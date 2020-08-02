@@ -1,0 +1,13 @@
+---
+- name: "Run preflight checks"
+  hosts: localhost
+  connection: local
+  roles:
+    - preflight
+
+- name: ""
+  hosts: localhost
+  connection: local
+  roles:
+    - ovirt/connect
+    - ovirt/template

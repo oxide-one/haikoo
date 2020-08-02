@@ -1,0 +1,44 @@
+# Check that the required engine variables exist
+- name: 'Assert that mandatory variables for oVirt are defined'
+  assert:
+    quiet: yes
+    fail_msg: |
+      Please make sure that all the required engine vars are defined
+
+      Example usage:
+      engine:
+        endpoint: "https://endpoint/ovirt-engine"
+        username: "username@profile"
+        password: "password"
+    that:
+      - engine.endpoint is defined
+      - engine.username is defined
+      - engine.password is defined
+
+# Search the engine.endpoint variable for 'ovirt-engine'
+# This is a check to see that the endpoint is defined correctly
+# that the username is formatted correctly
+- name: 'Assert that the endpoint looks correct'
+  assert:
+    quiet: yes
+    fail_msg: |
+      Please make sure your endpoint is formatted correctly
+      A properly formatted username ends with /ovirt-engine
+
+      Currently it is: {{ engine.endpoint }}
+    that:
+      - engine.endpoint is search('/ovirt-engine')
+
+# Search the engine.username variable for '@'
+# This is a fairly rudimentiary check to see
+# that the username is formatted correctly
+- name: 'Assert that username looks correct'
+  assert:
+    quiet: yes
+    fail_msg: |
+      Please make sure your username is formatted correctly
+      A properly formatted username looks like admin@internal
+      Following a pattern of '{username}@{profile}'
+      Currently it is: {{ engine.username }}
+    that:
+      - engine.username is search('@')

@@ -1,0 +1,28 @@
+
+#### Engine vars
+engine:
+## Your ovirt engine endpoint.
+## This ends with '/ovirt-engine'
+## example:
+# endpoint: "https://ovirt.oxide.one/ovirt-engine"
+## Your username.
+## This INCLUDES your profile.
+## example:
+# username: "admin@internal"
+## The password to login to the username above
+  password: ""
+## The Datacentre name.
+## You can get this from Compute -> Data Centers
+  datacentre: ""
+## The Cluster name.
+## You can get this from Compute -> Clusters
+  cluster: ""
+## The storage domain where templates and vms will be stored
+  storage: ""
+
+
+#### Virtual machine variables
+template:
+## The template name to base control and worker nodes from
+## Defaults to k8s
+#  name: "k8s"
