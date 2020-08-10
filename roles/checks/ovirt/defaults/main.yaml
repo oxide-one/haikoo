@@ -1,0 +1,21 @@
+###############
+# Engine vars #
+###############
+engine:
+## The default username for the Engine (default: "admin@internal")
+#  username: ""
+
+## The datacenter name (default: "Default")
+  datacenter: "Default"
+
+## The Cluster name. (default: "Default")
+  cluster: "Default"
+
+#################
+# Template vars #
+#################
+template:
+## The Template name to use (default: "k8s")
+  name: "k8s"
+## The Template name to use (default: "k8s")
+  storage: "data"

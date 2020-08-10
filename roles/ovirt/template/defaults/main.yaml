@@ -1,0 +1,16 @@
+###############
+# Engine vars #
+###############
+engine:
+## The Cluster name. (default: "Default")
+  cluster: "Default"
+  datacenter: "Default"
+#################
+# Template vars #
+#################
+template:
+## The Template name to use (default: "k8s")
+  name: "k8s"
+  storage: "data"
+  import_timeout: 300
+  description: "Created by haikoo"

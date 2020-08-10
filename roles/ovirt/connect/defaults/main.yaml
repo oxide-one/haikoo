@@ -1,0 +1,12 @@
+###############
+# Engine vars #
+###############
+engine:
+## The default username for the Engine (default: "admin@internal")
+  username: "admin@internal"
+
+## The datacenter name (default: "Default")
+  datacenter: "Default"
+
+## The Cluster name. (default: "Default")
+  cluster: "Default"

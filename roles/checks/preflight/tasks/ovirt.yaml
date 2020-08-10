@@ -1,3 +1,4 @@
+
 # Check that the required engine variables exist
 - name: 'Assert that mandatory variables for oVirt are defined'
   assert:
@@ -12,7 +13,6 @@
         password: "password"
     that:
       - engine.endpoint is defined
-      - engine.username is defined
       - engine.password is defined
 
 # Search the engine.endpoint variable for 'ovirt-engine'
@@ -29,6 +29,7 @@
     that:
       - engine.endpoint is search('/ovirt-engine')
 
+
 # Search the engine.username variable for '@'
 # This is a fairly rudimentiary check to see
 # that the username is formatted correctly
@@ -42,3 +43,36 @@
       Currently it is: {{ engine.username }}
     that:
       - engine.username is search('@')
+  when: engine.username is defined
+
+
+# Check to see that the datacenter name is correct
+- name: 'Assert that datacenter name is formatted correctly'
+  assert:
+    quiet: yes
+    fail_msg: |
+      Please make sure your Datacenter name is formatted correctly
+      Datacenter names may only contain letters, numbers, '-' or '_'.
+      Currently it is: {{ engine.datacenter }}
+    that:
+      - engine.datacenter is match("^(\w|-|_|\d)*$")
+  when: engine.datacenter is defined
+
+# Check to see if the cluster name is correct
+- name: 'Assert that cluster name is formatted correctly'
+  assert:
+    quiet: yes
+    fail_msg: |
+      Please make sure your Cluster name is formatted correctly
+      Cluster names may only contain letters, numbers, '-', or '_'.
+      Currently it is: {{ engine.cluster }}
+    that:
+      - engine.cluster is match("^(\w|-|\.|_|\d)*$")
+  when: engine.cluster is defined
+
+
+# Add ovirt engine host to inventory
+- name: 'Add host {{ engine.endpoint | urlsplit("hostname") }} to inventory for better logging'
+  add_host:
+    name: "{{ engine.endpoint | urlsplit('hostname') }}"
+    groups: ovirt

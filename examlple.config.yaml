@@ -1,0 +1,30 @@
+###############
+# Engine vars #
+###############
+engine:
+## Engine password
+  password:
+## Engine endpoint (ends with /ovirt-engine)
+  endpoint:
+
+## The default username for the Engine (default: "admin@internal")
+# username: ""
+
+## The datacenter name (default: "Default")
+# datacenter: ""
+
+## The Cluster name. (default: "Default")
+# cluster: ""
+
+#################
+# Template vars #
+#################
+template:
+## The Template name to use (default: "k8s")
+#  name: ""
+## The Storage domain to import the Template to
+#  storage: "data"
+## Import timeout. Increase this if your import fails. (default: 300)
+#  import_timeout:
+## Description of the imported template. (Default: "Created by haikoo")
+#  description:

@@ -1,13 +1,21 @@
 ---
-- name: "Run preflight checks"
+- name: "Run necessary preflight checks, and add ovirt host"
   hosts: localhost
   connection: local
   roles:
-    - preflight
+    - checks/preflight
 
-- name: ""
-  hosts: localhost
+- name: "Template setup tasks"
+  hosts: ovirt
   connection: local
   roles:
     - ovirt/connect
+    - checks/ovirt
     - ovirt/template
+
+#- name: "Import Template"
+#  hosts: localhost
+#  connection: local
+#  roles:
+#    - ovirt/connect
+#    - ovirt/template
