@@ -94,3 +94,26 @@
       Current value: {{ template.storage }}
     that:
       - (checks_ovirt_tmpl_storage.ovirt_storage_domains | length>0)
+
+######################
+# Networks (Template)#
+######################
+# Search for the template network in the cluster
+- name: 'Search for Network "{{ template.temp.network }}" in datacenter {{ engine.datacenter }}'
+  ovirt_network_info:
+    auth: "{{ ovirt_auth }}"
+    pattern:
+      name={{ template.temp.network }} and
+      datacenter={{ engine.datacenter }}
+  register: checks_ovirt_tmpl_network
+
+# Check that the template network actually exists
+- name: 'Assert that Network "{{ template.temp.network }}" exists'
+  assert:
+    quiet: yes
+    fail_msg: |
+      Network for template vm does not exist.
+
+      Current value: {{ template.temp.network }}
+    that:
+      - (checks_ovirt_tmpl_network.ovirt_networks | length>0)

@@ -1,13 +1,21 @@
 ---
-# Create template from vm
+# Create template from image provider
 - name: "Import ovirt template for use"
   include_tasks: setup.yaml
   when:
     state|default('present') == 'present' and
-    template.exists == False
+    template_exists == False
 
+# Delete template
 - name: "Delete imported ovirt template"
   include_tasks: destroy.yaml
   when:
     state|default('present') == 'absent' and
-    template.exists == True
+    template_exists == True
+
+# Start a temporary vm and modify template
+- name: "Delete imported ovirt template"
+  include_tasks: modify.yaml
+  when:
+    state|default('present') == 'present' and
+    template_exists == True

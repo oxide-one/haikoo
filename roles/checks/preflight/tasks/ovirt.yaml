@@ -25,7 +25,7 @@
       Please make sure your endpoint is formatted correctly
       A properly formatted username ends with /ovirt-engine
 
-      Currently it is: {{ engine.endpoint }}
+      Currently it is: "{{ engine.endpoint }}"
     that:
       - engine.endpoint is search('/ovirt-engine')
 
@@ -40,7 +40,7 @@
       Please make sure your username is formatted correctly
       A properly formatted username looks like admin@internal
       Following a pattern of '{username}@{profile}'
-      Currently it is: {{ engine.username }}
+      Currently it is: "{{ engine.username }}"
     that:
       - engine.username is search('@')
   when: engine.username is defined
@@ -53,7 +53,7 @@
     fail_msg: |
       Please make sure your Datacenter name is formatted correctly
       Datacenter names may only contain letters, numbers, '-' or '_'.
-      Currently it is: {{ engine.datacenter }}
+      Currently it is: "{{ engine.datacenter }}"
     that:
       - engine.datacenter is match("^(\w|-|_|\d)*$")
   when: engine.datacenter is defined
@@ -65,14 +65,19 @@
     fail_msg: |
       Please make sure your Cluster name is formatted correctly
       Cluster names may only contain letters, numbers, '-', or '_'.
-      Currently it is: {{ engine.cluster }}
+      Currently it is: "{{ engine.cluster }}"
     that:
       - engine.cluster is match("^(\w|-|\.|_|\d)*$")
   when: engine.cluster is defined
 
-
-# Add ovirt engine host to inventory
-- name: 'Add host {{ engine.endpoint | urlsplit("hostname") }} to inventory for better logging'
-  add_host:
-    name: "{{ engine.endpoint | urlsplit('hostname') }}"
-    groups: ovirt
+# Validate Template name
+- name: 'Assert that template name is formatted correctly'
+  assert:
+    quiet: yes
+    fail_msg: |
+      Please make sure your Template name is formatted correctly
+      Template names may not contain spaces
+      Currently it is: "{{ template.name }}"
+    that:
+      - template.name is match("^(\w|-|\.|_|\d)*$")
+  when: template.name is defined

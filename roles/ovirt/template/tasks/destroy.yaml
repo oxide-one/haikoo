@@ -1,13 +1,9 @@
 ---
 # Remove the template to ovirt
-- name: "Import template {{ template.name }} to storage domain {{ template.storage }}"
+- name: "Import template {{ template_name }} to storage domain {{ template_storage_location }}"
   ovirt_template:
      auth: "{{ ovirt_auth }}"
      state: absent
-     name: "{{ template.name }}"
-     image_disk: "Fedora 32 Cloud Base Image v1.6 for x86_64"
-     image_provider: "ovirt-image-repository"
-     storage_domain: "{{ template.storage }}"
-     cluster: "{{ engine.cluster }}"
-     timeout: "{{ template.import_timeout }}"
-     description: "{{ template.description }}"
+     name: "{{ template_name }}"
+     cluster: "{{ engine_cluster_name }}"
+     timeout: "{{ template_import_timeout }}"

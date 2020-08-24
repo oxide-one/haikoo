@@ -1,0 +1,72 @@
+---
+# Create a temporary virtual machine from a template
+- name: 'Create ovirt vm "{{ template.temp.name }}" from template "{{ template.name }}"'
+  ovirt_vm:
+    auth: "{{ ovirt_auth }}"
+    state: present
+    name: "{{ temp_vm_name }}"
+    cpu_cores: "{{ temp_vm_cores }}"
+    template: "{{ template_name }}"
+    cluster: "{{ engine_cluster_name }}"
+    type: "server"
+    operating_system: "other_linux"
+    nics:
+      - interface: "virtio"
+        name: "{{ temp_vm_network }}"
+        profile_name: "{{ temp_vm_network }}"
+  register: ovirt_created_vm
+
+# Quite a chunky task, but it is necessary for things to function.
+- name: 'Start the temporary virtual machine "{{ temp_vm_name }}"'
+  ovirt_vm:
+    auth: "{{ ovirt_auth }}"
+    cloud_init:
+      custom_script: "{{ temp_vm_cloudinit }}"
+    state: "running"
+    name: "{{ temp_vm_name }}"
+
+# Wait for the VM to complete the above operations and shutdown
+- name: 'Wait for vm "{{ temp_vm_name }}" to install packages and shutdown'
+  ovirt_vm_info:
+    auth: "{{ ovirt_auth }}"
+    pattern:
+      name="{{ temp_vm_name }}" and
+      datacenter="{{ engine_datacenter_name }}" and
+      cluster="{{ engine_cluster_name }}"
+  register: ovirt_template_info
+  until: ovirt_template_info.ovirt_vms[0].status != "up"
+  retries: "{{ temp_vm_shutdown_retries }}"
+  delay: 30
+
+# Make sure that the vm is down before operating
+- name: 'Ensure vm "{{ temp_vm_name }}" is shutdown'
+  ovirt_vm:
+    auth: "{{ ovirt_auth }}"
+    state: stopped
+    name: "{{ temp_vm_name }}"
+
+# Remove the NIC from the vm so it doesn't get saved in the template
+- name: 'Remove nic "{{ temp_vm_network }}" from vm "{{ temp_vm_name }}"'
+  ovirt_nic:
+    auth: "{{ ovirt_auth }}"
+    state: absent
+    vm: "{{ temp_vm_name }}"
+    name: "{{ temp_vm_network }}"
+
+# Save over OLD tempalte with new changes
+- name: 'Update template "{{ template_name }}" with the changes made from vm {{ temp_vm_name }}'
+  ovirt_template:
+    auth: "{{ ovirt_auth }}"
+    name: "{{ template_name }}"
+    seal: "yes"
+    cluster: "{{ engine_cluster_name }}"
+    vm: "{{ temp_vm_name }}"
+    version:
+      name: "subversion"
+
+# Remove VM from ovirt
+- name: 'Remove vm "{{ temp_vm_name }}" from ovirt'
+  ovirt_vm:
+    auth: "{{ ovirt_auth }}"
+    name: "{{ temp_vm_name }}"
+    state: absent
