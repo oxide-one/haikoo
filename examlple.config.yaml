@@ -2,35 +2,35 @@
 # Engine vars #
 ###############
 ## The default username for the Engine (default: "admin@internal")
-engine_username: ""
+#engine_username: ""
 
-## Engine password
-engine_password:
+## Engine password. REQUIRED, NO DEFAULT
+#engine_password:
 
-## Engine endpoint (ends with /ovirt-engine)
-engine_endpoint:
+## Engine endpoint (ends with /ovirt-engine). REQUIRED, NO DEFAULT
+#engine_endpoint:
 
 ## The datacenter name (default: "Default")
-engine_datacenter_name: ""
+#engine_datacenter_name: ""
 
 ## The Cluster name. (default: "Default")
-engine_cluster_name: ""
+#engine_cluster_name: ""
 
 
 #################
 # Template vars #
 #################
 ## The Template name to use (default: "k8s")
-template_name:
+#template_name:
 
 ## The Storage domain to import the Template to (default: "data")
-template_storage_location: ""
+#template_storage_location: ""
 
 ## Import timeout . Increase this if your import fails. (default: 300)
-template_import_timeout:
+#template_import_timeout:
 
 ## Description of the imported template. (default: "Created by haikoo")
-template_description:
+#template_description:
 
 ## Extra repos to add to the template. (default: none)
 #template_extra_repos: {}
@@ -39,44 +39,44 @@ template_description:
 #    gpgkey: "REPO_GPG_KEY"
 
 ## Upgrade all packages on the template at runtime (default: True)
-template_upgrade_packages: True
+#template_upgrade_packages: True
 
 ## Timezone of the imported template. (default: "Etc/GMT")
-template_timezone:
+#template_timezone:
 
 ## Install extra packages. (default: none)
-template_extra_packages: []
+#template_extra_packages: []
 
 ## Extra commands to run (default: none)
-template_extra_commands: []
+#template_extra_commands: []
 
 ## Extra systemd services to enable (default: none)
-template_extra_services: []
+#template_extra_services: []
 
 ## Enable SELINUX (default: False)
-template_selinux_enabled:
+#template_selinux_enabled:
 
 
 ##############################
 # Temporary VM configuration #
 ##############################
 ## Name of the temporary VM to create. (default: "haikoo-temp-vm")
-temp_vm_name:
+#temp_vm_name:
 
 ## Name of the network to provision the vm on (default: "ovirtmgmt")
-temp_vm_network: ""
+#temp_vm_network: ""
 
 ## Number of cores to give the temporary vm (default: 2)
-temp_vm_cores:
+#temp_vm_cores:
 
 ## Memory to give the temporary vm [in MB] (default: 2048)
-temp_vm_memory:
+#temp_vm_memory:
 
 ## Number of retries (x30s) for template to complete operation (default: 20)
-temp_vm_shutdown_retries:
+#temp_vm_shutdown_retries:
 
 ############################
 # Kubernetes Configuration #
 ############################
 ## The CRI-O Version to enable and install (default: 1.18)
-crio_version: "1.18"
+#crio_version: "1.18"

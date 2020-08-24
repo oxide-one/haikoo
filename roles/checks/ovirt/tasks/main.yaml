@@ -3,117 +3,119 @@
 # Datacenter #
 ##############
 # Check to see that the ovirt datacenter exists
-- name: 'Search for Datacenter {{ engine.datacenter }}'
+- name: 'Search for Datacenter {{ engine_datacenter_name }}'
   ovirt_datacenter_info:
     auth: "{{ ovirt_auth }}"
     pattern:
-      name={{ engine.datacenter }}
-  register: checks_ovirt_dc
+      name={{ engine_datacenter_name }}
+  register: checks_ovirt_datacentre_exists
 
 # Assert that the datacenter exists
-- name: 'Assert that Datacenter "{{ engine.datacenter }}" exists'
+- name: 'Assert that Datacenter "{{ engine_datacenter_name }}" exists'
   assert:
     quiet: yes
     fail_msg: |
       Datacenter does not exist.
 
-      Current value: {{ engine.datacenter }}
+      Current value: {{ engine_datacenter_name }}
     that:
-      - (checks_ovirt_dc.ovirt_datacenters | length>0)
+      - (checks_ovirt_datacentre_exists.ovirt_datacenters | length>0)
+
 
 ##############
 # Cluster #
 ##############
 # Search for clusters within ovirt
-- name: 'Search for cluster {{ engine.cluster }} in Datacenter {{ engine.datacenter }}'
+- name: 'Search for cluster {{ engine_cluster_name }} in Datacenter {{ engine_datacenter_name }}'
   ovirt_cluster_info:
     auth: "{{ ovirt_auth }}"
     pattern:
-      name={{ engine.cluster }}
-      datacenter={{ engine.datacenter }}
-  register: checks_ovirt_cl
+      name={{ engine_cluster_name }}
+      datacenter={{ engine_datacenter_name }}
+  register: checks_ovirt_cluster_exists
 
 # Check that the cluster actually exists
-- name: 'Assert that Cluster "{{ engine.cluster }}" exists'
+- name: 'Assert that Cluster "{{ engine_cluster_name }}" exists'
   assert:
     quiet: yes
     fail_msg: |
       Cluster does not exist.
 
-      Current value: {{ engine.cluster }}
+      Current value: {{ engine_cluster_name }}
     that:
-      - (checks_ovirt_cl.ovirt_clusters | length>0)
+      - (checks_ovirt_cluster_exists.ovirt_clusters | length>0)
+
 
 ##############
 # Templating #
 ##############
 # Check if template exists already. Do not assert if not, just set a variable.
-- name: 'Check if Templates "{{ template.name }}" exists'
+- name: 'Check if Template "{{ template_name }}" exists'
   ovirt_template_info:
     auth: "{{ ovirt_auth }}"
     pattern:
-      name={{ template.name }} and
-      datacenter={{ engine.datacenter }} and
-      cluster={{ engine.cluster }}
-  register: checks_ovirt_tmpl
+      name={{ template_name }} and
+      datacenter={{ engine_datacenter_name }} and
+      cluster={{ engine_cluster_name }}
+  register: checks_ovirt_template_exists
 
 # Set the template.exists variable to true if template exists
-- name: 'Set a variable if template "{{ template.name }}" exists'
+- name: 'Set a variable if template "{{ template_name }}" exists'
   set_fact:
-    template:
-      exists: true
-  when: checks_ovirt_tmpl.ovirt_templates | length>0
+    template_exists: true
+  when: checks_ovirt_template_exists.ovirt_templates | length>0
 
 # Set the template.exists variable to false if template exists
-- name: 'Set a variable if template "{{ template.name }}" does not exist'
+- name: 'Set a variable if template "{{ template_name }}" does not exist'
   set_fact:
-    template:
-      exists: false
-  when: checks_ovirt_tmpl.ovirt_templates | length==0
+    template_exists: false
+  when: checks_ovirt_template_exists.ovirt_templates | length==0
+
 
 ##################
 # Storage domain #
 ##################
 # Search for the template storage domain in the cluster
-- name: 'Search for Storage domain "{{ template.storage }}" in cluster {{ engine.cluster }}'
+- name: 'Search for Storage domain "{{ template_storage_location }}" in cluster {{ engine_cluster_name }}'
   ovirt_storage_domain_info:
     auth: "{{ ovirt_auth }}"
     pattern:
-      name={{ template.storage }} and
-      datacenter={{ engine.datacenter }} and
-      cluster={{ engine.cluster }}
-  register: checks_ovirt_tmpl_storage
+      name={{ template_storage_location }} and
+      datacenter={{ engine_datacenter_name }} and
+      cluster={{ engine_cluster_name }}
+  register: checks_ovirt_template_storage_exists
 
 # Check that the template storage domain actually exists
-- name: 'Assert that Storage domain "{{ template.storage }}" exists'
+- name: 'Assert that Storage domain "{{ template_storage_location }}" exists'
   assert:
     quiet: yes
     fail_msg: |
       Storage doamin for template does not exist.
 
-      Current value: {{ template.storage }}
+      Current value: {{ template_storage_location }}
     that:
-      - (checks_ovirt_tmpl_storage.ovirt_storage_domains | length>0)
+      - (checks_ovirt_template_storage_exists.ovirt_storage_domains | length>0)
 
-######################
-# Networks (Template)#
-######################
+
+#######################################
+# Networks (Temporary Virtual Machine)#
+#######################################
 # Search for the template network in the cluster
-- name: 'Search for Network "{{ template.temp.network }}" in datacenter {{ engine.datacenter }}'
+- name: 'Search for Network "{{ temp_vm_network }}" in datacenter {{ engine_datacenter_name }}'
   ovirt_network_info:
     auth: "{{ ovirt_auth }}"
     pattern:
-      name={{ template.temp.network }} and
-      datacenter={{ engine.datacenter }}
-  register: checks_ovirt_tmpl_network
+      name={{ temp_vm_network }} and
+      datacenter={{ engine_datacenter_name }}
+  register: checks_ovirt_temp_vm_network_exists
 
 # Check that the template network actually exists
-- name: 'Assert that Network "{{ template.temp.network }}" exists'
+- name: 'Assert that Network "{{ temp_vm_network }}" exists'
   assert:
     quiet: yes
     fail_msg: |
       Network for template vm does not exist.
 
-      Current value: {{ template.temp.network }}
+      Current value: {{ temp_vm_network }}
     that:
-      - (checks_ovirt_tmpl_network.ovirt_networks | length>0)
+      - (checks_ovirt_temp_vm_network_exists.ovirt_networks | length>0)

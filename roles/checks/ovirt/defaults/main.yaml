@@ -1,26 +1,12 @@
 ###############
 # Engine vars #
 ###############
-engine:
-## The default username for the Engine (default: "admin@internal")
-#  username: ""
-
-## The datacenter name (default: "Default")
-  datacenter: "Default"
-
-## The Cluster name. (default: "Default")
-  cluster: "Default"
+engine_username: "admin@internal"
+engine_datacenter_name: "Default"
+engine_cluster_name: "Default"
 
 #################
 # Template vars #
 #################
-template:
-## The Template name to use (default: "k8s")
-  name: "k8s"
-## The Template name to use (default: "k8s")
-  storage: "data"
-  temp:
-    name: "haikoo-temp-vm"
-    network: "ovirtmgmt"
-    cores: 2
-    memory: 2048
+template_name: "k8s"
+template_storage_location: "data"
