@@ -12,8 +12,8 @@
         username: "username@profile"
         password: "password"
     that:
-      - engine.endpoint is defined
-      - engine.password is defined
+      - engine_endpoint is defined
+      - engine_password is defined
 
 # Search the engine.endpoint variable for 'ovirt-engine'
 # This is a check to see that the endpoint is defined correctly
@@ -25,9 +25,9 @@
       Please make sure your endpoint is formatted correctly
       A properly formatted username ends with /ovirt-engine
 
-      Currently it is: "{{ engine.endpoint }}"
+      Currently it is: "{{ engine_endpoint }}"
     that:
-      - engine.endpoint is search('/ovirt-engine')
+      - engine_endpoint is search('/ovirt-engine')
 
 
 # Search the engine.username variable for '@'
@@ -40,10 +40,10 @@
       Please make sure your username is formatted correctly
       A properly formatted username looks like admin@internal
       Following a pattern of '{username}@{profile}'
-      Currently it is: "{{ engine.username }}"
+      Currently it is: "{{ engine_username }}"
     that:
-      - engine.username is search('@')
-  when: engine.username is defined
+      - engine_username is search('@')
+  when: engine_username is defined
 
 
 # Check to see that the datacenter name is correct
@@ -53,10 +53,10 @@
     fail_msg: |
       Please make sure your Datacenter name is formatted correctly
       Datacenter names may only contain letters, numbers, '-' or '_'.
-      Currently it is: "{{ engine.datacenter }}"
+      Currently it is: "{{ engine_datacenter_name }}"
     that:
-      - engine.datacenter is match("^(\w|-|_|\d)*$")
-  when: engine.datacenter is defined
+      - engine_datacenter_name is match("^(\w|-|_|\d)*$")
+  when: engine_datacenter_name is defined
 
 # Check to see if the cluster name is correct
 - name: 'Assert that cluster name is formatted correctly'
@@ -65,10 +65,10 @@
     fail_msg: |
       Please make sure your Cluster name is formatted correctly
       Cluster names may only contain letters, numbers, '-', or '_'.
-      Currently it is: "{{ engine.cluster }}"
+      Currently it is: "{{ engine_cluster_name }}"
     that:
-      - engine.cluster is match("^(\w|-|\.|_|\d)*$")
-  when: engine.cluster is defined
+      - engine_cluster_name is match("^(\w|-|\.|_|\d)*$")
+  when: engine_cluster_name is defined
 
 # Validate Template name
 - name: 'Assert that template name is formatted correctly'
@@ -77,7 +77,7 @@
     fail_msg: |
       Please make sure your Template name is formatted correctly
       Template names may not contain spaces
-      Currently it is: "{{ template.name }}"
+      Currently it is: "{{ template_name }}"
     that:
-      - template.name is match("^(\w|-|\.|_|\d)*$")
-  when: template.name is defined
+      - template_name is match("^(\w|-|\.|_|\d)*$")
+  when: template_name is defined

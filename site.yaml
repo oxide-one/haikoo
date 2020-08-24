@@ -5,14 +5,14 @@
   roles:
     - checks/preflight
 
-- name: "Add ovirt engine endpoint {{ engine.endpoint | urlsplit('hostname') }} to inventory"
+- name: "Add ovirt engine endpoint {{ engine_endpoint | urlsplit('hostname') }} to inventory"
   hosts: localhost
   connection: local
   tasks:
     # Add ovirt engine host to inventory
-    - name: "Add host {{ engine.endpoint | urlsplit('hostname') }} to inventory for better logging"
+    - name: "Add host {{ engine_endpoint | urlsplit('hostname') }} to inventory for better logging"
       add_host:
-        name: "{{ engine.endpoint | urlsplit('hostname') }}"
+        name: "{{ engine_endpoint | urlsplit('hostname') }}"
         groups: ovirt
 
 - name: "Template setup tasks"
