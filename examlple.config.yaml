@@ -26,7 +26,7 @@
 ## The Storage domain to import the Template to (default: "data")
 #template_storage_location: ""
 
-## Import timeout . Increase this if your import fails. (default: 300)
+## Import timeout . Increase this if your import fails. (default: 600)
 #template_import_timeout:
 
 ## Description of the imported template. (default: "Created by haikoo")

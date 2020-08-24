@@ -3,9 +3,9 @@
 # 'ovirt_auth'
 - name: "Connect to Ovirt engine"
   ovirt_auth:
-    url: "{{ engine.endpoint }}/api"
-    username: "{{ engine.username }}"
-    password: "{{ engine.password }}"
+    url: "{{ engine_endpoint }}/api"
+    username: "{{ engine_username }}"
+    password: "{{ engine_password }}"
   when: state|default('present') == 'present'
 
 - name: "Remove ovirt authentication"

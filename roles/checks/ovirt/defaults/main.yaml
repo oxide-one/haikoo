@@ -10,3 +10,8 @@ engine_cluster_name: "Default"
 #################
 template_name: "k8s"
 template_storage_location: "data"
+
+##############################
+# Temporary VM configuration #
+##############################
+temp_vm_network: "ovirtmgmt"

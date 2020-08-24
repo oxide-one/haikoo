@@ -1,6 +1,6 @@
 ---
 # Create a temporary virtual machine from a template
-- name: 'Create ovirt vm "{{ template.temp.name }}" from template "{{ template.name }}"'
+- name: 'Create ovirt vm "{{ temp_vm_name }}" from template "{{ template_name }}"'
   ovirt_vm:
     auth: "{{ ovirt_auth }}"
     state: present

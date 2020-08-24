@@ -10,7 +10,7 @@ engine_cluster_name: "Default"
 #################
 template_name: "k8s"
 template_storage_location: "data"
-template_import_timeout: 300
+template_import_timeout: 600
 template_description: "Created by haikoo"
 template_timezone: "Etc/GMT"
 template_upgrade_packages: True
@@ -34,6 +34,20 @@ template_commands:
   - "yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes"
   - "dnf module enable -y cri-o:{{ crio_version }}"
   - "dnf install -y cri-o kubernetes-cni logrotate ceph-common"
+
+##############################
+# Temporary VM configuration #
+##############################
+temp_vm_name: "haikoo-temp-vm"
+temp_vm_network: "ovirtmgmt"
+temp_vm_cores: 2
+temp_vm_memory: 2048
+temp_vm_shutdown_retries: 20
+
+############################
+# Kubernetes Configuration #
+############################
+crio_version: "1.18"
 
 
 ###########################################
