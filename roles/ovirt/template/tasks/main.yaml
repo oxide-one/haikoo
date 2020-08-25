@@ -1,7 +1,7 @@
 ---
 # Create template from image provider
 - name: "Import ovirt template for use"
-  include_tasks: setup.yaml
+  include_tasks: import.yaml
   when:
     state|default('present') == 'present' and
     template_exists == False
