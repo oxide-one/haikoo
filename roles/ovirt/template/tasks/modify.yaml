@@ -26,7 +26,7 @@
     name: "{{ temp_vm_name }}"
 
 # Wait for the VM to complete the above operations and shutdown
-- name: 'Wait for vm "{{ temp_vm_name }}" to install packages and shutdown'
+- name: 'Wait for vm "{{ temp_vm_name }}" to install packages and shutdown. This will take some time.'
   ovirt_vm_info:
     auth: "{{ ovirt_auth }}"
     pattern:
