@@ -42,7 +42,7 @@ temp_vm_name: "haikoo-temp-vm"
 temp_vm_network: "ovirtmgmt"
 temp_vm_cores: 6
 temp_vm_memory: 3072
-temp_vm_shutdown_retries: 20
+temp_vm_shutdown_retries: 30
 
 ############################
 # Kubernetes Configuration #
