@@ -16,7 +16,7 @@
         profile_name: "{{ temp_vm_network }}"
   register: ovirt_created_vm
 
-# Quite a chunky task, but it is necessary for things to function.
+# Start a virtual machien with cloud-init. You CANNOT create+start a VM at the same time when using cloud-init, so this approach is given.
 - name: 'Start the temporary virtual machine "{{ temp_vm_name }}"'
   ovirt_vm:
     auth: "{{ ovirt_auth }}"
