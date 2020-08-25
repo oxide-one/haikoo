@@ -1,0 +1,14 @@
+---
+# Import the template to the
+- name: "Import template {{ template_name }} to storage domain {{ template_storage_location }}"
+  ovirt_template:
+     auth: "{{ ovirt_auth }}"
+     state: imported
+     name: "{{ template_name }}"
+     image_disk: "Fedora 32 Cloud Base Image v1.6 for x86_64"
+     image_provider: "ovirt-image-repository"
+     storage_domain: "{{ template_storage_location }}"
+     cluster: "{{ engine_cluster_name }}"
+     timeout: "{{ template_import_timeout }}"
+     timezone: "{{ template_timezone }}"
+     description: "{{ template_description }}"
