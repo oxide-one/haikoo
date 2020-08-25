@@ -66,10 +66,10 @@
 ## Name of the network to provision the vm on (default: "ovirtmgmt")
 #temp_vm_network: ""
 
-## Number of cores to give the temporary vm (default: 4)
+## Number of cores to give the temporary vm (default: 6)
 #temp_vm_cores:
 
-## Memory to give the temporary vm [in MB] (default: 2048)
+## Memory to give the temporary vm [in MB] (default: 3072)
 #temp_vm_memory:
 
 ## Number of retries (x60s) for template to complete operation (default: 20) AKA 20 Minutes.

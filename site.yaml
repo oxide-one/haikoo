@@ -23,11 +23,11 @@
     - checks/ovirt
     - ovirt/template
 
-- name: "Add dynamic hosts to inventory"
-  hosts: ovirt
-  connection: local
-  roles:
-    - add_hosts
+# - name: "Add dynamic hosts to inventory"
+#   hosts: ovirt
+#   connection: local
+#   roles:
+#     - add_hosts
 #- name: "Import Template"
 #  hosts: localhost
 #  connection: local
