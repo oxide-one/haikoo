@@ -36,7 +36,7 @@
   register: ovirt_template_info
   until: ovirt_template_info.ovirt_vms[0].status != "up"
   retries: "{{ temp_vm_shutdown_retries }}"
-  delay: 30
+  delay: 60
 
 # Make sure that the vm is down before operating
 - name: 'Ensure vm "{{ temp_vm_name }}" is shutdown'

@@ -26,7 +26,7 @@
 ## The Storage domain to import the Template to (default: "data")
 #template_storage_location: ""
 
-## Import timeout . Increase this if your import fails. (default: 600)
+## Import timeout . Increase this if your import fails. (default: 600) AKA 10 Minutes
 #template_import_timeout:
 
 ## Description of the imported template. (default: "Created by haikoo")
@@ -72,7 +72,7 @@
 ## Memory to give the temporary vm [in MB] (default: 2048)
 #temp_vm_memory:
 
-## Number of retries (x30s) for template to complete operation (default: 20)
+## Number of retries (x60s) for template to complete operation (default: 20) AKA 20 Minutes.
 #temp_vm_shutdown_retries:
 
 ############################
