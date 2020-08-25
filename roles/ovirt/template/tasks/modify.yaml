@@ -6,6 +6,7 @@
     state: present
     name: "{{ temp_vm_name }}"
     cpu_cores: "{{ temp_vm_cores }}"
+    memory: "{{ temp_vm_memory }}MiB"
     template: "{{ template_name }}"
     cluster: "{{ engine_cluster_name }}"
     type: "server"

@@ -72,7 +72,7 @@
 ## Memory to give the temporary vm [in MB] (default: 3072)
 #temp_vm_memory:
 
-## Number of retries (x60s) for template to complete operation (default: 30) AKA 30 Minutes.
+## Number of retries (x60s) for template to complete operation (default: 45) AKA 45 Minutes.
 #temp_vm_shutdown_retries:
 
 ############################
