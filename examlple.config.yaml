@@ -66,7 +66,7 @@
 ## Name of the network to provision the vm on (default: "ovirtmgmt")
 #temp_vm_network: ""
 
-## Number of cores to give the temporary vm (default: 2)
+## Number of cores to give the temporary vm (default: 4)
 #temp_vm_cores:
 
 ## Memory to give the temporary vm [in MB] (default: 2048)
@@ -80,3 +80,58 @@
 ############################
 ## The CRI-O Version to enable and install (default: 1.18)
 #crio_version: "1.18"
+
+## The name of the cluster. (default: haikoo)
+#cluster_name: ""
+
+## The IP address of the controlplane endpoint. This must be within the same subnet as your mainline nodes. REQUIRED
+#controlplane_endpoint: ""
+
+## The DNS endpoint of your controlplane endpoint. No default.
+#controlplane_dns_endpoint: ""
+
+######################################
+# mainline/master node Configuration #
+######################################
+
+## How the main nodes will be named. Defaults to {{ cluster_name }}-main-{{ machine_id }}
+## Please note the pattern you specify MUST create a unique string. use the machine_id to create a unique string of 6 Char length.
+#main_node_naming_schema: ""
+
+## How many main nodes you would like (default: 3)
+#main_node_count:
+
+## The number of cores to give to each main node (default: 4)
+#main_node_cpu_cores:
+
+## The amount of memory (in MB) to give to the main nodes (default: 4096)
+#main_node_memory:
+
+## The Disk size (in GB) to give to the main nodes (default: 30)
+#main_node_disk_size:
+
+## List of roles to give to the worker node once provisioned. (default: none)
+#main_node_roles: []
+
+#############################
+# Worker node configuration #
+#############################
+
+## How the worker nodes will be named. Defaults to {{ cluster_name }}-worker-{{ machine_id }}
+## Please note the pattern you specify MUST create a unique string. use the machine_id to create a unique string of 6 Char length.
+#worker_node_naming_schema: ""
+
+## How many main nodes you would like (default: 3)
+#worker_node_count:
+
+## The number of cores to give to each main node (default: 4)
+#worker_node_cpu_cores:
+
+## The amount of memory (in MB) to give to the main nodes (default: 4096)
+#worker_node_memory:
+
+## The Disk size (in GB) to give to the main nodes (default: 30)
+#worker_node_disk_size:
+
+## List of roles to give to the worker node once provisioned. (default: none)
+#worker_node_roles: []
