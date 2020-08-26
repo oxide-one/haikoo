@@ -5,10 +5,10 @@
 #engine_username: ""
 
 ## Engine password. REQUIRED, NO DEFAULT
-#engine_password:
+#engine_password: ""
 
 ## Engine endpoint (ends with /ovirt-engine). REQUIRED, NO DEFAULT
-#engine_endpoint:
+#engine_endpoint: ""
 
 ## The datacenter name (default: "Default")
 #engine_datacenter_name: ""
@@ -21,7 +21,7 @@
 # Template vars #
 #################
 ## The Template name to use (default: "k8s")
-#template_name:
+#template_name: ""
 
 ## The Storage domain to import the Template to (default: "data")
 #template_storage_location: ""
@@ -30,7 +30,7 @@
 #template_import_timeout:
 
 ## Description of the imported template. (default: "Created by haikoo")
-#template_description:
+#template_description: ""
 
 ## Extra repos to add to the template. (default: none)
 #template_extra_repos: {}
@@ -42,7 +42,7 @@
 #template_upgrade_packages: True
 
 ## Timezone of the imported template. (default: "Etc/GMT")
-#template_timezone:
+#template_timezone: ""
 
 ## Install extra packages. (default: none)
 #template_extra_packages: []
@@ -56,7 +56,8 @@
 ## Enable SELINUX (default: False)
 #template_selinux_enabled:
 
-
+## Template subversion name to save the template as (default: "post-modification" )
+# template_subversion_name: ""
 ##############################
 # Temporary VM configuration #
 ##############################

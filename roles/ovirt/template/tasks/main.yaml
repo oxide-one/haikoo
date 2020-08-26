@@ -18,4 +18,5 @@
   include_tasks: modify.yaml
   when:
     state|default('present') == 'present' and
-    template_exists
+    template_exists and
+    not template_modified

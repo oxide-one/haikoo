@@ -9,6 +9,7 @@ engine_cluster_name: "Default"
 # Template vars #
 #################
 template_name: "k8s"
+template_subversion_name: "post-modification"
 template_storage_location: "data"
 template_import_timeout: 600
 template_description: "Created by haikoo"

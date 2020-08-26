@@ -71,6 +71,28 @@
     template_exists: false
   when: checks_ovirt_template_exists.ovirt_templates | length==0
 
+# Check if the template subversion exists. (aka, if the template has already been modified)
+- name: 'Check if Template {{ template_name }} has the subversion {{ template_subversion_name }}'
+  ovirt_template_info:
+    auth: "{{ ovirt_auth }}"
+    pattern:
+      name={{ template_name }} and
+      datacenter={{ engine_datacenter_name }} and
+      cluster={{ engine_cluster_name }} and
+      version_name={{ template_subversion_name }}
+  register: checks_ovirt_template_subversion_exists
+
+# Set the template_modified variable to true if template has been modified
+- name: 'Set a variable if template "{{ template_name }}" does not have a subversion (i.e, not been modified)'
+  set_fact:
+    template_modified: true
+  when: checks_ovirt_template_subversion_exists.ovirt_templates | length>0
+
+# Set the template_modified variable to false if template has not been modified
+- name: 'Set a variable if template "{{ template_name }}" does not have a subversion (i.e, not been modified)'
+  set_fact:
+    template_modified: false
+  when: checks_ovirt_template_subversion_exists.ovirt_templates | length==0
 
 ##################
 # Storage domain #
