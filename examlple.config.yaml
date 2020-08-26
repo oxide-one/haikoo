@@ -91,6 +91,9 @@
 ## The DNS endpoint of your controlplane endpoint. No default.
 #controlplane_dns_endpoint: ""
 
+## Skip a DNS check if you are know that the DNS name resolves properly. (default: false)
+#skip_dns_check:
+
 ######################################
 # mainline/master node Configuration #
 ######################################

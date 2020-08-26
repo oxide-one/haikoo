@@ -1,0 +1,4 @@
+---
+
+- name: "Grab a list of hosts from Ovirt"
+  debug: msg="hello"

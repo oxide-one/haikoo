@@ -9,3 +9,10 @@
         controlplane_endpoint: "10.0.0.1"
     that:
       - controlplane_endpoint is defined
+
+# Import DNS check tasks
+- name: "Import DNS checks for the kubernetes controlplane endpoint"
+  import_tasks: kubernetes_dns_check.yaml
+  when:
+    controlplane_dns_endpoint is defined and
+    not skip_dns_check
