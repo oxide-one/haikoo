@@ -69,5 +69,3 @@
     path: "/tmp/kubehost-{{ item }}"
     state: absent
   with_sequence: count="{{ worker_node_modify_count }}"
-
-- debug: msg="{{ groups['kube_cluster'] }}"
