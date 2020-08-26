@@ -1,0 +1,52 @@
+---
+# Odd thing to do, I know. But this will make it so that the domain is properly set.
+- name: "Append a '.' to the domain variable if domain is set"
+  set_fact:
+    domain_tmp: ".{{ domain }}"
+  when:
+    domain is defined and
+    domain | length > 0
+
+# Add a new Main node to the inventory
+- name: "Add new main nodes to the inventory, scheduled to be created"
+  add_host:
+    name: "{{ cluster_name }}-{{ main_node_name }}-{{ lookup('password', ('/tmp/kubehost-' item) length=6 chars=ascii_letters') | lower }}{{ domain_tmp }}"
+    groups:
+      - kube_cluster
+      - kube_main
+    network: "{{ network }}"
+    cores: "{{ main_node_cpu_cores }}"
+    memory: "{{ main_node_memory }}"
+    disk_size: "{{ main_node_disk_size }}"
+    roles: "{{ main_node_roles | default(omit) }}"
+  with_sequence: count="{{ main_node_modify_count }}"
+
+# Remove a temporary file created to define the names of the nodes
+- name: "Remove temporary file"
+  file:
+    path: "/tmp/kubehost-{{ item }}"
+    state: absent
+  with_sequence: count="{{ main_node_modify_count }}"
+
+# Add a new Worker node to the inventory
+- name: "Add new worker nodes to the inventory, scheduled to be created"
+  add_host:
+    name: "{{ cluster_name }}-{{ worker_node_name }}-{{ lookup('password', '/tmp/kubehost-' + item, length=6 chars=ascii_letters') | lower }}{{ domain_tmp }}"
+    groups:
+      - kube_cluster
+      - kube_worker
+    network: "{{ network }}"
+    cores: "{{ worker_node_cpu_cores }}"
+    memory: "{{ worker_node_memory }}"
+    disk_size: "{{ worker_node_disk_size }}"
+    roles: "{{ worker_node_roles | default(omit) }}"
+  with_sequence: count="{{ worker_node_modify_count }}"
+
+# Remove a temporary file created to define the names of the nodes
+- name: "Remove temporary file created by adding the worker nodes"
+  file:
+    path: "/tmp/kubehost-{{ item }}"
+    state: absent
+  with_sequence: count="{{ worker_node_modify_count }}"
+
+- debug: msg="{{ groups['kube_cluster'] }}"

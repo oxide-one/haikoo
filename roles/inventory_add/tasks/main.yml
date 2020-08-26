@@ -1,87 +1,13 @@
 ---
 
-# Grab all of the main nodes from ovirt
-# Matches a pattern of {{ cluster_name }}-worker-*
-- name: "Grab a list of the main nodes (if any) from Ovirt"
-  ovirt_vm_info:
-    auth: "{{ ovirt_auth }}"
-    pattern:
-      name={{ cluster_name }}-{{ main_node_name }}-* and
-      datacenter="{{ engine_datacenter_name }}" and
-      cluster="{{ engine_cluster_name }}"
-  register: main_node_list
+- name: "Import task to handle grabbing hosts from oVirt"
+  import_tasks: grab_hosts.yaml
 
-# When there are NO vms matching the pattern, create a new cluster
-- name: "Set a var to initialize a new cluster when no {{ main_node_name }} nodes returned"
-  set_fact:
-    new_cluster: True
+- name: "Import task to handle the difference calculation"
+  import_tasks: calculate_differences.yaml
+
+- name: "Import task to handle the creation of dynamic hosts"
+  import_tasks: add_new_hosts.yaml
   when:
-    main_node_list.ovirt_vms | length == 0
-
-# When there are vms matching the pattern, do not create a new cluster
-- name: "Set a var to initialize a new cluster when {{ main_node_name }} vms are returned"
-  set_fact:
-    new_cluster: False
-  when:
-    main_node_list.ovirt_vms | length > 0
-
-# Grab all of the worker nodes from ovirt.
-# Matches a pattern of {{ cluster_name }}-worker-*
-- name: "Grab a list of the worker nodes (if any) from Ovirt"
-  ovirt_vm_info:
-    auth: "{{ ovirt_auth }}"
-    pattern:
-      name={{ cluster_name }}-{{ worker_node_name }}-* and
-      datacenter="{{ engine_datacenter_name }}" and
-      cluster="{{ engine_cluster_name }}"
-  register: worker_node_list
-
-
-# Calculate a diff of the nodes needed vs the nodes present
-- name: "Calculate the node differences"
-  set_fact:
-    main_node_count_diff: "{{ (main_node_count | int) - (main_node_list.ovirt_vms | length) }}"
-    worker_node_count_diff: "{{ (worker_node_count | int) - (worker_node_list.ovirt_vms | length) }}"
-
-
-# Calculate the number of main nodes to add/subtract
-- name: "Check if we need to add more main nodes"
-  set_fact:
-    main_node_modify_count: "{{ main_node_count_diff | int }}"
-    increase_main_nodes: True
-  when:
-    main_node_count_diff | int > 0
-
-- name: "Check if we need less main main node"
-  set_fact:
-    main_node_modify_count: "{{ main_node_count_diff  | int | abs }}"
-    decrease_main_nodes: True
-  when:
-    main_node_count_diff | int < 0
-
-- name: "Check if we need less main main node"
-  set_fact:
-    keep_main_nodes: True
-  when:
-    main_node_count_diff | int == 0
-
-# Calculate the number of worker nodes to add/subtract
-- name: "Check if we need to add more main nodes"
-  set_fact:
-    worker_node_modify_count: "{{ worker_node_count_diff | int }}"
-    increase_worker_nodes: True
-  when:
-    worker_node_count_diff | int > 0
-
-- name: "Check if we need less main main node"
-  set_fact:
-    worker_node_modify_count: "{{ worker_node_count_diff | int | abs }}"
-    decrease_worker_nodes: True
-  when:
-    worker_node_count_diff | int < 0
-
-- name: "Check if we need less main main node"
-  set_fact:
-    keep_worker_nodes: True
-  when:
-    worker_node_count_diff | int == 0
+    increase_worker_nodes or
+    increase_main_nodes

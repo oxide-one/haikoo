@@ -1,0 +1,36 @@
+---
+# Grab all of the main nodes from ovirt
+# Matches a pattern of {{ cluster_name }}-worker-*
+- name: "Grab a list of the main nodes (if any) from Ovirt"
+  ovirt_vm_info:
+    auth: "{{ ovirt_auth }}"
+    pattern:
+      name={{ cluster_name }}-{{ main_node_name }}-* and
+      datacenter="{{ engine_datacenter_name }}" and
+      cluster="{{ engine_cluster_name }}"
+  register: main_node_list
+
+# When there are NO vms matching the pattern, create a new cluster
+- name: "Set a var to initialize a new cluster when no {{ main_node_name }} nodes returned"
+  set_fact:
+    new_cluster: True
+  when:
+    main_node_list.ovirt_vms | length == 0
+
+# When there are vms matching the pattern, do not create a new cluster
+- name: "Set a var to initialize a new cluster when {{ main_node_name }} vms are returned"
+  set_fact:
+    new_cluster: False
+  when:
+    main_node_list.ovirt_vms | length > 0
+
+# Grab all of the worker nodes from ovirt.
+# Matches a pattern of {{ cluster_name }}-worker-*
+- name: "Grab a list of the worker nodes (if any) from Ovirt"
+  ovirt_vm_info:
+    auth: "{{ ovirt_auth }}"
+    pattern:
+      name={{ cluster_name }}-{{ worker_node_name }}-* and
+      datacenter="{{ engine_datacenter_name }}" and
+      cluster="{{ engine_cluster_name }}"
+  register: worker_node_list
