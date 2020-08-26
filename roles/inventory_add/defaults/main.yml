@@ -1,6 +1,38 @@
 ---
+###############
+# Engine vars #
+###############
+engine_username: "admin@internal"
+engine_datacenter_name: "Default"
+engine_cluster_name: "Default"
+
+#################
+# Template vars #
+#################
 template_name: "k8s"
 template_subversion_name: "post-modification"
 
+###################
+# Kubernetes vars #
+###################
 cluster_name: "haikoo"
 domain: ""
+
+#############
+# Node vars #
+#############
+main_node_name: "main"
+main_node_count: 3
+worker_node_name: "worker"
+worker_node_count: 4
+
+####################
+# Role Specific vars
+####################
+main_node_modify_count: 0
+increase_main_nodes: False
+decrease_main_nodes: False
+
+worker_node_modify_count: 0
+increase_worker_nodes: False
+decrease_worker_nodes: False

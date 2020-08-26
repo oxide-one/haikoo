@@ -23,14 +23,8 @@
     - checks/ovirt
     - ovirt/template
 
-# - name: "Add dynamic hosts to inventory"
-#   hosts: ovirt
-#   connection: local
-#   roles:
-#     - add_hosts
-#- name: "Import Template"
-#  hosts: localhost
-#  connection: local
-#  roles:
-#    - ovirt/connect
-#    - ovirt/template
+- name: "Create an inventory of hosts"
+  hosts: ovirt
+  connection: local
+  roles:
+    - inventory_add
