@@ -62,8 +62,10 @@
     seal: "yes"
     cluster: "{{ engine_cluster_name }}"
     vm: "{{ temp_vm_name }}"
+    timeout: "{{ template_import_timeout }}"
+    description: "{{ template_description }}"
     version:
-      name: "subversion"
+      name: "post-modification"
 
 # Remove VM from ovirt
 - name: 'Remove vm "{{ temp_vm_name }}" from ovirt'
