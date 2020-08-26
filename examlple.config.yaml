@@ -5,10 +5,10 @@
 #engine_username: ""
 
 ## Engine password. REQUIRED, NO DEFAULT
-#engine_password:
+#engine_password: ""
 
 ## Engine endpoint (ends with /ovirt-engine). REQUIRED, NO DEFAULT
-#engine_endpoint:
+#engine_endpoint: ""
 
 ## The datacenter name (default: "Default")
 #engine_datacenter_name: ""
@@ -21,16 +21,16 @@
 # Template vars #
 #################
 ## The Template name to use (default: "k8s")
-#template_name:
+#template_name: ""
 
 ## The Storage domain to import the Template to (default: "data")
 #template_storage_location: ""
 
-## Import timeout . Increase this if your import fails. (default: 600)
+## Import timeout . Increase this if your import fails. (default: 600) AKA 10 Minutes
 #template_import_timeout:
 
 ## Description of the imported template. (default: "Created by haikoo")
-#template_description:
+#template_description: ""
 
 ## Extra repos to add to the template. (default: none)
 #template_extra_repos: {}
@@ -42,7 +42,7 @@
 #template_upgrade_packages: True
 
 ## Timezone of the imported template. (default: "Etc/GMT")
-#template_timezone:
+#template_timezone: ""
 
 ## Install extra packages. (default: none)
 #template_extra_packages: []
@@ -56,7 +56,8 @@
 ## Enable SELINUX (default: False)
 #template_selinux_enabled:
 
-
+## Template subversion name to save the template as (default: "post-modification" )
+# template_subversion_name: ""
 ##############################
 # Temporary VM configuration #
 ##############################
@@ -66,13 +67,13 @@
 ## Name of the network to provision the vm on (default: "ovirtmgmt")
 #temp_vm_network: ""
 
-## Number of cores to give the temporary vm (default: 2)
+## Number of cores to give the temporary vm (default: 6)
 #temp_vm_cores:
 
-## Memory to give the temporary vm [in MB] (default: 2048)
+## Memory to give the temporary vm [in MB] (default: 3072)
 #temp_vm_memory:
 
-## Number of retries (x30s) for template to complete operation (default: 20)
+## Number of retries (x60s) for template to complete operation (default: 45) AKA 45 Minutes.
 #temp_vm_shutdown_retries:
 
 ############################
@@ -80,3 +81,58 @@
 ############################
 ## The CRI-O Version to enable and install (default: 1.18)
 #crio_version: "1.18"
+
+## The name of the cluster. (default: haikoo)
+#cluster_name: ""
+
+## The IP address of the controlplane endpoint. This must be within the same subnet as your mainline nodes. REQUIRED
+#controlplane_endpoint: ""
+
+## The DNS endpoint of your controlplane endpoint. No default.
+#controlplane_dns_endpoint: ""
+
+######################################
+# mainline/master node Configuration #
+######################################
+
+## How the main nodes will be named. Defaults to {{ cluster_name }}-main-{{ machine_id }}
+## Please note the pattern you specify MUST create a unique string. use the machine_id to create a unique string of 6 Char length.
+#main_node_naming_schema: ""
+
+## How many main nodes you would like (default: 3)
+#main_node_count:
+
+## The number of cores to give to each main node (default: 4)
+#main_node_cpu_cores:
+
+## The amount of memory (in MB) to give to the main nodes (default: 4096)
+#main_node_memory:
+
+## The Disk size (in GB) to give to the main nodes (default: 30)
+#main_node_disk_size:
+
+## List of roles to give to the worker node once provisioned. (default: none)
+#main_node_roles: []
+
+#############################
+# Worker node configuration #
+#############################
+
+## How the worker nodes will be named. Defaults to {{ cluster_name }}-worker-{{ machine_id }}
+## Please note the pattern you specify MUST create a unique string. use the machine_id to create a unique string of 6 Char length.
+#worker_node_naming_schema: ""
+
+## How many main nodes you would like (default: 3)
+#worker_node_count:
+
+## The number of cores to give to each main node (default: 4)
+#worker_node_cpu_cores:
+
+## The amount of memory (in MB) to give to the main nodes (default: 4096)
+#worker_node_memory:
+
+## The Disk size (in GB) to give to the main nodes (default: 30)
+#worker_node_disk_size:
+
+## List of roles to give to the worker node once provisioned. (default: none)
+#worker_node_roles: []

@@ -6,6 +6,7 @@
     state: present
     name: "{{ temp_vm_name }}"
     cpu_cores: "{{ temp_vm_cores }}"
+    memory: "{{ temp_vm_memory }}MiB"
     template: "{{ template_name }}"
     cluster: "{{ engine_cluster_name }}"
     type: "server"
@@ -16,7 +17,7 @@
         profile_name: "{{ temp_vm_network }}"
   register: ovirt_created_vm
 
-# Quite a chunky task, but it is necessary for things to function.
+# Start a virtual machien with cloud-init. You CANNOT create+start a VM at the same time when using cloud-init, so this approach is given.
 - name: 'Start the temporary virtual machine "{{ temp_vm_name }}"'
   ovirt_vm:
     auth: "{{ ovirt_auth }}"
@@ -26,7 +27,7 @@
     name: "{{ temp_vm_name }}"
 
 # Wait for the VM to complete the above operations and shutdown
-- name: 'Wait for vm "{{ temp_vm_name }}" to install packages and shutdown'
+- name: 'Wait for vm "{{ temp_vm_name }}" to install packages and shutdown. This will take some time.'
   ovirt_vm_info:
     auth: "{{ ovirt_auth }}"
     pattern:
@@ -36,7 +37,7 @@
   register: ovirt_template_info
   until: ovirt_template_info.ovirt_vms[0].status != "up"
   retries: "{{ temp_vm_shutdown_retries }}"
-  delay: 30
+  delay: 60
 
 # Make sure that the vm is down before operating
 - name: 'Ensure vm "{{ temp_vm_name }}" is shutdown'
@@ -61,8 +62,10 @@
     seal: "yes"
     cluster: "{{ engine_cluster_name }}"
     vm: "{{ temp_vm_name }}"
+    timeout: "{{ template_import_timeout }}"
+    description: "{{ template_description }}"
     version:
-      name: "subversion"
+      name: "post-modification"
 
 # Remove VM from ovirt
 - name: 'Remove vm "{{ temp_vm_name }}" from ovirt'
