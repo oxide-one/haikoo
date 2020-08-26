@@ -1,0 +1,11 @@
+---
+# Check that the required kubernetes variables exist
+- name: 'Assert that the Kubernetes Controlplane endpoint is defined'
+  assert:
+    quiet: yes
+    fail_msg: |
+      Please make sure that the Kubernetes Controlplane endpoint is defined
+      Example usage:
+        controlplane_endpoint: "10.0.0.1"
+    that:
+      - controlplane_endpoint is defined

@@ -1,0 +1,5 @@
+---
+template_name: "k8s"
+template_subversion_name: "post-modification"
+
+cluster_name: "haikoo"
