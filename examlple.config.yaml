@@ -85,6 +85,11 @@
 ## The name of the cluster. (default: haikoo)
 #cluster_name: ""
 
+## Cluster name suffix
+## (alternatively, domain)
+## A string that will be appended onto the end of the hostnames for each node. default is none.
+#domain:
+
 ## The IP address of the controlplane endpoint. This must be within the same subnet as your mainline nodes. REQUIRED
 #controlplane_endpoint: ""
 
@@ -94,13 +99,15 @@
 ## Skip a DNS check if you are know that the DNS name resolves properly. (default: false)
 #skip_dns_check:
 
+## The Name of the oVirt network to deploy Kubernetes on
+#network:
+
 ######################################
 # mainline/master node Configuration #
 ######################################
 
-## How the main nodes will be named. Defaults to {{ cluster_name }}-main-{{ machine_id }}
-## Please note the pattern you specify MUST create a unique string. use the machine_id to create a unique string of 6 Char length.
-#main_node_naming_schema: ""
+## The name of the main nodes (default: "main")
+#main_node_name: ""
 
 ## How many main nodes you would like (default: 3)
 #main_node_count:
@@ -121,9 +128,8 @@
 # Worker node configuration #
 #############################
 
-## How the worker nodes will be named. Defaults to {{ cluster_name }}-worker-{{ machine_id }}
-## Please note the pattern you specify MUST create a unique string. use the machine_id to create a unique string of 6 Char length.
-#worker_node_naming_schema: ""
+## The name of the worker nodes (default: "worker")
+#worker_node_name: ""
 
 ## How many main nodes you would like (default: 3)
 #worker_node_count:

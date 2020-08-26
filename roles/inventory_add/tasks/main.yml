@@ -1,4 +1,23 @@
 ---
 
-- name: "Grab a list of hosts from Ovirt"
-  debug: msg="hello"
+# Grab all of the main nodes from ovirt
+# Matches a pattern of {{ cluster_name }}-worker-*
+- name: "Grab a list of the main nodes (if any) from Ovirt"
+  ovirt_vm_info:
+    auth: "{{ ovirt_auth }}"
+    pattern:
+      name={{ cluster_name }}-main-* and
+      datacenter="{{ engine_datacenter_name }}" and
+      cluster="{{ engine_cluster_name }}"
+  register: main_node_list
+
+# Grab all of the worker nodes from ovirt.
+# Matches a pattern of {{ cluster_name }}-worker-*
+- name: "Grab a list of the worker nodes (if any) from Ovirt"
+  ovirt_vm_info:
+    auth: "{{ ovirt_auth }}"
+    pattern:
+      name={{ cluster_name }}-worker-* and
+      datacenter="{{ engine_datacenter_name }}" and
+      cluster="{{ engine_cluster_name }}"
+  register: main_node_list
