@@ -1,4 +1,18 @@
 ###############
+# Auth vars   #
+###############
+
+## Set the username to create on the virtual machines, and that ansible will use. (default: 'kubeadmin')
+#username:
+
+## Set the default password to use for the above user. (default: none)
+#password:
+
+## Set the SSH key to add as an authorized key
+## One of two of these variables must be defined
+#ssh_key_path:
+#ssh_key_github:
+###############
 # Engine vars #
 ###############
 ## The default username for the Engine (default: "admin@internal")
