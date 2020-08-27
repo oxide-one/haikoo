@@ -1,0 +1,12 @@
+---
+- name: "Run ovirt related preflight checks"
+  import_tasks: ovirt.yaml
+
+- name: "Run kubernetes related preflight checks"
+  import_tasks: kubernetes.yaml
+
+- name: "Run Virtual Machine related preflight checks"
+  import_tasks: virtual_machines.yaml
+
+- name: "Import role to handle setting extra facts"
+  import_tasks: extra_facts.yaml
