@@ -16,6 +16,7 @@
     - pre_tasks
     - ovirt/connect
     - tests/ovirt
+    - inventory
 
 - name: "Provision the main virtual machine nodes"
   hosts: kube_main
@@ -28,8 +29,7 @@
   hosts: kube_main
   gather_facts: yes
   tasks:
-    - debug:
-        msg: "{{ hostvars[item].ansible_host }}"
-      with_list: "{{ groups['kube_main'] }}"
-  #roles:
-  #  - kubernetes/main_node_setup
+    - name: "Import role when handling new nodes being added to the cluster"
+      import_role:
+        name: kubernetes/main_node_setup
+      when: increase_main_nodes

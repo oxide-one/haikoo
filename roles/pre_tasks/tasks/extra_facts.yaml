@@ -4,3 +4,10 @@
 - name: "Set the ansble_user variable from the username variable"
   set_fact:
     ansible_user: "{{ username }}"
+
+- name: "Set the main node facts"
+  set_fact:
+    increase_main_nodes: False
+    increase_worker_nodes: False
+    decrease_main_nodes: False
+    decrease_worker_nodes: False
