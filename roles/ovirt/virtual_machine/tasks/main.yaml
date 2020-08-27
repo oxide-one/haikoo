@@ -2,7 +2,7 @@
 
 # Create a Virtual Machine
 - name: "Import tasks to handle creation of a virtual machine"
-  import_tasks: setup.yaml
+  import_tasks: create.yaml
   when: state|default('present') == 'present'
 
 # # Start the Virtual Machine

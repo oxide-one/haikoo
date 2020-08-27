@@ -34,3 +34,4 @@
   roles:
     - ovirt/import_facts
     - ovirt/virtual_machine
+    - ovirt/resize_disk
