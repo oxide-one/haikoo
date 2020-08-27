@@ -16,26 +16,10 @@
     - tests/preflight
     - ovirt/connect
     - tests/ovirt
-    - ovirt/template
-
-- name: "Handle templating"
-  hosts: ovirt
-  connection: local
-  roles:
-    - ovirt/template
-
-- name: "Create an inventory of hosts"
-  hosts: ovirt
-  connection: local
-  roles:
-    - inventory
 
 - name: "Provision the main virtual machine nodes"
   hosts: kube_main
   connection: local
   roles:
     - ovirt/import_facts
-    - ovirt/virtual_machine
-    - ovirt/resize_disk
-    - role: ovirt/virtual_machine
-      state: started
+    - ovirt/wait_for_ip

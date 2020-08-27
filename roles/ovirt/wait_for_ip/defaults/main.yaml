@@ -1,0 +1,6 @@
+---
+###############
+# Engine vars #
+###############
+engine_datacenter_name: "Default"
+engine_cluster_name: "Default"
