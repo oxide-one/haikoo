@@ -1,4 +1,5 @@
 ---
+# Create the virtual machine
 - name: "Create ovirt virtual machine"
   ovirt_vm:
     auth: "{{ ovirt_auth }}"
@@ -13,6 +14,7 @@
     disk_format: "cow"
     cluster: "{{ engine_cluster_name }}"
 
+# Add the NIC to the virtual machine
 - name: "Add nics to new virtual machine"
   ovirt_nic:
     auth: "{{ ovirt_auth }}"
@@ -22,21 +24,3 @@
     network: "{{ network }}"
     interface: "virtio"
     state: "present"
-
-- name: "Get disk info for {{ inventory_hostname }}"
-  ovirt_disk_info:
-    auth: "{{ ovirt_auth }}"
-    pattern:
-      vm_names={{ inventory_hostname }}
-  register: disk_infosetup
-
-- debug: msg="{{ disk_info }}"
-
-- name: "Get disk info for {{ inventory_hostname }}"
-  ovirt_disk:
-    auth: "{{ ovirt_auth }}"
-    id: "{{ disk_info.ovirt_disks[0].id }}"
-    name: "root_{{ inventory_hostname }}"
-    vm_name: "{{ inventory_hostname }}"
-    description: "Root filesystem for {{ inventory_hostname }}"
-    size: "{{ ovirt_vm_disk_size }}GiB"
