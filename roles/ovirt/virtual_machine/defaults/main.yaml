@@ -26,6 +26,7 @@ main_node_name: "main"
 main_node_count: 3
 worker_node_name: "worker"
 worker_node_count: 4
+username: "kubeadmin"
 
 ######################
 # Role Specific vars #

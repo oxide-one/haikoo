@@ -4,3 +4,4 @@ facts_to_import:
   - "ovirt_auth"
   - "new_cluster"
   - "template_version_number"
+  - "ssh_key"

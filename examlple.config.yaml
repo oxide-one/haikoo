@@ -5,7 +5,7 @@
 ## Set the username to create on the virtual machines, and that ansible will use. (default: 'kubeadmin')
 #username:
 
-## Set the default password to use for the above user. (default: none)
+## Set the password for the root user. (default: none)
 #password:
 
 ## Set the SSH key to add as an authorized key

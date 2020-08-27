@@ -142,3 +142,66 @@
       Current value: {{ temp_vm_network }}
     that:
       - (checks_ovirt_temp_vm_network_exists.ovirt_networks | length>0)
+
+
+#################
+# SSH Key Stuff #
+#################
+# Check if the ssh_key_path var is defined
+- name: "Check if the SSH key vars are defined"
+  assert:
+    quiet: yes
+    fail_msg: |
+      Please make sure that your SSH key vars are defined.
+
+      Example usage:
+        ssh_key_path: "/home/haikoo/.ssh/mykey.pubkey"
+        ssh_key_github: "oxide-one"
+
+      Currently, it is:
+        ssh_key_path: {{ ssh_key_path | default("none") }}
+        ssh_key_github: {{ ssh_key_github | default("none") }}
+    that:
+      - ssh_key_path is defined
+  when:
+    - ssh_key_github is not defined
+
+# Check if the ssh_key_path var is defined
+- name: "Check if the SSH key vars are defined"
+  assert:
+    quiet: yes
+    fail_msg: |
+      Please make sure that your SSH key vars are defined.
+
+      Example usage:
+        ssh_key_path: "/home/haikoo/.ssh/mykey.pubkey"
+        ssh_key_github: "oxide-one"
+
+      Currently, it is:
+        ssh_key_path: {{ ssh_key_path | default("none") }}
+        ssh_key_github: {{ ssh_key_github | default("none") }}
+    that:
+      - ssh_key_github is defined
+  when:
+    - ssh_key_path is not defined
+
+# Grab an SSH key from github
+- name: "Grab an SSH key from github"
+  uri:
+    url: "https://github.com/{{ ssh_key_github }}.keys"
+    return_content: yes
+  register:
+    ssh_key_github_contents
+  failed_when: ssh_key_github_contents.status != 200
+  when: ssh_key_github is defined
+
+- name: "Set the ssh_key variable from githu"
+  set_fact:
+    ssh_key: "{{ ssh_key_github_contents.content | replace('\n', '') }}"
+  when: ssh_key_github is defined
+
+# File related stuff
+- name: "Grab an SSH key from a file"
+  set_fact:
+    ssh_key: "{{ lookup('file', ssh_key_path) }}"
+  when: ssh_key_path is defined
