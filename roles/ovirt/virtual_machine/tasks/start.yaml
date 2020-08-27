@@ -8,7 +8,7 @@
       host_name: "{{ inventory_hostname }}"
       authorized_ssh_keys: "{{ ssh_key }}"
       user_name: "{{ username }}"
-      root_password: "{{ password }}"
+      root_password: "{{ password | default(omit) }}"
       custom_script: |
         {% if runtime_commands is defined %}
         {{ runtime_commands }}

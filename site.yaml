@@ -1,10 +1,4 @@
 ---
-- name: "Run necessary preflight checks, and add ovirt engine as host"
-  hosts: localhost
-  connection: local
-  roles:
-    - tests/preflight
-
 - name: "Add ovirt engine endpoint {{ engine_endpoint | urlsplit('hostname') }} to inventory"
   hosts: localhost
   connection: local
@@ -15,12 +9,19 @@
         name: "{{ engine_endpoint | urlsplit('hostname') }}"
         groups: ovirt
 
-- name: "Template setup tasks"
+- name: "Run Preliminary checks and tests"
   hosts: ovirt
   connection: local
   roles:
+    - tests/preflight
     - ovirt/connect
     - tests/ovirt
+    - ovirt/template
+
+- name: "Handle templating"
+  hosts: ovirt
+  connection: local
+  roles:
     - ovirt/template
 
 - name: "Create an inventory of hosts"
