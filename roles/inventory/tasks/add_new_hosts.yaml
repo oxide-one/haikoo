@@ -26,11 +26,6 @@
     state: absent
   with_sequence: count="{{ worker_node_modify_count }}"
 
-# Ensure /tmp/kubehost-1...etc are not present for worker nodes
-- name: "Ensure /tmp/haikookpasswd is absent so node passwords can be created"
-  file:
-    path: "/tmp/haikookpasswd"
-    state: absent
 
 # Add a new Main node to the inventory
 - name: "Add new main nodes to the inventory, scheduled to be created"
@@ -41,7 +36,6 @@
       - kube_cluster
       - kube_main
     network: "{{ network }}"
-    temp_password: "{{ lookup('password', '/tmp/haikookpasswd length=32 chars=ascii_letters') }}"
     cores: "{{ main_node_cpu_cores }}"
     memory: "{{ main_node_memory }}"
     disk_size: "{{ main_node_disk_size }}"
@@ -66,7 +60,6 @@
       - kube_cluster
       - kube_worker
     network: "{{ network }}"
-    temp_password: "{{ lookup('password', '/tmp/haikookpasswd length=32 chars=ascii_letters') }}"
     cores: "{{ worker_node_cpu_cores }}"
     memory: "{{ worker_node_memory }}"
     disk_size: "{{ worker_node_disk_size }}"
@@ -81,9 +74,3 @@
     path: "/tmp/kubehost-{{ item }}"
     state: absent
   with_sequence: count="{{ worker_node_modify_count }}"
-
-# Ensure /tmp/haikookpasswd is absent
-- name: "Ensure /tmp/haikookpasswd is absent so people can't snoop >:D"
-  file:
-    path: "/tmp/haikookpasswd"
-    state: absent
