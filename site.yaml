@@ -3,7 +3,7 @@
   hosts: localhost
   connection: local
   roles:
-    - checks/preflight
+    - tests/preflight
 
 - name: "Add ovirt engine endpoint {{ engine_endpoint | urlsplit('hostname') }} to inventory"
   hosts: localhost
@@ -20,11 +20,17 @@
   connection: local
   roles:
     - ovirt/connect
-    - checks/ovirt
+    - tests/ovirt
     - ovirt/template
 
 - name: "Create an inventory of hosts"
   hosts: ovirt
   connection: local
   roles:
-    - inventory_add
+    - inventory
+
+- hosts: kube_main
+  connection: local
+  roles:
+    - ovirt/import_facts
+    - ovirt/virtual_machine

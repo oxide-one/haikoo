@@ -86,6 +86,7 @@
 - name: 'Set a variable if template "{{ template_name }}" does not have a subversion (i.e, not been modified)'
   set_fact:
     template_modified: true
+    template_version_number: "{{ checks_ovirt_template_subversion_exists.ovirt_templates[0].version.version_number }}"
   when: checks_ovirt_template_subversion_exists.ovirt_templates | length>0
 
 # Set the template_modified variable to false if template has not been modified

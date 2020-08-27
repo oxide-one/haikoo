@@ -39,6 +39,8 @@
     memory: "{{ main_node_memory }}"
     disk_size: "{{ main_node_disk_size }}"
     roles: "{{ main_node_roles | default(omit) }}"
+    template_version: "{{ template_version_number }}"
+    template: "{{ template_name }}"
   with_sequence: count="{{ main_node_modify_count }}"
 
 # Remove a temporary file created to define the names of the nodes
@@ -61,6 +63,8 @@
     memory: "{{ worker_node_memory }}"
     disk_size: "{{ worker_node_disk_size }}"
     roles: "{{ worker_node_roles | default(omit) }}"
+    template_version: "{{ template_version_number }}"
+    template: "{{ template_name }}"
   with_sequence: count="{{ worker_node_modify_count }}"
 
 # Remove a temporary file created to define the names of the nodes

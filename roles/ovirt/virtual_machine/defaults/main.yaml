@@ -1,0 +1,50 @@
+---
+###############
+# Engine vars #
+###############
+engine_username: "admin@internal"
+engine_datacenter_name: "Default"
+engine_cluster_name: "Default"
+
+#################
+# Template vars #
+#################
+template_name: "k8s"
+template_subversion_name: "post-modification"
+
+###################
+# Kubernetes vars #
+###################
+cluster_name: "haikoo"
+domain: ""
+domain_tmp: ""
+network: "ovirtmgmt"
+#############
+# Node vars #
+#############
+main_node_name: "main"
+main_node_count: 3
+worker_node_name: "worker"
+worker_node_count: 4
+
+######################
+# Role Specific vars #
+######################
+main_node_modify_count: 0
+increase_main_nodes: False
+decrease_main_nodes: False
+
+worker_node_modify_count: 0
+increase_worker_nodes: False
+decrease_worker_nodes: False
+
+#############################
+# Virtual Machine Variables #
+#############################
+main_node_cpu_cores: 4
+main_node_memory: 4096
+main_node_disk_size: 30
+
+worker_node_cpu_cores: 4
+worker_node_memory: 4096
+worker_node_disk_size: 30
