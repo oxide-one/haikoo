@@ -5,5 +5,5 @@
 - name: "Run kubernetes related preflight checks"
   import_tasks: kubernetes.yaml
 
-#- name: "Run Virtual Machine related preflight checks"
-#  import_tasks: virtual_machines.yaml
+- name: "Run Virtual Machine related preflight checks"
+  import_tasks: virtual_machines.yaml
