@@ -13,7 +13,7 @@
   hosts: ovirt
   connection: local
   roles:
-    - tests/preflight
+    - pre_tasks
     - ovirt/connect
     - tests/ovirt
     - ovirt/template

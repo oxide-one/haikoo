@@ -13,7 +13,7 @@
   hosts: ovirt
   connection: local
   roles:
-    - tests/preflight
+    - pre_tasks
     - ovirt/connect
     - tests/ovirt
 
@@ -23,3 +23,13 @@
   roles:
     - ovirt/import_facts
     - ovirt/wait_for_ip
+
+- name: "Prepare the main nodes"
+  hosts: kube_main
+  gather_facts: yes
+  tasks:
+    - debug:
+        msg: "{{ hostvars[item].ansible_host }}"
+      with_list: "{{ groups['kube_main'] }}"
+  #roles:
+  #  - kubernetes/main_node_setup

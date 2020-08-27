@@ -5,3 +5,4 @@ facts_to_import:
   - "new_cluster"
   - "template_version_number"
   - "ssh_key"
+  - "ansible_user"

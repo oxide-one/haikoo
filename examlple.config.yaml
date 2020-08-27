@@ -116,6 +116,8 @@
 ## The Name of the oVirt network to deploy Kubernetes on
 #network:
 
+## The statup timeout (in minutes) to wait for the virtual machines to power on
+#startup_timeout: 60
 ######################################
 # mainline/master node Configuration #
 ######################################

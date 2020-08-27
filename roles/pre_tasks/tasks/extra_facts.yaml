@@ -1,0 +1,6 @@
+---
+
+# Set some extra extra facts
+- name: "Set the ansble_user variable from the username variable"
+  set_fact:
+    ansible_user: "{{ username }}"

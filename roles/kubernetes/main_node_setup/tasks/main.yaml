@@ -1,0 +1,10 @@
+---
+- name: "Install haproxy and keepalived"
+  dnf:
+    name:
+      - haproxy
+      - keepalived
+    state: present
+  become: yes
+
+- debug: msg="{{ hostvars[groups['kube_main']] }}"
