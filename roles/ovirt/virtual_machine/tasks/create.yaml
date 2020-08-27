@@ -25,10 +25,10 @@
 
 - name: "Get disk info for {{ inventory_hostname }}"
   ovirt_disk_info:
-    auth: "{{ ovirt_auth }}"
+    auth: "{{ ovirt_auth}}"
     pattern:
       vm_names={{ inventory_hostname }}
-  register: disk_info
+  register: disk_infosetup
 
 - debug: msg="{{ disk_info }}"
 
