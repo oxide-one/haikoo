@@ -35,3 +35,5 @@
     - ovirt/import_facts
     - ovirt/virtual_machine
     - ovirt/resize_disk
+    - role: ovirt/virtual_machine
+      state: started

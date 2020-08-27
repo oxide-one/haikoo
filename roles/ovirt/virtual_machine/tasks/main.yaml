@@ -5,10 +5,10 @@
   import_tasks: create.yaml
   when: state|default('present') == 'present'
 
-# # Start the Virtual Machine
-# - name: "Import tasks to handle starting a virtual machine"
-#   import_tasks: start.yaml
-#   when: state|default('present') == 'started'
+## Start the Virtual Machine
+- name: "Import tasks to handle starting a virtual machine"
+  import_tasks: start.yaml
+  when: state|default('present') == 'started'
 #
 # # Stop the Virtual Machine
 # - name: "Import tasks to handle stopping a virtual machine"

@@ -42,6 +42,10 @@
     roles: "{{ main_node_roles | default(omit) }}"
     template_version: "{{ template_version_number }}"
     template: "{{ template_name }}"
+    runtime_commands: |
+      packages:
+        - haproxy
+        - keepalived
   with_sequence: count="{{ main_node_modify_count }}"
 
 # Remove a temporary file created to define the names of the nodes
