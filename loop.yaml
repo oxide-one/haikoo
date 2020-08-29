@@ -14,6 +14,7 @@
   connection: local
   roles:
     - pre_tasks
+    - grab_ssh_key
     - ovirt/connect
     - tests/ovirt
     - inventory
@@ -23,6 +24,8 @@
   connection: local
   roles:
     - ovirt/import_facts
+    - role: ovirt/virtual_machine
+      state: started
     - ovirt/wait_for_ip
 
 - name: "Prepare the main nodes"

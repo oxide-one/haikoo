@@ -14,6 +14,7 @@
   connection: local
   roles:
     - pre_tasks
+    - grab_ssh_key
     - ovirt/connect
     - tests/ovirt
     - ovirt/template
