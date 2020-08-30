@@ -1,0 +1,19 @@
+vrrp_instance VI_1 {
+    state MASTER
+    interface eth0
+    virtual_router_id 100
+{% for host in groups['kube_main'] %}
+{% if host == inventory_hostname %}
+    priority {{ ( groups['kube_main'] | length ) - loop.index0 }}
+{% endif %}
+{% endfor %}
+
+    advert_int 1
+    authentication {
+        auth_type PASS
+        auth_pass {{ lookup('password', '/tmp/keepalived_pw length=5 chars=ascii_letters') }}
+    }
+    virtual_ipaddress {
+        {{ controlplane_endpoint }}
+    }
+}
