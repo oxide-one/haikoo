@@ -2,7 +2,7 @@
 - name: "Add ovirt engine endpoint {{ engine_endpoint | urlsplit('hostname') }} to inventory"
   hosts: localhost
   connection: local
-  tasks:
+  pre_tasks:
     # Add ovirt engine host to inventory
     - name: "Add host {{ engine_endpoint | urlsplit('hostname') }} to inventory for better logging"
       add_host:
@@ -12,11 +12,20 @@
 - name: "Run Preliminary checks and tests"
   hosts: ovirt
   connection: local
+  pre_tasks:
+    - name: "Import role to handle pre tasks"
+      import_role:
+        name: pre_tasks
+    - name: "Import role to handle grabbing an SSH key"
+      import_role:
+        name: grab_ssh_key
+    - name: "Import role to connect to ovirt"
+      import_role:
+        name: ovirt/connect
+    - name: "Import role to handle testing ovirt in flight"
+      import_role:
+        name: tests/ovirt
   roles:
-    - pre_tasks
-    - grab_ssh_key
-    - ovirt/connect
-    - tests/ovirt
     - inventory
 
 - name: "Provision the main virtual machine nodes"
@@ -31,6 +40,10 @@
 - name: "Prepare the main nodes"
   hosts: kube_main
   gather_facts: yes
+  pre_tasks:
+    - name: "Wait for connection"
+      wait_for_connection:
+
   tasks:
     - name: "Import role when handling new nodes being added to the cluster"
       import_role:

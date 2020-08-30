@@ -2,41 +2,71 @@
 - name: "Add ovirt engine endpoint {{ engine_endpoint | urlsplit('hostname') }} to inventory"
   hosts: localhost
   connection: local
-  tasks:
+  pre_tasks:
     # Add ovirt engine host to inventory
     - name: "Add host {{ engine_endpoint | urlsplit('hostname') }} to inventory for better logging"
       add_host:
         name: "{{ engine_endpoint | urlsplit('hostname') }}"
         groups: ovirt
 
-- name: "Run Preliminary checks and tests"
+- name: "Run Preliminary checks and tests, then handle templating"
   hosts: ovirt
   connection: local
-  roles:
-    - pre_tasks
-    - grab_ssh_key
-    - ovirt/connect
-    - tests/ovirt
-    - ovirt/template
+  pre_tasks:
+    # Handle the necessary pre tasks
+    - name: "Import role to handle pre tasks"
+      import_role:
+        name: pre_tasks
+    # Grab an SSH key from a file or github
+    - name: "Import role to handle grabbing an SSH key"
+      import_role:
+        name: grab_ssh_key
+    # Connect to ovirt and set the ovirt_auth var
+    - name: "Import role to connect to ovirt"
+      import_role:
+        name: ovirt/connect
+    # Run Tests
+    - name: "Import role to handle testing ovirt in flight"
+      import_role:
+        name: tests/ovirt
+  tasks:
+    # Handle templating
+    - name: "Import role to handle testing ovirt in flight"
+      import_role:
+        name: ovirt/template
 
-- name: "Handle templating"
-  hosts: ovirt
-  connection: local
-  roles:
-    - ovirt/template
 
 - name: "Create an inventory of hosts"
   hosts: ovirt
   connection: local
-  roles:
-    - inventory
+  tasks:
+    # Handle templating
+    - name: "Import role to create inventory of hosts"
+      import_role:
+        name: inventory
 
 - name: "Provision the main virtual machine nodes"
   hosts: kube_main
   connection: local
-  roles:
-    - ovirt/import_facts
-    - ovirt/virtual_machine
-    - ovirt/resize_disk
-    - role: ovirt/virtual_machine
-      state: started
+  pre_tasks:
+    # Import facts from 'ovirt' to the machines to prevent re-run
+    - name: "Import facts from the ovirt host"
+      import_role:
+        name: ovirt/import_facts
+  tasks:
+    # Create a virtual machine
+    - name: "Import role to create a virtual machine"
+      import_role:
+        name: ovirt/virtual_machine
+
+    # Resize the disks
+    - name: "Import a role to resize the disks"
+      import_role:
+        name: ovirt/resize_disk
+
+    # Start the VM
+    - name: "Import a role to start a virtual machine"
+      import_role:
+        name: ovirt/virtual_machine
+      vars:
+        state: started
