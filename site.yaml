@@ -89,4 +89,4 @@
     - name: "Import role to handle setting up main nodes"
       import_role:
         name: kubernetes/main_node_setup
-      when: increase_main_nodes
+      when: increase_main_nodes|bool

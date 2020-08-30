@@ -1,10 +1,31 @@
 ---
-- name: "Install haproxy and keepalived"
-  dnf:
-    name:
-      - haproxy
-      - keepalived
-    state: present
-  become: yes
+# - name: "Install haproxy and keepalived"
+#   dnf:
+#     name:
+#       - haproxy
+#       - keepalived
+#     state: present
+#   become: yes
+# This is all because the fucking nmcli module is broken.
+- name: "Set fact to set the CIDR"
+  set_fact:
+    mask_cidr: "{{ ip | ipaddr('prefix') }}"
+    ip_address: "{{ ansible_default_ipv4.address }}"
+  vars:
+    ip: "{{ ansible_default_ipv4.address }}/{{ ansible_default_ipv4.netmask }}"
 
-- debug: msg="{{ hostvars[groups['kube_main']] }}"
+# Probably a bad use of the changed_when var
+- name: "Run command set a static IP from the DHCP address"
+  command: "nmcli con mod 'System eth0' ipv4.addresses '{{ ip_address }}/{{ mask_cidr }}'"
+  become: yes
+  register: nmcli_command
+  changed_when: nmcli_command.rc != 0
+
+- name: "Tempalate out the hosts file"
+  template:
+    src: hosts.conf.j2
+    dest: /etc/hosts
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+  become: yes
