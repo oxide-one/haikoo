@@ -34,3 +34,11 @@
       datacenter="{{ engine_datacenter_name }}" and
       cluster="{{ engine_cluster_name }}"
   register: worker_node_list
+
+
+# Set a fact to add existing hosts to the inventory
+- name: "Import task to import existing nodes to the inventory"
+  import_tasks: add_existing_hosts.yaml
+  when:
+    main_node_list.ovirt_vms | length > 0 or
+    worker_node_list.ovirt_vms | length > 0

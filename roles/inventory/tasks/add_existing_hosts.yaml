@@ -1,0 +1,32 @@
+---
+# Add am Existing Main node to the inventory
+- name: "Add new main nodes to the inventory, scheduled to be created"
+  add_host:
+    name: "{{ item.name }}"
+    groups:
+      - kube_cluster
+      - kube_main
+    network: "{{ network }}"
+    cores: "{{ main_node_cpu_cores }}"
+    memory: "{{ main_node_memory }}"
+    disk_size: "{{ main_node_disk_size }}"
+    roles: "{{ main_node_roles | default(omit) }}"
+    template_version: "{{ template_version_number }}"
+    template: "{{ template_name }}"
+  with_list: "{{ main_node_list.ovirt_vms }}"
+
+# Add an Existing Worker node to the inventory
+- name: "Add new worker nodes to the inventory, scheduled to be created"
+  add_host:
+    name: "{{ item.name }}"
+    groups:
+      - kube_cluster
+      - kube_worker
+    network: "{{ network }}"
+    cores: "{{ worker_node_cpu_cores }}"
+    memory: "{{ worker_node_memory }}"
+    disk_size: "{{ worker_node_disk_size }}"
+    roles: "{{ worker_node_roles | default(omit) }}"
+    template_version: "{{ template_version_number }}"
+    template: "{{ template_name }}"
+  with_list: "{{ worker_node_list.ovirt_vms }}"
