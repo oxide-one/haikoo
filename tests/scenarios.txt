@@ -1,0 +1,45 @@
+VARS
+- Engine Endpoint not Defined
+- Engine Password not Defined
+- SSH_key not defined
+
+ENGINE
+- Engine Endpoint is Wrong
+- Engine Password is Wrong
+- Engine Username is Wrong
+- Engine Datacentre Does not exist
+- Engine Cluster Does not exist
+
+TEMPLATE
+- Template name is invalid
+- Storage location does not exist
+- Storage location does not have enough storage (warn)
+- Template import timeout
+
+NETWORK
+- Network does not exist
+
+TEMPORARY VM
+- Temporary VM already exists
+- Cores exceeded
+- Memory exceeded
+- Disk size too large (warn)
+
+- Shutdown retries timeout
+
+KUBERNETES
+- controlplane is out of subnet
+- controlplane dns endpoint does not resolve
+- controlplane dns endpoint does not resolve correctly
+- startup timeout exceeded
+
+MAIN NODES
+- Cores exceeded
+- Memory exceeded
+- Disk size too large (warn)
+
+
+WORKER NODES
+- Cores exceeded
+- Memory exceeded
+- Disk size too large (warn)
