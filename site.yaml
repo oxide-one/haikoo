@@ -58,6 +58,8 @@
     - name: "Import role to create a virtual machine"
       import_role:
         name: ovirt/virtual_machine
+      vars:
+        state: present
 
     # Resize the disks
     - name: "Import a role to resize the disks"
@@ -70,3 +72,21 @@
         name: ovirt/virtual_machine
       vars:
         state: started
+
+    # Wait for the Virtual machines to get an IP address, then set their ansible_host vars
+    - name: "Import role to handle getting IP address information"
+      import_role:
+        name: ovirt/wait_for_ip
+
+- name: "Playbook to handle preparing the main nodes for use"
+  hosts: kube_main
+  gather_facts: yes
+  pre_tasks:
+    - name: "Wait for the virtual machines to become available to ansible before continuing"
+      wait_for_connection:
+  tasks:
+    # Import this role only when we are increasing the main nodes
+    - name: "Import role to handle setting up main nodes"
+      import_role:
+        name: kubernetes/main_node_setup
+      when: increase_main_nodes
