@@ -68,8 +68,10 @@ temp_vm_cloudinit: |
   {% endfor %}
   {% endif %}
     kubernetes:
-      url: "https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64"
+      enabled: true
+      url: https://packages.cloud.google.com/yum/repos/kubernetes-el7-$basearch
       gpgkey: "https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg"
+      gpgcheck: true
       name: "Kubernetes"
   {% if template_upgrade_packages %}
   package_update: true

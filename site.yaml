@@ -35,7 +35,6 @@
       import_role:
         name: ovirt/template
 
-
 - name: "Create an inventory of hosts"
   hosts: ovirt
   connection: local
@@ -90,3 +89,17 @@
       import_role:
         name: kubernetes/main_node_setup
       when: increase_main_nodes|bool
+
+
+- name: "Create a new cluster"
+  hosts: "{{ groups['kube_main'] | first }}"
+  gather_facts: yes
+  pre_tasks:
+    - name: "Wait for the virtual machines to become available to ansible before continuing"
+      wait_for_connection:
+  tasks:
+    # Make a new cluster and register var "join_command" and "certificate_key"
+    - name: "Import role to handle creating a new cluster"
+      import_role:
+        name: kubernetes/init_cluster
+      when: new_cluster|bool

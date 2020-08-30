@@ -1,0 +1,4 @@
+---
+
+skip_dns_check: False
+dns_check_passed: False
