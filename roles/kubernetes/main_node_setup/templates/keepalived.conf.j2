@@ -1,6 +1,6 @@
 vrrp_instance VI_1 {
     state MASTER
-    interface eth0
+    interface {{ interface }}
     virtual_router_id 100
 {% for host in groups['kube_main'] %}
 {% if host == inventory_hostname %}

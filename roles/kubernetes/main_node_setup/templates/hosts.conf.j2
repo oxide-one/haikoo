@@ -10,7 +10,13 @@
 {% else %}
 {% set hostline = ip_address + " " + hostname_short + " " + hostname %}
 {% endif %}
+{% if groups['kube_main_removed'] is defined %}
+{% if host not in groups['kube_main_removed'] %}
 {{ hostline }}
+{% endif %}
+{% else %}
+{{ hostline }}
+{% endif %}
 {% endfor %}
 
 {% if controlplane_dns_endpoint is defined %}
