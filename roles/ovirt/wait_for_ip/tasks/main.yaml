@@ -11,6 +11,7 @@
   until: ovirt_nic_info.ovirt_nics[0].reported_devices[0].ips is defined
   delay: 60
   retries: "{{ startup_timeout }}"
+  no_log: True
 
 - name: "Set the ansible_host fact from the returned IP information"
   set_fact:
