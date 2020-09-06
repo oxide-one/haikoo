@@ -6,8 +6,23 @@
 - name: "Import task to handle the difference calculation"
   import_tasks: calculate_differences.yaml
 
-- name: "Import task to handle the creation of dynamic hosts"
-  import_tasks: add_new_hosts.yaml
+
+- name: "Import task to handle the creation of main nodes"
+  import_tasks: new_main_nodes.yaml
   when:
-    increase_worker_nodes or
     increase_main_nodes
+
+- name: "Import task to handle the creation of worker nodes"
+  import_tasks: new_worker_nodes.yaml
+  when:
+    increase_worker_nodes
+
+- name: "Import task to handle the removal of main nodes"
+  import_tasks: remove_main_nodes.yaml
+  when:
+    decrease_main_nodes
+
+- name: "Import task to handle the removal of worker nodes"
+  import_tasks: remove_worker_nodes.yaml
+  when:
+    decrease_worker_nodes

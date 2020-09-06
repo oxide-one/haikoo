@@ -70,7 +70,7 @@
   with_list:
     - haproxy
     - keepalived
-  when: inventory_hostname not in (groups['kube_main_removed'] | default(""))
+  when: inventory_hostname not in (groups['kube_main_removal'] | default(""))
   become: yes
 
 # Restart services
@@ -82,6 +82,6 @@
   with_list:
     - haproxy
     - keepalived
-  when: inventory_hostname not in (groups['kube_main_removed'] | default(""))
+  when: inventory_hostname not in (groups['kube_main_removal'] | default(""))
   throttle: 1
   become: yes

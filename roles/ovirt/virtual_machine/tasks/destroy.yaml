@@ -1,0 +1,12 @@
+---
+- name: "Stop the ovirt virtual machine"
+  ovirt_vm:
+    auth: "{{ ovirt_auth }}"
+    state: stopped
+    name: "{{ inventory_hostname }}"
+
+- name: "Destroy the ovirt virtual machine"
+  ovirt_vm:
+    auth: "{{ ovirt_auth }}"
+    state: absent
+    name: "{{ inventory_hostname }}"

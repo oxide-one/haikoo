@@ -16,4 +16,4 @@
   set_fact:
     ansible_host: "{{ item.address }}"
   with_list: "{{ ovirt_nic_info.ovirt_nics[0].reported_devices[0].ips }}"
-  when: item.version == 'v4'
+  when: item.version == 'v4' and item.address != controlplane_endpoint
