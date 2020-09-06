@@ -149,6 +149,23 @@
       register: kubeadm_reset_cmd
       failed_when: kubeadm_reset_cmd.rc != 0
 
+- name: "Handle removing worker nodes from the cluster"
+  hosts: kube_main_existing[0]
+  pre_tasks:
+    # End the play if decrease_worker_nodes is false
+    - name: "Do not run the playbook if nodes do not need to be decreased"
+      meta: end_play
+      when: not decrease_main_nodes
+  tasks:
+    # Start the VM
+    - name: "Drain the node so that pods can be evicted"
+      become: yes
+      command: >
+        kubectl delete node {{ item }}
+        --kubeconfig '/etc/kubernetes/admin.conf'
+      register: drain_cmd
+      with_list: "{{ groups['kube_main_removal'] }}"
+      failed_when: drain_cmd.rc != 0
 #########################################
 # Decreasing the number of Worker nodes #
 #########################################
@@ -227,7 +244,7 @@
       vars:
         state: started
 
-- name: "Grab an IP address for the main nodes"
+- name: "Grab an IP address for the new nodes"
   hosts: kube_main_new, kube_worker_new
   connection: local
   pre_tasks:
@@ -241,17 +258,9 @@
         name: ovirt/wait_for_ip
 
 - name: "Playbook to handle preparing the nodes for use"
-  hosts: kube_main_new, kube_worker_new
+  hosts: kube_main, kube_worker, !kube_main_removal, !kube_worker_removal
   # Run on ALL main nodes as we need to retemplate the haproxy and keepalived files
   pre_tasks:
-    - name: Wait 300 seconds for port 22 to become open and contain "OpenSSH"
-      wait_for:
-        port: 22
-        host: '{{ ansible_host }}'
-        search_regex: OpenSSH
-        delay: 60
-      connection: local
-
     - name: "Wait for the virtual machines to become available to ansible before continuing"
       wait_for_connection:
 
@@ -334,6 +343,7 @@
       retries: 3
       register: join_command_status
       changed_when: join_command_status.rc != 0
+      throttle: 1
 
 ################################################################################################
 # New Worker node management
@@ -370,3 +380,4 @@
       retries: 3
       register: join_command_status
       changed_when: join_command_status.rc != 0
+      throttle: 1

@@ -10,8 +10,8 @@
 {% else %}
 {% set hostline = ip_address + " " + hostname_short + " " + hostname %}
 {% endif %}
-{% if groups['kube_main_removed'] is defined %}
-{% if host not in groups['kube_main_removed'] %}
+{% if groups['kube_main_removal'] is defined %}
+{% if host not in groups['kube_main_removal'] %}
 {{ hostline }}
 {% endif %}
 {% else %}

@@ -51,8 +51,8 @@ backend main_nodes
     balance leastconn
     timeout server  10800s
 {% for host in groups['kube_main'] %}
-{% if groups['kube_main_removed'] is defined %}
-{% if host not in groups['kube_main_removed'] %}
+{% if groups['kube_main_removal'] is defined %}
+{% if host not in groups['kube_main_removal'] %}
     server {{ hostvars[host].inventory_hostname_short }} {{ host }}:6443 check
 {% endif %}
 {% else %}
