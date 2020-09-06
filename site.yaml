@@ -35,10 +35,10 @@
       import_role:
         name: tests/ovirt
 
-################################################################################################
-# Templating setup.
-# Only performs actions when there is no template, or it hasn't been modified.
-################################################################################################
+################################################################################
+# Templating setup.                                                            #
+# Only performs actions when there is no template, or it hasn't been modified. #
+################################################################################
 - name: "Handle template import and setup"
   hosts: ovirt
   connection: local
@@ -93,10 +93,9 @@
       vars:
         state: seal
 
-
-################################################################################################
-# Inventory management
-################################################################################################
+########################
+# Inventory management #
+########################
 - name: "Create an inventory of hosts"
   hosts: ovirt
   connection: local
@@ -105,22 +104,19 @@
     - name: "Import role to create inventory of hosts"
       import_role:
         name: inventory
-################################################################################################
-# Decreasing the number of Main nodes (local action)
-# Runs only when decrease_main_nodes is TRUE
-################################################################################################
-- name: "Handle local tasks for decreasing the main nodes"
-  hosts: kube_main_removal
+
+- name: "Import facts to the entire cluster"
+  hosts: kube_cluster
   connection: local
-  pre_tasks:
+  tasks:
     # Import facts from 'ovirt' to the machines to prevent re-run
     - name: "Import facts from the ovirt host"
       import_role:
         name: ovirt/import_facts
-    # End the play if decrease_main_nodes is false
-    - name: "Do not run the playbook if nodes do not need to be decreased"
-      meta: end_play
-      when: not decrease_main_nodes
+
+- name: "If nodes exist already, grab their IP addresses"
+  hosts: kube_worker_existing, kube_main_existing
+  connection: local
   tasks:
     # Start the VM
     - name: "Import a role to start a virtual machine"
@@ -128,52 +124,15 @@
         name: ovirt/virtual_machine
       vars:
         state: started
-    # Wait for the Virtual machines to get an IP address, then set their ansible_host vars
-    - name: "Import role to handle getting IP address information"
+    - name: "Grab an IP address from the existing nodes"
       import_role:
         name: ovirt/wait_for_ip
 
-################################################################################################
-# Decreasing the number of Worker nodes (local action)
-# Runs only when decrease_worker_nodes is TRUE
-################################################################################################
-- name: "Handle local tasks for decreasing the worker nodes"
-  hosts: kube_worker_removal
-  connection: local
-  pre_tasks:
-    # Import facts from 'ovirt' to the machines to prevent re-run
-    - name: "Import facts from the ovirt host"
-      import_role:
-        name: ovirt/import_facts
-    # End the play if decrease_worker_nodes is false
-    - name: "Do not run the playbook if nodes do not need to be decreased"
-      meta: end_play
-      when: not decrease_worker_nodes
-  tasks:
-    # Start the VM
-    - name: "Import a role to start a virtual machine"
-      import_role:
-        name: ovirt/virtual_machine
-      vars:
-        state: started
-    # Wait for the Virtual machines to get an IP address, then set their ansible_host vars
-    - name: "Import role to handle getting IP address information"
-      import_role:
-        name: ovirt/wait_for_ip
-
-################################################################################################
-# Decreasing the number of Main nodes (ssh)
-################################################################################################
-- name: "Handle decreasing the main nodes"
+#######################################
+# Decreasing the number of Main nodes #
+#######################################
+- name: "Handle removing main nodes from the cluster"
   hosts: kube_main_removal
-  pre_tasks:
-    # End the play if decrease_main_nodes is false
-    - name: "Do not run the playbook if nodes do not need to be decreased"
-      meta: end_play
-      when: not decrease_main_nodes
-    # Wait for VM to become available
-    - name: "Wait for the virtual machines to become available to ansible before continuing"
-      wait_for_connection:
   tasks:
     - name: "Drain the node so that pods can be evicted"
       become: yes
@@ -190,52 +149,16 @@
       register: kubeadm_reset_cmd
       failed_when: kubeadm_reset_cmd.rc != 0
 
-    # # Start the VM
-    # - name: "Drain the node so that pods can be evicted"
-    #   become: yes
-    #   command: >
-    #     kubectl delete node {{ inventory_hostname }}
-    #     --kubeconfig '/etc/kubernetes/admin.conf'
-    #   register: remove_cmd
-    #   failed_when: remove_cmd.rc != 0
-
-
-
-- name: "Handle local tasks for removing the main nodes"
-  hosts: kube_main_removal
-  connection: local
-  pre_tasks:
-    # End the play if decrease_main_nodes is false
-    - name: "Do not run the playbook if nodes do not need to be decreased"
-      meta: end_play
-      when: not decrease_main_nodes
-  tasks:
-    # Start the VM
-    - name: "Import a role to start a virtual machine"
-      import_role:
-        name: ovirt/virtual_machine
-      vars:
-        state: stopped
-    # Remove the VM
-    - name: "Import a role to start a virtual machine"
-      import_role:
-        name: ovirt/virtual_machine
-      vars:
-        state: absent
-
-################################################################################################
-# Decreasing the number of Worker nodes (ssh)
-################################################################################################
-- name: "Handle decreasing the worker nodes"
-  hosts: kube_main_remain[0]
+#########################################
+# Decreasing the number of Worker nodes #
+#########################################
+- name: "Handle removing worker nodes from the cluster"
+  hosts: kube_main_existing[0]
   pre_tasks:
     # End the play if decrease_worker_nodes is false
     - name: "Do not run the playbook if nodes do not need to be decreased"
       meta: end_play
       when: not decrease_worker_nodes
-    # Wait for VM to become available
-    - name: "Wait for the virtual machines to become available to ansible before continuing"
-      wait_for_connection:
   tasks:
     # Start the VM
     - name: "Drain the node so that pods can be evicted"
@@ -257,14 +180,12 @@
       with_list: "{{ groups['kube_worker_removal'] }}"
       failed_when: remove_cmd.rc != 0
 
-- name: "Handle local tasks for removing the worker nodes"
-  hosts: kube_worker_removal
+##########################################################################
+# Handle deletion of nodes after they have been removed from the cluster #
+##########################################################################
+- name: "Handle deletion of nodes after they have been removed from the cluster"
+  hosts: kube_worker_removal, kube_main_removal
   connection: local
-  pre_tasks:
-    # End the play if decrease_worker_nodes is false
-    - name: "Do not run the playbook if nodes do not need to be decreased"
-      meta: end_play
-      when: not decrease_worker_nodes
   tasks:
     # Start the VM
     - name: "Import a role to start a virtual machine"
@@ -279,22 +200,13 @@
       vars:
         state: absent
 
-
-################################################################################################
-# Increasing the number of Main nodes management
-################################################################################################
-- name: "Provision the new main virtual machine nodes"
-  hosts: kube_main_new
+#######################################
+# Increasing the number of Main nodes #
+#######################################
+- name: "Provision the new virtual machines"
   # Run on all new nodes so that the VMs can be created
+  hosts: kube_main_new, kube_worker_new
   connection: local
-  pre_tasks:
-    # Import facts from 'ovirt' to the machines to prevent re-run
-    - name: "Import facts from the ovirt host"
-      import_role:
-        name: ovirt/import_facts
-    - name: "End the play if new nodes do not need to be added"
-      meta: end_play
-      when: not increase_main_nodes|bool
   tasks:
     # Create a virtual machine
     - name: "Import role to create a virtual machine"
@@ -316,30 +228,22 @@
         state: started
 
 - name: "Grab an IP address for the main nodes"
-  hosts: kube_main, !kube_main_removal
+  hosts: kube_main_new, kube_worker_new
   connection: local
   pre_tasks:
-    # Import facts from 'ovirt' to the machines to prevent re-run
-    - name: "Import facts from the ovirt host"
-      import_role:
-        name: ovirt/import_facts
     - name: "End the play if new nodes do not need to be added"
       meta: end_play
-      when: not increase_main_nodes|bool
+      when: not increase_main_nodes|bool or not increase_worker_nodes|bool
   tasks:
     # Wait for the Virtual machines to get an IP address, then set their ansible_host vars
     - name: "Import role to handle getting IP address information"
       import_role:
         name: ovirt/wait_for_ip
 
-- name: "Playbook to handle preparing the main nodes for use"
-  hosts: kube_main, !kube_main_removal
+- name: "Playbook to handle preparing the nodes for use"
+  hosts: kube_main_new, kube_worker_new
   # Run on ALL main nodes as we need to retemplate the haproxy and keepalived files
   pre_tasks:
-    - name: "End the play if new nodes do not need to be added"
-      meta: end_play
-      when: not increase_main_nodes|bool and not decrease_main_nodes|bool
-
     - name: Wait 300 seconds for port 22 to become open and contain "OpenSSH"
       wait_for:
         port: 22
@@ -359,7 +263,7 @@
     - name: "Import role to handle setting up main nodes"
       import_role:
         name: kubernetes/main_node_setup
-
+      when: inventory_hostname in groups['kube_main']
 
 ################################################################################################
 # New cluster management
@@ -370,12 +274,6 @@
     - name: "End the play if new cluster does not need to be initalized"
       meta: end_play
       when: not new_cluster|bool
-
-    - name: "Wait for the virtual machines to become available to ansible before continuing"
-      wait_for_connection:
-
-    - name: "Run the setup module after connection is successfully initiated"
-      setup:
 
     - name: "Copy over skip_dns_check var if it is defined"
       set_fact:
@@ -397,7 +295,7 @@
 # New Main node management
 ################################################################################################
 - name: "Grab Join token for main nodes"
-  hosts: "{{ groups['kube_main_existing'] | first }}"
+  hosts: "{% if hostvars[groups['ovirt'] | first].new_cluster %}{{ groups['kube_main'] | first }}{% else %}{{ groups['kube_main_existing'] | first }}{% endif %}"
   pre_tasks:
     - name: "End the play if new cluster does not need to be initalized"
       meta: end_play
@@ -418,15 +316,12 @@
       changed_when: join_command.rc != 0
 
 - name: "Join any new main nodes to the cluster"
-  hosts: "kube_main_new, !kube_main_init_host"
+  hosts: kube_main_new, !kube_main_init_host
   pre_tasks:
     # Skip the play if there are no new nodes to be created
     - name: "End the play if new cluster does not need to be initalized"
       meta: end_play
       when: not increase_main_nodes|bool
-    # Ensure that the nodes are available
-    - name: "Wait for the virtual machines to become available to ansible before continuing"
-      wait_for_connection:
     # Set facts from an existing main node.
     - name: "Grab facts from the existing main node to be able to join the cluster"
       set_fact:
@@ -443,8 +338,8 @@
 ################################################################################################
 # New Worker node management
 ################################################################################################
-- name: "Grab Join token for main nodes"
-  hosts: "{{ groups['kube_main_existing'] | first }}"
+- name: "Grab Join token for worker nodes"
+  hosts: "{% if hostvars[groups['ovirt'] | first].new_cluster %}{{ groups['kube_main'] | first }}{% else %}{{ groups['kube_main_existing'] | first }}{% endif %}"
   pre_tasks:
     - name: "End the play if new cluster does not need to be initalized"
       meta: end_play
@@ -457,39 +352,21 @@
       register: join_command
       changed_when: join_command.rc != 0
 
-- name: "Provision the new main virtual machine nodes"
+- name: "Join any new worker nodes to the cluster"
   hosts: kube_worker_new
-  # Run on all new nodes so that the VMs can be created
-  connection: local
-  vars:
-    runtime_commands: |
-      runcmd:
-        - {{ hostvars[groups['kube_main_existing'] | first ].join_command.stdout_lines | last }}
   pre_tasks:
-    # Import facts from 'ovirt' to the machines to prevent re-run
-    - name: "Import facts from the ovirt host"
-      import_role:
-        name: ovirt/import_facts
-
-    - name: "End the play if new nodes do not need to be added"
+    # Skip the play if there are no new nodes to be created
+    - name: "End the play if new cluster does not need to be initalized"
       meta: end_play
       when: not increase_worker_nodes|bool
+    # Set facts from an existing main node.
+    - name: "Grab facts from the existing main node to be able to join the cluster"
+      set_fact:
+        join_command: "{{ hostvars[groups['kube_main_existing'] | first ].join_command.stdout_lines | last }}"
   tasks:
-    # Create a virtual machine
-    - name: "Import role to create a virtual machine"
-      import_role:
-        name: ovirt/virtual_machine
-      vars:
-        state: present
-
-    # Resize the disks
-    - name: "Import a role to resize the disks"
-      import_role:
-        name: ovirt/resize_disk
-
-    # Start the VM
-    - name: "Import a role to start a virtual machine"
-      import_role:
-        name: ovirt/virtual_machine
-      vars:
-        state: started
+    - name: "Join the new worker nodes to the cluster"
+      become: yes
+      command: "{{ join_command }}"
+      retries: 3
+      register: join_command_status
+      changed_when: join_command_status.rc != 0

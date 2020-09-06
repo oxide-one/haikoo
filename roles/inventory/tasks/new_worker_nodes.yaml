@@ -10,7 +10,6 @@
     domain is defined and
     domain | length > 0
 
-- debug: msg="ADDING NEW HOST"
 
 # Ensure /tmp/kubehost-1...etc are not present for worker nodes
 - name: "Ensure /tmp/kubehost-1..etc are absent so main node hashes can be created"
