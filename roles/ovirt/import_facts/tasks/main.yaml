@@ -10,3 +10,4 @@
 - name: "Pull over variables from the ovirt engine"
   set_fact: {"{{ item }}":"{{ engine_info[item] }}"}
   with_list: "{{ facts_to_import }}"
+  no_log: true

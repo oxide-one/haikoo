@@ -1,12 +1,12 @@
 ---
 # Install packages
-# - name: "Install haproxy and keepalived"
-#   dnf:
-#     name:
-#       - haproxy
-#       - keepalived
-#     state: present
-#   become: yes
+- name: "Install haproxy and keepalived"
+  dnf:
+    name:
+      - haproxy
+      - keepalived
+    state: present
+  become: yes
 
 # This is all because the fucking nmcli module is broken.
 - name: "Set fact to set the CIDR"
@@ -85,5 +85,3 @@
   when: inventory_hostname not in (groups['kube_main_removed'] | default(""))
   throttle: 1
   become: yes
-
-- debug: msg="{{ ansible_facts }}"

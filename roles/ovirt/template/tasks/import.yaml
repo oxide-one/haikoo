@@ -16,4 +16,4 @@
 # Run ovirt checks again to set the 'template_exists' variable
 - name: "Import role checks/ovirt again to set the template_exists variable"
   import_role:
-    role: checks/ovirt
+    role: tests/ovirt

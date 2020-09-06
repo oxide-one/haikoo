@@ -1,4 +1,8 @@
 ---
+################################################################################################
+# Preliminary setup.
+# Always runs, regardless of operation.
+################################################################################################
 - name: "Add ovirt engine endpoint {{ engine_endpoint | urlsplit('hostname') }} to inventory"
   hosts: localhost
   connection: local
@@ -9,7 +13,7 @@
         name: "{{ engine_endpoint | urlsplit('hostname') }}"
         groups: ovirt
 
-- name: "Run Preliminary checks and tests, then handle templating"
+- name: "Run Preliminary checks and tests"
   hosts: ovirt
   connection: local
   pre_tasks:
@@ -17,6 +21,7 @@
     - name: "Import role to handle pre tasks"
       import_role:
         name: pre_tasks
+  tasks:
     # Grab an SSH key from a file or github
     - name: "Import role to handle grabbing an SSH key"
       import_role:
@@ -25,27 +30,88 @@
     - name: "Import role to connect to ovirt"
       import_role:
         name: ovirt/connect
-    # Run Tests
+    # Run Tests that require an ovirt connection
     - name: "Import role to handle testing ovirt in flight"
       import_role:
         name: tests/ovirt
+
+################################################################################################
+# Templating setup.
+# Only performs actions when there is no template, or it hasn't been modified.
+################################################################################################
+- name: "Handle template import and setup"
+  hosts: ovirt
+  connection: local
   tasks:
-    # Handle templating
+    # Handle templating stuff on a local connection as only dealing with ovirt
     - name: "Import role to handle testing ovirt in flight"
       import_role:
         name: ovirt/template
 
+- name: "Wait for the temporary virtual machine to become available"
+  hosts: temp_vm_group
+  connection: local
+  vars:
+    facts_to_import:
+      - "ovirt_auth"
+      - "template_modified"
+      - "template_exists"
+  pre_tasks:
+    # Import facts from the hosted engine
+    - name: "Import role to handle importing facts from the hosted engine"
+      import_role:
+        name: ovirt/import_facts
+    # Wait for the Virtual machines to get an IP address, then set their ansible_host vars
+    - name: "Import role to handle getting IP address information"
+      import_role:
+        name: ovirt/wait_for_ip
+
+- name: "Run tasks on temporary virtual machine"
+  hosts: temp_vm_group
+  pre_tasks:
+    # Wait for the virtual machine to become available
+    - name: "Wait for the virtual machines to become available to ansible before continuing"
+      wait_for_connection:
+    # Run the setup module to gather facts.
+    - name: "Run the setup module after connection has been made"
+      setup:
+  tasks:
+    - name: "Import role to handle running through tasks"
+      import_role:
+        name: ovirt/template
+      vars:
+        state: modify
+
+- name: "Seal the template"
+  hosts: ovirt
+  connection: local
+  tasks:
+    # Seal the template on a local connection
+    - name: "Import role to handle sealing the template"
+      import_role:
+        name: ovirt/template
+      vars:
+        state: seal
+
+
+################################################################################################
+# Inventory management
+################################################################################################
 - name: "Create an inventory of hosts"
   hosts: ovirt
   connection: local
   tasks:
-    # Handle templating
+    # Create an inventory of hosts based on existing and new hosts
     - name: "Import role to create inventory of hosts"
       import_role:
         name: inventory
 
-- name: "Provision the main virtual machine nodes"
-  hosts: kube_main
+################################################################################################
+# Main node management
+################################################################################################
+- name: "Provision the new main virtual machine nodes"
+  hosts: kube_main_new
+  # Run on all new nodes so that the VMs can be created
   connection: local
   pre_tasks:
     # Import facts from 'ovirt' to the machines to prevent re-run
@@ -72,6 +138,15 @@
       vars:
         state: started
 
+- name: "Grab an IP address for the main nodes"
+  hosts: kube_main
+  connection: local
+  pre_tasks:
+    # Import facts from 'ovirt' to the machines to prevent re-run
+    - name: "Import facts from the ovirt host"
+      import_role:
+        name: ovirt/import_facts
+  tasks:
     # Wait for the Virtual machines to get an IP address, then set their ansible_host vars
     - name: "Import role to handle getting IP address information"
       import_role:
@@ -79,10 +154,26 @@
 
 - name: "Playbook to handle preparing the main nodes for use"
   hosts: kube_main
-  gather_facts: yes
+  # Run on ALL main nodes as we need to retemplate the haproxy and keepalived files
   pre_tasks:
+    - name: "End the play if new nodes do not need to be added"
+      meta: end_play
+      when: not new_cluster|bool
+
+    - name: Wait 300 seconds for port 22 to become open and contain "OpenSSH"
+      wait_for:
+        port: 22
+        host: '{{ ansible_host }}'
+        search_regex: OpenSSH
+        delay: 60
+      connection: local
+
     - name: "Wait for the virtual machines to become available to ansible before continuing"
       wait_for_connection:
+
+    - name: "Run the setup module to gather facts"
+      setup:
+
   tasks:
     # Import this role only when we are increasing the main nodes
     - name: "Import role to handle setting up main nodes"
@@ -91,15 +182,83 @@
       when: increase_main_nodes|bool
 
 
+################################################################################################
+# New cluster management
+################################################################################################
 - name: "Create a new cluster"
   hosts: "{{ groups['kube_main'] | first }}"
   gather_facts: yes
   pre_tasks:
+    - name: "End the play if new cluster does not need to be initalized"
+      meta: end_play
+      when: not new_cluster|bool
+
     - name: "Wait for the virtual machines to become available to ansible before continuing"
       wait_for_connection:
+
+    - name: "Copy over skip_dns_check var if it is defined"
+      set_fact:
+        dns_check_passed: "{{ hostvars[groups['ovirt'] | first ].dns_check_passed }}"
+      when: hostvars[groups['ovirt'] | first ].dns_check_passed is defined
+
+    - name: "Copy over skip_dns_check var if it is defined"
+      set_fact:
+        skip_dns_check: "{{ hostvars[groups['ovirt'] | first ].skip_dns_check }}"
+      when: hostvars[groups['ovirt'] | first ].skip_dns_check is defined
   tasks:
     # Make a new cluster and register var "join_command" and "certificate_key"
     - name: "Import role to handle creating a new cluster"
       import_role:
         name: kubernetes/init_cluster
       when: new_cluster|bool
+
+################################################################################################
+# New Main node management
+################################################################################################
+- name: "Grab Join token for main nodes"
+  hosts: "{{ groups['kube_main_existing'] | first }}"
+  pre_tasks:
+    - name: "End the play if new cluster does not need to be initalized"
+      meta: end_play
+      when: not increase_main_nodes|bool
+  tasks:
+    # This will initalize and re-upload certificates to be able to add new main nodes to the cluster
+    - name: "Reset the Certificate token for the main nodes"
+      become: yes
+      command: "kubeadm init phase upload-certs --upload-certs"
+      register: certificate_key
+      changed_when: certificate_key.rc != 0
+
+    # This will create a join token command
+    - name: "Grab a join token for the main nodes"
+      become: yes
+      command: "kubeadm token create --print-join-command"
+      register: join_command
+      changed_when: join_command.rc != 0
+
+- name: "Join any new main nodes to the cluster"
+  hosts: "kube_main_new, !kube_main_init_host"
+  pre_tasks:
+    # Skip the play if there are no new nodes to be created
+    - name: "End the play if new cluster does not need to be initalized"
+      meta: end_play
+      when: not increase_main_nodes|bool
+    # Ensure that the nodes are available
+    - name: "Wait for the virtual machines to become available to ansible before continuing"
+      wait_for_connection:
+    # Set facts from an existing main node.
+    - name: "Grab facts from the existing main node to be able to join the cluster"
+      set_fact:
+        certificate_key: "{{ hostvars[groups['kube_main_existing'] | first ].certificate_key.stdout_lines | last }}"
+        join_command: "{{ hostvars[groups['kube_main_existing'] | first ].join_command.stdout_lines | last }}"
+  tasks:
+    - name: "Join the new main nodes to the cluster"
+      become: yes
+      command: "{{ join_command }} --control-plane --certificate-key {{ certificate_key }}"
+      retries: 3
+      register: join_command_status
+      changed_when: join_command_status.rc != 0
+
+################################################################################################
+# Removing main nodes
+################################################################################################

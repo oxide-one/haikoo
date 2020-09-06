@@ -61,9 +61,6 @@
 ## Install extra packages. (default: none)
 #template_extra_packages: []
 
-## Extra commands to run (default: none)
-#template_extra_commands: []
-
 ## Extra systemd services to enable (default: none)
 #template_extra_services: []
 

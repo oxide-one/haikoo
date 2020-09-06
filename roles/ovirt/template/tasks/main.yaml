@@ -20,3 +20,20 @@
     state|default('present') == 'present' and
     template_exists and
     not template_modified
+
+
+# Make modifications on a template vm
+- name: "Import task to handle modifying the virtual machine."
+  include_tasks: run_modifications.yaml
+  when:
+    state|default('present') == 'modify' and
+    template_exists|bool and
+    not template_modified|bool
+
+# Make modifications on a template vm
+- name: "Import task to handle sealing the virtual machine"
+  include_tasks: seal.yaml
+  when:
+    state|default('present') == 'seal' and
+    template_exists|bool and
+    not template_modified|bool

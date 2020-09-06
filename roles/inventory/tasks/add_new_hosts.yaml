@@ -35,6 +35,7 @@
     groups:
       - kube_cluster
       - kube_main
+      - kube_main_new
     network: "{{ network }}"
     cores: "{{ main_node_cpu_cores }}"
     memory: "{{ main_node_memory }}"
@@ -43,6 +44,7 @@
     template_version: "{{ template_version_number }}"
     template: "{{ template_name }}"
   with_sequence: count="{{ main_node_modify_count }}"
+  no_log: true
 
 # Remove a temporary file created to define the names of the nodes
 - name: "Remove temporary file"
@@ -59,6 +61,7 @@
     groups:
       - kube_cluster
       - kube_worker
+      - kube_worker_new
     network: "{{ network }}"
     cores: "{{ worker_node_cpu_cores }}"
     memory: "{{ worker_node_memory }}"
@@ -67,6 +70,7 @@
     template_version: "{{ template_version_number }}"
     template: "{{ template_name }}"
   with_sequence: count="{{ worker_node_modify_count }}"
+  no_log: true
 
 # Remove a temporary file created to define the names of the nodes
 - name: "Remove temporary file created by adding the worker nodes"
