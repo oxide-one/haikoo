@@ -342,7 +342,9 @@
       command: "{{ join_command }} --control-plane --certificate-key {{ certificate_key }}"
       retries: 3
       register: join_command_status
+      until: join_command_status.rc == 0
       changed_when: join_command_status.rc != 0
+      failed_when: join_command_status.rc >= 2
       throttle: 1
 
 ################################################################################################
