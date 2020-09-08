@@ -278,7 +278,7 @@
 # New cluster management
 ################################################################################################
 - name: "Create a new cluster"
-  hosts: kube_main[0]
+  hosts: "{{ groups['kube_main'] | first }}"
   pre_tasks:
     - name: "End the play if new cluster does not need to be initalized"
       meta: end_play
