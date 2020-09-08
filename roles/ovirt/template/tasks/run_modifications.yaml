@@ -79,7 +79,7 @@
     path: "/etc/crio/crio.conf"
     regexp: '^default_runtime = "runc"$'
     line: 'default_runtime = "crun"'
-    mode: 'preserve'
+    mode: u=rw,g=r,o=r
 
 - name: "Adda runtime argument so that crun can be used"
   become: yes
@@ -87,7 +87,7 @@
     path: "/etc/crio/crio.conf"
     insertbefore: '\[crio\.runtime\.runtimes\.runc\]'
     line: "[crio.runtime.runtimes.crun]"
-    mode: 'preserve'
+    mode: u=rw,g=r,o=r
 
 - name: "Disable SELinux for cri-o"
   become: yes
@@ -95,7 +95,7 @@
     path:  "/etc/crio/crio.conf"
     regexp: '^selinux = true$'
     line: 'selinux = false'
-    mode: 'preserve'
+    mode: u=rw,g=r,o=r
   when: not template_selinux_enabled
 
 # Disable selinux
@@ -114,7 +114,7 @@
     line: SELINUX=disabled
     owner: root
     group: root
-    mode: 'preserve'
+    mode: u=rw,g=r,o=r
 # Grab the br_netfiter module
 - name: "Modprobe the br_netfiter module"
   become: yes
@@ -160,7 +160,7 @@
       --runtime-request-timeout=5m
     owner: root
     group: root
-    mode: "preserve"
+    mode: u=rw,g=r,o=r
     state: present
 
 
@@ -204,7 +204,7 @@
     line: 'PasswordAuthentication no'
     owner: root
     group: root
-    mode: "preserve"
+    mode: u=rw,g=r,o=r
 
 # Shutdown the system. There is no 'comparative' model
 - name: "Poweroff the system"
