@@ -1,7 +1,8 @@
 127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
 ::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
-
+127.0.1.1   {{ inventory_hostname }} {{ inventory_hostname_short }}
 {% for host in groups['kube_main'] %}
+{% if host != inventory_hostname %}
 {% set ip_address = hostvars[host].ansible_host %}
 {% set hostname = hostvars[host].inventory_hostname %}
 {% set hostname_short = hostvars[host].inventory_hostname_short %}
@@ -17,8 +18,8 @@
 {% else %}
 {{ hostline }}
 {% endif %}
+{% endif %}
 {% endfor %}
-
 {% if controlplane_dns_endpoint is defined %}
 {{ controlplane_endpoint }} {{ controlplane_dns_endpoint }}
 {% endif %}

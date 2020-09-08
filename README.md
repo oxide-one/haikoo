@@ -6,3 +6,4 @@ Dependencies
 - dnspython
 - ovirtsdk
 - sshpass
+- python-netaddr

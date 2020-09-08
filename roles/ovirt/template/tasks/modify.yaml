@@ -35,7 +35,7 @@
     state: absent
 
 # Start a virtual machien with cloud-init. You CANNOT create+start a VM at the same time when using cloud-init, so this approach is given.
-- name: 'Start the temporary virtual machine "{{ inventory_hostname }}"'
+- name: 'Start the temporary virtual machine "{{ temp_vm_name }}"'
   ovirt_vm:
     auth: "{{ ovirt_auth }}"
     cloud_init:

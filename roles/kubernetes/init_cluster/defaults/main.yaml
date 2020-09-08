@@ -2,3 +2,4 @@
 
 skip_dns_check: False
 dns_check_passed: False
+cluster_name: "haikoo"
