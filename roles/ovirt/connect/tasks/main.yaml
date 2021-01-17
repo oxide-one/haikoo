@@ -3,7 +3,7 @@
 # 'ovirt_auth'
 - name: "Connect to Ovirt engine"
   ovirt_auth:
-    url: "{{ engine_endpoint }}/api"
+    url: "{{ ovirt_engine_endpoint }}/api"
     username: "{{ engine_username }}"
     password: "{{ engine_password }}"
   when: state|default('present') == 'present'

@@ -173,3 +173,18 @@
     groups:
       - kube_main_existing
       - kube_main_init_host
+
+- name: "Set a fact to declare that the node is not yet ready"
+  set_fact:
+    node_ready: False
+
+- name: "Import task to grab pod information and wait until all are ready before continuing"
+  import_tasks: loop_ready.yaml
+  retries: 30
+  delay: 5
+  until: node_ready
+
+- name: "Pause for 3 minutes to allow for the node to be properly setup."
+  pause:
+    minutes: 3
+    prompt: "Pausing the script for 3 minutes to allow for the node to properly spin up."

@@ -45,17 +45,20 @@ frontend haproxy_kube
     timeout client  10800s
     default_backend main_nodes
 
+
 backend main_nodes
     mode tcp
     option tcplog
+    option tcp-check
     balance leastconn
-    timeout server  10800s
+    timeout connect        10s
+    timeout server          1m
 {% for host in groups['kube_main'] %}
 {% if groups['kube_main_removal'] is defined %}
 {% if host not in groups['kube_main_removal'] %}
-    server {{ hostvars[host].inventory_hostname_short }} {{ host }}:6443 check
+    server {{ hostvars[host].inventory_hostname_short }} {{ host }}:6443 check fall 3 rise 2
 {% endif %}
 {% else %}
-    server {{ hostvars[host].inventory_hostname_short }} {{ host }}:6443 check
+    server {{ hostvars[host].inventory_hostname_short }} {{ host }}:6443 check fall 3 rise 2
 {% endif %}
 {% endfor %}

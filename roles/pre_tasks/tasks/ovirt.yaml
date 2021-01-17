@@ -7,11 +7,11 @@
       Please make sure that all the required engine vars are defined
 
       Example usage:
-      engine_endpoint: "https://endpoint/ovirt-engine"
+      ovirt_engine_endpoint: "https://endpoint/ovirt-engine"
       engine_username: "username@profile"
       engine_password: "password"
     that:
-      - engine_endpoint is defined
+      - ovirt_engine_endpoint is defined
       - engine_password is defined
 
 # Search the engine.endpoint variable for 'ovirt-engine'
@@ -24,9 +24,9 @@
       Please make sure your endpoint is formatted correctly
       A properly formatted username ends with /ovirt-engine
 
-      Currently it is: "{{ engine_endpoint }}"
+      Currently it is: "{{ ovirt_engine_endpoint }}"
     that:
-      - engine_endpoint is search('/ovirt-engine')
+      - ovirt_engine_endpoint is search('/ovirt-engine')
 
 
 # Search the engine.username variable for '@'

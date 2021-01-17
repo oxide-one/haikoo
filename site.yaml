@@ -1,16 +1,22 @@
+#     __  __      _ __
+#    / / / /___ _(_) /______  ____
+#   / /_/ / __ `/ / //_/ __ \/ __ \
+#  / __  / /_/ / / ,< / /_/ / /_/ /
+# /_/ /_/\__,_/_/_/|_|\____/\____/
 ---
 ################################################################################################
 # Preliminary setup.
 # Always runs, regardless of operation.
+# This stage will add the ovirt engine as a host, and
 ################################################################################################
-- name: "Add ovirt engine endpoint {{ engine_endpoint | urlsplit('hostname') }} to inventory"
+- name: "Add ovirt engine endpoint {{ ovirt_engine_endpoint | urlsplit('hostname') }} to inventory"
   hosts: localhost
   connection: local
   pre_tasks:
     # Add ovirt engine host to inventory
-    - name: "Add host {{ engine_endpoint | urlsplit('hostname') }} to inventory for better logging"
+    - name: "Add host {{ ovirt_engine_endpoint | urlsplit('hostname') }} to inventory for better logging"
       add_host:
-        name: "{{ engine_endpoint | urlsplit('hostname') }}"
+        name: "{{ ovirt_engine_endpoint | urlsplit('hostname') }}"
         groups: ovirt
 
 - name: "Run Preliminary checks and tests"
@@ -247,10 +253,6 @@
 - name: "Grab an IP address for the new nodes"
   hosts: kube_main_new, kube_worker_new
   connection: local
-  pre_tasks:
-    - name: "End the play if new nodes do not need to be added"
-      meta: end_play
-      when: not increase_main_nodes|bool or not increase_worker_nodes|bool
   tasks:
     # Wait for the Virtual machines to get an IP address, then set their ansible_host vars
     - name: "Import role to handle getting IP address information"
@@ -261,6 +263,17 @@
   hosts: kube_main, kube_worker, !kube_main_removal, !kube_worker_removal
   # Run on ALL main nodes as we need to retemplate the haproxy and keepalived files
   pre_tasks:
+    - debug: msg="{{ ansible_host }} {{ inventory_hostname }}"
+
+    - name: Wait 300 seconds for port 22 to become open and contain "OpenSSH"
+      wait_for:
+        port: 22
+        host: '{{ ansible_host }}'
+        search_regex: OpenSSH
+        delay: 10
+      vars:
+        ansible_connection: local
+
     - name: "Wait for the virtual machines to become available to ansible before continuing"
       wait_for_connection:
 

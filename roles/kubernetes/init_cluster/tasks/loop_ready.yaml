@@ -1,0 +1,6 @@
+- name: "Grab the pods from kubernetes in the kube-system namespace"
+  command:  "kubectl get pods -n kube-system --kubeconfig /etc/kubernetes/admin.conf -o json"
+  register: pods_cmd
+#
+# .items[].status.containerStatuses[].ready
+# - name: ""

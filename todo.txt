@@ -1,1 +1,4 @@
-- Handler for Removing main nodes
+- Use IPVS for kube-proxy
+  https://github.com/kubernetes/kubernetes/blob/master/pkg/proxy/ipvs/README.md
+
+- Switch the joining method around so that we don't use kubeadm join, we use the full phases, for better logging and erroring out.
