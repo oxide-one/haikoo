@@ -20,6 +20,6 @@
 {% endif %}
 {% endif %}
 {% endfor %}
-{% if controlplane_dns_endpoint is defined %}
-{{ kubernetes_control_plane_endpoint_ip }} {{ controlplane_dns_endpoint }}
+{% if kubernetes_control_plane_endpoint_dns is defined %}
+{{ kubernetes_control_plane_endpoint_ip }} {{ kubernetes_control_plane_endpoint_dns }}
 {% endif %}

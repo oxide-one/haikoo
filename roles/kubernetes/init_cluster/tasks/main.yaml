@@ -43,9 +43,9 @@
 # Set a fact to determine what the endpoint will be
 - name: "Set a fact to determine whether to use the dns endpoint or IP endpoint"
   ansible.builtin.set_fact:
-    endpoint: "{{ controlplane_dns_endpoint }}"
+    endpoint: "{{ kubernetes_control_plane_endpoint_dns }}"
   when:
-    - controlplane_dns_endpoint is defined and ( skip_dns_check or dns_check_passed )
+    - kubernetes_control_plane_endpoint_dns is defined and ( skip_dns_check or dns_check_passed )
 
 
 # Set a fact to determine what the endpoint will be
@@ -53,7 +53,7 @@
   ansible.builtin.set_fact:
     endpoint: "{{ kubernetes_control_plane_endpoint_ip }}"
   when:
-    - controlplane_dns_endpoint is not defined
+    - kubernetes_control_plane_endpoint_dns is not defined
 
 
 # Template out the config as it's used heavily from now on.

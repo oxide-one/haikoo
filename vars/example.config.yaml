@@ -3,6 +3,7 @@
 ###############
 ## Set the SSH key to add as an authorized key
 ## One of two of these variables must be defined
+# By Default, ssh_key_path will be ~/.ssh/id_rsa.pub
 #ssh_key_path:
 #ssh_key_github:
 
@@ -99,7 +100,7 @@ ovirt_engine_endpoint: ""
 #kubernetes_control_plane_endpoint_ip: ""
 
 ## The DNS endpoint of your controlplane endpoint. No default.
-#controlplane_dns_endpoint: ""
+#kubernetes_control_plane_endpoint_dns: ""
 
 ## Skip a DNS check if you are know that the DNS name resolves properly. (default: false)
 #skip_dns_check:

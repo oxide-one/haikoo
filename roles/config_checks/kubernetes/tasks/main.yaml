@@ -15,5 +15,5 @@
 # - name: "Import DNS checks for the kubernetes controlplane endpoint"
 #   ansible.builtin.import_tasks: kubernetes_dns_check.yaml
 #   when:
-#     controlplane_dns_endpoint is defined and
+#     kubernetes_control_plane_endpoint_dns is defined and
 #     not skip_dns_check
