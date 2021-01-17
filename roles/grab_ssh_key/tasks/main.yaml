@@ -1,7 +1,7 @@
 ---
 # Check if the ssh_key_path var is defined
 - name: "Check if the SSH key vars are defined"
-  assert:
+  ansible.builtin.assert:
     quiet: yes
     fail_msg: |
       Please make sure that your SSH key vars are defined.
@@ -18,9 +18,10 @@
   when:
     - ssh_key_github is not defined
 
+
 # Check if the ssh_key_path var is defined
 - name: "Check if the SSH key vars are defined"
-  assert:
+  ansible.builtin.assert:
     quiet: yes
     fail_msg: |
       Please make sure that your SSH key vars are defined.
@@ -43,7 +44,7 @@
 #################
 # Grab an SSH key from github
 - name: "Grab an SSH key from github"
-  uri:
+  ansible.builtin.uri:
     url: "https://github.com/{{ ssh_key_github }}.keys"
     return_content: yes
   register:
@@ -51,13 +52,15 @@
   failed_when: ssh_key_github_contents.status != 200
   when: ssh_key_github is defined
 
+
 - name: "Set the ssh_key variable from githu"
-  set_fact:
+  ansible.builtin.set_fact:
     ssh_key: "{{ ssh_key_github_contents.content | replace('\n', '') }}"
   when: ssh_key_github is defined
 
+
 # File related stuff
 - name: "Grab an SSH key from a file"
-  set_fact:
+  ansible.builtin.set_fact:
     ssh_key: "{{ lookup('file', ssh_key_path) }}"
   when: ssh_key_path is defined

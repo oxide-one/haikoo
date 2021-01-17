@@ -1,9 +1,9 @@
 ###############
 # Engine vars #
 ###############
-engine_username: "admin@internal"
-engine_datacenter_name: "Default"
-engine_cluster_name: "Default"
+ovirt_engine_username: "admin@internal"
+ovirt_engine_datacenter_name: "Default"
+ovirt_engine_cluster_name: "Default"
 startup_timeout: 60
 username: "kubeadmin"
 #################

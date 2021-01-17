@@ -1,7 +1,7 @@
 ---
 # Create the virtual machine
 - name: "Create ovirt virtual machine"
-  ovirt_vm:
+  ovirt.ovirt.ovirt_vm:
     auth: "{{ ovirt_auth }}"
     cpu_sockets: "{{ cores }}"
     cpu_cores: 1
@@ -12,11 +12,11 @@
     template_version: "{{ template_version_number }}"
     memory: "{{ memory }}MiB"
     disk_format: "cow"
-    cluster: "{{ engine_cluster_name }}"
+    cluster: "{{ ovirt_engine_cluster_name }}"
 
 # Add the NIC to the virtual machine
 - name: "Add nics to new virtual machine"
-  ovirt_nic:
+  ovirt.ovirt.ovirt_nic:
     auth: "{{ ovirt_auth }}"
     vm: "{{ inventory_hostname }}"
     name: "{{ network }}"

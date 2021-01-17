@@ -3,101 +3,145 @@
 #   / /_/ / __ `/ / //_/ __ \/ __ \
 #  / __  / /_/ / / ,< / /_/ / /_/ /
 # /_/ /_/\__,_/_/_/|_|\____/\____/
+# because Kubernetes on oVirt should be easy... right?
 ---
-################################################################################################
 # Preliminary setup.
 # Always runs, regardless of operation.
-# This stage will add the ovirt engine as a host, and
-################################################################################################
+# This stage will add the ovirt engine as a host to the inventory.
 - name: "Add ovirt engine endpoint {{ ovirt_engine_endpoint | urlsplit('hostname') }} to inventory"
   hosts: localhost
   connection: local
-  pre_tasks:
-    # Add ovirt engine host to inventory
-    - name: "Add host {{ ovirt_engine_endpoint | urlsplit('hostname') }} to inventory for better logging"
-      add_host:
-        name: "{{ ovirt_engine_endpoint | urlsplit('hostname') }}"
-        groups: ovirt
 
-- name: "Run Preliminary checks and tests"
-  hosts: ovirt
-  connection: local
   pre_tasks:
+    # This just makes it look nice :)
+    - name: "Make the ovirt_engine_endpoint variable pretty."
+      ansible.builtin.set_fact:
+        ovirt_engine_endpoint_pretty: "{{ ovirt_engine_endpoint | urlsplit('hostname') }}"
+
+  tasks:
+    # Add ovirt engine host to inventory
+    - name: "Add host {{ ovirt_engine_endpoint_pretty }} to inventory for better logging"
+      ansible.builtin.add_host:
+        name: "{{ ovirt_engine_endpoint_pretty }}"
+        groups: ovirt_engine
+
+
+
+
+- name: "Run configuration checks"
+  hosts: ovirt_engine
+  connection: local
+
+  tasks:
+    # Set some defaults for the oVirt engine if they don't exist
+    - name: "Set oVirt defaults"
+      ansible.builtin.import_role:
+        name: set_defaults/ovirt
+
+
     # Handle the necessary pre tasks
     - name: "Import role to handle pre tasks"
-      import_role:
-        name: pre_tasks
-  tasks:
+      ansible.builtin.import_role:
+        name: config_checks
+
+
     # Grab an SSH key from a file or github
     - name: "Import role to handle grabbing an SSH key"
-      import_role:
+      ansible.builtin.import_role:
         name: grab_ssh_key
+
+
     # Connect to ovirt and set the ovirt_auth var
     - name: "Import role to connect to ovirt"
-      import_role:
+      ansible.builtin.import_role:
         name: ovirt/connect
+
+
     # Run Tests that require an ovirt connection
     - name: "Import role to handle testing ovirt in flight"
-      import_role:
+      ansible.builtin.import_role:
         name: tests/ovirt
 
-################################################################################
+
+
+
 # Templating setup.                                                            #
 # Only performs actions when there is no template, or it hasn't been modified. #
-################################################################################
 - name: "Handle template import and setup"
   hosts: ovirt
   connection: local
+
   tasks:
     # Handle templating stuff on a local connection as only dealing with ovirt
     - name: "Import role to handle testing ovirt in flight"
-      import_role:
+      ansible.builtin.import_role:
         name: ovirt/template
+
+
+
 
 - name: "Wait for the temporary virtual machine to become available"
   hosts: temp_vm_group
   connection: local
+
   vars:
     facts_to_import:
       - "ovirt_auth"
       - "template_modified"
       - "template_exists"
+
   pre_tasks:
     # Import facts from the hosted engine
     - name: "Import role to handle importing facts from the hosted engine"
-      import_role:
+      ansible.builtin.import_role:
         name: ovirt/import_facts
+
+
     # Wait for the Virtual machines to get an IP address, then set their ansible_host vars
     - name: "Import role to handle getting IP address information"
-      import_role:
+      ansible.builtin.import_role:
         name: ovirt/wait_for_ip
+
+
+
 
 - name: "Run tasks on temporary virtual machine"
   hosts: temp_vm_group
+
   pre_tasks:
     # Wait for the virtual machine to become available
     - name: "Wait for the virtual machines to become available to ansible before continuing"
-      wait_for_connection:
+      ansible.builtin.wait_for_connection:
+
+
     # Run the setup module to gather facts.
     - name: "Run the setup module after connection has been made"
-      setup:
+      ansible.builtin.setup:
+
   tasks:
     - name: "Import role to handle running through tasks"
-      import_role:
+      ansible.builtin.import_role:
         name: ovirt/template
       vars:
         state: modify
 
+
+
+
 - name: "Seal the template"
   hosts: ovirt
   connection: local
+
   tasks:
     # Seal the template on a local connection
     - name: "Import role to handle sealing the template"
-      import_role:
+      ansible.builtin.import_role:
         name: ovirt/template
       vars:
         state: seal
+
+
+
 
 ########################
 # Inventory management #
@@ -105,103 +149,135 @@
 - name: "Create an inventory of hosts"
   hosts: ovirt
   connection: local
+
   tasks:
     # Create an inventory of hosts based on existing and new hosts
     - name: "Import role to create inventory of hosts"
-      import_role:
+      ansible.builtin.import_role:
         name: inventory
+
+
+
 
 - name: "Import facts to the entire cluster"
   hosts: kube_cluster
   connection: local
+
   tasks:
     # Import facts from 'ovirt' to the machines to prevent re-run
     - name: "Import facts from the ovirt host"
-      import_role:
+      ansible.builtin.import_role:
         name: ovirt/import_facts
+
+
+
 
 - name: "If nodes exist already, grab their IP addresses"
   hosts: kube_worker_existing, kube_main_existing
   connection: local
+
   tasks:
     # Start the VM
     - name: "Import a role to start a virtual machine"
-      import_role:
+      ansible.builtin.import_role:
         name: ovirt/virtual_machine
       vars:
         state: started
+
+
     - name: "Grab an IP address from the existing nodes"
-      import_role:
+      ansible.builtin.import_role:
         name: ovirt/wait_for_ip
+
+
+
 
 #######################################
 # Decreasing the number of Main nodes #
 #######################################
 - name: "Handle removing main nodes from the cluster"
   hosts: kube_main_removal
+
   tasks:
     - name: "Drain the node so that pods can be evicted"
       become: yes
-      command: >
+      ansible.builtin.command: >
         kubectl drain {{ inventory_hostname }}
         --ignore-daemonsets --delete-local-data
         --kubeconfig '/etc/kubernetes/admin.conf'
       register: drain_cmd
       failed_when: drain_cmd.rc != 0
 
+
     - name: "Run kubeadm reset to remove the node fully."
       become: yes
-      command: kubeadm reset -f
+      ansible.builtin.command: kubeadm reset -f
       register: kubeadm_reset_cmd
       failed_when: kubeadm_reset_cmd.rc != 0
 
+
+
+
 - name: "Handle removing worker nodes from the cluster"
   hosts: kube_main_existing[0]
+
   pre_tasks:
     # End the play if decrease_worker_nodes is false
     - name: "Do not run the playbook if nodes do not need to be decreased"
-      meta: end_play
+      ansible.builtin.meta: end_play
       when: not decrease_main_nodes
+
   tasks:
     # Start the VM
     - name: "Drain the node so that pods can be evicted"
       become: yes
-      command: >
+      ansible.builtin.command: >
         kubectl delete node {{ item }}
         --kubeconfig '/etc/kubernetes/admin.conf'
       register: drain_cmd
       with_list: "{{ groups['kube_main_removal'] }}"
       failed_when: drain_cmd.rc != 0
+
+
+
+
 #########################################
 # Decreasing the number of Worker nodes #
 #########################################
 - name: "Handle removing worker nodes from the cluster"
   hosts: kube_main_existing[0]
+
   pre_tasks:
     # End the play if decrease_worker_nodes is false
     - name: "Do not run the playbook if nodes do not need to be decreased"
-      meta: end_play
+      ansible.builtin.meta: end_play
       when: not decrease_worker_nodes
+
   tasks:
     # Start the VM
     - name: "Drain the node so that pods can be evicted"
       become: yes
-      command: >
+      ansible.builtin.command: >
         kubectl drain {{ item }}
         --ignore-daemonsets --delete-local-data
         --kubeconfig '/etc/kubernetes/admin.conf'
       register: drain_cmd
       with_list: "{{ groups['kube_worker_removal'] }}"
       failed_when: drain_cmd.rc != 0
+
+
     # Start the VM
     - name: "Drain the node so that pods can be evicted"
       become: yes
-      command: >
+      ansible.builtin.command: >
         kubectl delete node {{ item }}
         --kubeconfig '/etc/kubernetes/admin.conf'
       register: remove_cmd
       with_list: "{{ groups['kube_worker_removal'] }}"
       failed_when: remove_cmd.rc != 0
+
+
+
 
 ##########################################################################
 # Handle deletion of nodes after they have been removed from the cluster #
@@ -209,19 +285,25 @@
 - name: "Handle deletion of nodes after they have been removed from the cluster"
   hosts: kube_worker_removal, kube_main_removal
   connection: local
+
   tasks:
     # Start the VM
     - name: "Import a role to start a virtual machine"
-      import_role:
+      ansible.builtin.import_role:
         name: ovirt/virtual_machine
       vars:
         state: stopped
+
+
     # Remove the VM
     - name: "Import a role to start a virtual machine"
-      import_role:
+      ansible.builtin.import_role:
         name: ovirt/virtual_machine
       vars:
         state: absent
+
+
+
 
 #######################################
 # Increasing the number of Main nodes #
@@ -230,43 +312,55 @@
   # Run on all new nodes so that the VMs can be created
   hosts: kube_main_new, kube_worker_new
   connection: local
+
   tasks:
     # Create a virtual machine
     - name: "Import role to create a virtual machine"
-      import_role:
+      ansible.builtin.import_role:
         name: ovirt/virtual_machine
       vars:
         state: present
 
+
     # Resize the disks
     - name: "Import a role to resize the disks"
-      import_role:
+      ansible.builtin.import_role:
         name: ovirt/resize_disk
+
 
     # Start the VM
     - name: "Import a role to start a virtual machine"
-      import_role:
+      ansible.builtin.import_role:
         name: ovirt/virtual_machine
       vars:
         state: started
 
+
+
+
 - name: "Grab an IP address for the new nodes"
   hosts: kube_main_new, kube_worker_new
   connection: local
+
   tasks:
     # Wait for the Virtual machines to get an IP address, then set their ansible_host vars
     - name: "Import role to handle getting IP address information"
-      import_role:
+      ansible.builtin.import_role:
         name: ovirt/wait_for_ip
+
+
+
 
 - name: "Playbook to handle preparing the nodes for use"
   hosts: kube_main, kube_worker, !kube_main_removal, !kube_worker_removal
+
   # Run on ALL main nodes as we need to retemplate the haproxy and keepalived files
   pre_tasks:
-    - debug: msg="{{ ansible_host }} {{ inventory_hostname }}"
+    - ansible.builtin.debug: msg="{{ ansible_host }} {{ inventory_hostname }}"
+
 
     - name: Wait 300 seconds for port 22 to become open and contain "OpenSSH"
-      wait_for:
+      ansible.builtin.wait_for:
         port: 22
         host: '{{ ansible_host }}'
         search_regex: OpenSSH
@@ -274,85 +368,107 @@
       vars:
         ansible_connection: local
 
+
     - name: "Wait for the virtual machines to become available to ansible before continuing"
-      wait_for_connection:
+      ansible.builtin.wait_for_connection:
+
 
     - name: "Run the setup module to gather facts"
-      setup:
+      ansible.builtin.setup:
 
   tasks:
     # Import this role only when we are increasing the main nodes
     - name: "Import role to handle setting up main nodes"
-      import_role:
+      ansible.builtin.import_role:
         name: kubernetes/main_node_setup
       when: inventory_hostname in groups['kube_main']
+
+
+
 
 ################################################################################################
 # New cluster management
 ################################################################################################
 - name: "Create a new cluster"
   hosts: "{{ groups['kube_main'] | first }}"
+
   pre_tasks:
     - name: "End the play if new cluster does not need to be initalized"
-      meta: end_play
+      ansible.builtin.meta: end_play
       when: not new_cluster|bool
 
+
     - name: "Copy over skip_dns_check var if it is defined"
-      set_fact:
+      ansible.builtin.set_fact:
         dns_check_passed: "{{ hostvars[groups['ovirt'] | first ].dns_check_passed }}"
       when: hostvars[groups['ovirt'] | first ].dns_check_passed is defined
 
+
     - name: "Copy over skip_dns_check var if it is defined"
-      set_fact:
+      ansible.builtin.set_fact:
         skip_dns_check: "{{ hostvars[groups['ovirt'] | first ].skip_dns_check }}"
       when: hostvars[groups['ovirt'] | first ].skip_dns_check is defined
+
   tasks:
     # Make a new cluster and register var "join_command" and "certificate_key"
     - name: "Import role to handle creating a new cluster"
-      import_role:
+      ansible.builtin.import_role:
         name: kubernetes/init_cluster
       when: new_cluster|bool
+
+
+
 
 ################################################################################################
 # New Main node management
 ################################################################################################
 - name: "Grab Join token for main nodes"
   hosts: "{% if hostvars[groups['ovirt'] | first].new_cluster %}{{ groups['kube_main'] | first }}{% else %}{{ groups['kube_main_existing'] | first }}{% endif %}"
+
   pre_tasks:
     - name: "End the play if new cluster does not need to be initalized"
-      meta: end_play
+      ansible.builtin.meta: end_play
       when: not increase_main_nodes|bool
+
   tasks:
     # This will initalize and re-upload certificates to be able to add new main nodes to the cluster
     - name: "Reset the Certificate token for the main nodes"
       become: yes
-      command: "kubeadm init phase upload-certs --upload-certs"
+      ansible.builtin.command: "kubeadm init phase upload-certs --upload-certs"
       register: certificate_key
       changed_when: certificate_key.rc != 0
+
 
     # This will create a join token command
     - name: "Grab a join token for the main nodes"
       become: yes
-      command: "kubeadm token create --print-join-command"
+      ansible.builtin.command: "kubeadm token create --print-join-command"
       register: join_command
       changed_when: join_command.rc != 0
 
+
+
+
 - name: "Join any new main nodes to the cluster"
   hosts: kube_main_new, !kube_main_init_host
+
   pre_tasks:
     # Skip the play if there are no new nodes to be created
     - name: "End the play if new cluster does not need to be initalized"
-      meta: end_play
+      ansible.builtin.meta: end_play
       when: not increase_main_nodes|bool
+
+
     # Set facts from an existing main node.
     - name: "Grab facts from the existing main node to be able to join the cluster"
-      set_fact:
+      ansible.builtin.set_fact:
         certificate_key: "{{ hostvars[groups['kube_main_existing'] | first ].certificate_key.stdout_lines | last }}"
         join_command: "{{ hostvars[groups['kube_main_existing'] | first ].join_command.stdout_lines | last }}"
+
   tasks:
     - name: "Join the new main nodes to the cluster"
       become: yes
-      command: "{{ join_command }} --control-plane --certificate-key {{ certificate_key }}"
+      ansible.builtin.command: "{{ join_command }} --control-plane --certificate-key {{ certificate_key }}"
       retries: 3
       register: join_command_status
       until: join_command_status.rc == 0
@@ -360,38 +476,50 @@
       failed_when: join_command_status.rc >= 2
       throttle: 1
 
+
+
+
 ################################################################################################
 # New Worker node management
 ################################################################################################
 - name: "Grab Join token for worker nodes"
   hosts: "{% if hostvars[groups['ovirt'] | first].new_cluster %}{{ groups['kube_main'] | first }}{% else %}{{ groups['kube_main_existing'] | first }}{% endif %}"
+
   pre_tasks:
     - name: "End the play if new cluster does not need to be initalized"
-      meta: end_play
+      ansible.builtin.meta: end_play
       when: not increase_worker_nodes|bool
+
   tasks:
     # This will create a join token command
     - name: "Grab a join token for the main nodes"
       become: yes
-      command: "kubeadm token create --print-join-command"
+      ansible.builtin.command: "kubeadm token create --print-join-command"
       register: join_command
       changed_when: join_command.rc != 0
 
+
+
+
 - name: "Join any new worker nodes to the cluster"
   hosts: kube_worker_new
+
   pre_tasks:
     # Skip the play if there are no new nodes to be created
     - name: "End the play if new cluster does not need to be initalized"
-      meta: end_play
+      ansible.builtin.meta: end_play
       when: not increase_worker_nodes|bool
+
+
     # Set facts from an existing main node.
     - name: "Grab facts from the existing main node to be able to join the cluster"
-      set_fact:
+      ansible.builtin.set_fact:
         join_command: "{{ hostvars[groups['kube_main_existing'] | first ].join_command.stdout_lines | last }}"
+
   tasks:
     - name: "Join the new worker nodes to the cluster"
       become: yes
-      command: "{{ join_command }}"
+      ansible.builtin.command: "{{ join_command }}"
       retries: 3
       register: join_command_status
       changed_when: join_command_status.rc != 0

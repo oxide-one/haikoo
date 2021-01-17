@@ -10,19 +10,19 @@
 # Engine vars #
 ###############
 ## The default username for the Engine (default: "admin@internal")
-#engine_username: ""
+#ovirt_engine_username: ""
 
 ## Engine password. REQUIRED, NO DEFAULT
-#engine_password: ""
+ovirt_engine_password: ""
 
 ## Engine endpoint (ends with /ovirt-engine). REQUIRED, NO DEFAULT
-#ovirt_engine_endpoint: ""
+ovirt_engine_endpoint: ""
 
 ## The datacenter name (default: "Default")
-#engine_datacenter_name: ""
+#ovirt_engine_datacenter_name: ""
 
 ## The Cluster name. (default: "Default")
-#engine_cluster_name: ""
+#ovirt_engine_cluster_name: ""
 
 
 #################

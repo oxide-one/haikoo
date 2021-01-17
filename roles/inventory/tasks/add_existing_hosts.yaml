@@ -2,7 +2,7 @@
 # Add am Existing Main node to the inventory
 # Not logging as it prints out a load of bs
 - name: "Add existing main nodes to the inventory, scheduled to be created"
-  add_host:
+  ansible.builtin.add_host:
     name: "{{ item.name }}"
     groups:
       - kube_cluster
@@ -17,10 +17,12 @@
     template: "{{ template_name }}"
   with_list: "{{ main_node_list.ovirt_vms }}"
   no_log: True
+
+
 # Add an Existing Worker node to the inventory
 # Not logging as it prints out a load of bs
 - name: "Add existing worker nodes to the inventory, scheduled to be created"
-  add_host:
+  ansible.builtin.add_host:
     name: "{{ item.name }}"
     groups:
       - kube_cluster

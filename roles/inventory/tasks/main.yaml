@@ -1,28 +1,31 @@
 ---
-
 - name: "Import task to handle grabbing hosts from oVirt"
-  import_tasks: grab_hosts.yaml
+  ansible.builtin.import_tasks: grab_hosts.yaml
+
 
 - name: "Import task to handle the difference calculation"
-  import_tasks: calculate_differences.yaml
+  ansible.builtin.import_tasks: calculate_differences.yaml
 
 
 - name: "Import task to handle the creation of main nodes"
-  import_tasks: new_main_nodes.yaml
+  ansible.builtin.import_tasks: new_main_nodes.yaml
   when:
     increase_main_nodes
 
+
 - name: "Import task to handle the creation of worker nodes"
-  import_tasks: new_worker_nodes.yaml
+  ansible.builtin.import_tasks: new_worker_nodes.yaml
   when:
     increase_worker_nodes
 
+
 - name: "Import task to handle the removal of main nodes"
-  import_tasks: remove_main_nodes.yaml
+  ansible.builtin.import_tasks: remove_main_nodes.yaml
   when:
     decrease_main_nodes
 
+
 - name: "Import task to handle the removal of worker nodes"
-  import_tasks: remove_worker_nodes.yaml
+  ansible.builtin.import_tasks: remove_worker_nodes.yaml
   when:
     decrease_worker_nodes

@@ -1,6 +1,6 @@
 ---
 - name: "Stop the ovirt virtual machine"
-  ovirt_vm:
+  ovirt.ovirt.ovirt_vm:
     auth: "{{ ovirt_auth }}"
     state: stopped
     name: "{{ inventory_hostname }}"

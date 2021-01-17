@@ -1,14 +1,14 @@
 ---
 # Create a temporary virtual machine from a template
 - name: 'Create ovirt vm "{{ temp_vm_name }}" from template "{{ template_name }}"'
-  ovirt_vm:
+  ovirt.ovirt.ovirt_vm:
     auth: "{{ ovirt_auth }}"
     state: present
     name: "{{ temp_vm_name }}"
     cpu_cores: "{{ temp_vm_cores }}"
     memory: "{{ temp_vm_memory }}MiB"
     template: "{{ template_name }}"
-    cluster: "{{ engine_cluster_name }}"
+    cluster: "{{ ovirt_engine_cluster_name }}"
     type: "server"
     operating_system: "other_linux"
     nics:
@@ -19,24 +19,24 @@
 
 # Ensure /tmp/temp_vm_password are not present for main nodes
 - name: "Ensure /tmp/temp_vm_password is absent so temporary vm password can be set"
-  file:
+  ansible.builtin.file:
     path: "/tmp/temp_vm_password"
     state: absent
 
 # Set a password for the root user of the temporary vm
 - name: "Create a temporary password for the root user"
-  set_fact:
+  ansible.builtin.set_fact:
     temp_vm_password: "{{ lookup('password', '/tmp/temp_vm_password length=64 chars=ascii_letters') }}"
 
 # Ensure /tmp/temp_vm_password are not present for main nodes
 - name: "Ensure /tmp/temp_vm_password is absent after vm started for security reasons."
-  file:
+  ansible.builtin.file:
     path: "/tmp/temp_vm_password"
     state: absent
 
 # Start a virtual machien with cloud-init. You CANNOT create+start a VM at the same time when using cloud-init, so this approach is given.
 - name: 'Start the temporary virtual machine "{{ temp_vm_name }}"'
-  ovirt_vm:
+  ovirt.ovirt.ovirt_vm:
     auth: "{{ ovirt_auth }}"
     cloud_init:
       user_name: "{{ username }}"
@@ -51,7 +51,7 @@
     name: "{{ temp_vm_name }}"
 
 - name: 'Add host to inventory'
-  add_host:
+  ansible.builtin.add_host:
     name: "{{ temp_vm_name }}"
     ansible_ssh_pass: "{{ temp_vm_password }}"
     ansible_user: "{{ username }}"

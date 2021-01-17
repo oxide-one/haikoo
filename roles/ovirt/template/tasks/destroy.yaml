@@ -1,9 +1,9 @@
 ---
 # Remove the template to ovirt
 - name: "Import template {{ template_name }} to storage domain {{ template_storage_location }}"
-  ovirt_template:
+  ovirt.ovirt.ovirt_template:
      auth: "{{ ovirt_auth }}"
      state: absent
      name: "{{ template_name }}"
-     cluster: "{{ engine_cluster_name }}"
+     cluster: "{{ ovirt_engine_cluster_name }}"
      timeout: "{{ template_import_timeout }}"

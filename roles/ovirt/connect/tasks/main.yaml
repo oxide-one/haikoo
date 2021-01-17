@@ -2,14 +2,15 @@
 # Run the ovirt authentication module, which registers the variable
 # 'ovirt_auth'
 - name: "Connect to Ovirt engine"
-  ovirt_auth:
+  ovirt.ovirt.ovirt_auth:
     url: "{{ ovirt_engine_endpoint }}/api"
-    username: "{{ engine_username }}"
-    password: "{{ engine_password }}"
+    username: "{{ ovirt_engine_username }}"
+    password: "{{ ovirt_engine_password }}"
   when: state|default('present') == 'present'
 
+
 - name: "Remove ovirt authentication"
-  ovirt_auth:
+  ovirt.ovirt.ovirt_auth:
     state: absent
     ovirt_auth: "{{ ovirt_auth }}"
   when: state|default('present') == 'absent' and ovirt_auth is defined

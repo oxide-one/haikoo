@@ -1,6 +1,6 @@
 # Grab information for the ovirt disks
 - name: "Get disk info for the Virtual Machine"
-  ovirt_disk_info:
+  ovirt.ovirt.ovirt_disk_info:
     auth: "{{ ovirt_auth }}"
     pattern:
       vm_names={{ inventory_hostname }}
@@ -8,7 +8,7 @@
 
 # Set the size of the disk
 - name: "Get disk info for the Virtual Machine"
-  ovirt_disk:
+  ovirt.ovirt.ovirt_disk:
     auth: "{{ ovirt_auth }}"
     id: "{{ disk_info.ovirt_disks[0].id }}"
     name: "root_{{ inventory_hostname }}"

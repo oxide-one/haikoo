@@ -2,7 +2,7 @@
 # Enable kubernetes repo
 - name: "Enable the Kubernetes Repo"
   become: yes
-  yum_repository:
+  ansible.builtin.yum_repository:
     name: Kubernetes
     file: kubernetes
     description: The Kubernetes repos
@@ -17,10 +17,11 @@
       - kubectl
     enabled: yes
 
+
 # Enable extra repos if they're defined
 - name: "Enable extra repos"
   become: yes
-  yum_repository:
+  ansible.builtin.yum_repository:
     name: "{{ item.name }}"
     baseurl: "{{ item.url }}"
     gpgcheck: yes
@@ -33,25 +34,27 @@
 # Run a given command to enable cri-o
 - name: "Enable cri-o version {{ crio_version }}"
   become: yes
-  command:
+  ansible.builtin.command:
     cmd: "dnf module enable -y cri-o:{{ crio_version }}"
     warn: no
   register: dnf_output
   changed_when: dnf_output.rc != 0
 
+
 # Update all the packages
 # Ansible lint complains about this but whatever.
 - name: "Update all packages"
   become: yes
-  dnf:
+  ansible.builtin.dnf:
     name: '*'
     state: latest
   when: template_upgrade_packages
 
+
 # Get kubernetes
 - name: "Download kubernetes packages"
   become: yes
-  dnf:
+  ansible.builtin.dnf:
     name:
       - kubelet
       - kubeadm
@@ -59,10 +62,11 @@
     disable_excludes: all
     state: present
 
+
 # Download and install packages
 - name: "Install base template packages"
   become: yes
-  dnf:
+  ansible.builtin.dnf:
     name:
       - dnf-automatic
       - nfs-utils
@@ -72,60 +76,68 @@
       - logrotate
       - crun
 
+
 # Change the default runtime to crun
 - name: Change the default Runtime to crun
   become: yes
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: "/etc/crio/crio.conf"
     regexp: '^default_runtime = "runc"$'
     line: 'default_runtime = "crun"'
     mode: u=rw,g=r,o=r
 
+
 - name: "Adda runtime argument so that crun can be used"
   become: yes
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: "/etc/crio/crio.conf"
     insertbefore: '\[crio\.runtime\.runtimes\.runc\]'
     line: "[crio.runtime.runtimes.crun]"
     mode: u=rw,g=r,o=r
 
+
 - name: "Disable SELinux for cri-o"
   become: yes
-  lineinfile:
+  ansible.builtin.lineinfile:
     path:  "/etc/crio/crio.conf"
     regexp: '^selinux = true$'
     line: 'selinux = false'
     mode: u=rw,g=r,o=r
   when: not template_selinux_enabled
 
+
 # Disable selinux
 - name: "Disable SELinux"
   become: yes
-  selinux:
+  ansible.builtin.selinux:
     state: disabled
   when: not template_selinux_enabled
+
 
 # Ensure Selinux is disabled
 - name: "Ensure SELinux is set to disabled in the file"
   become: yes
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/selinux/config
     regexp: '^SELINUX='
     line: SELINUX=disabled
     owner: root
     group: root
     mode: u=rw,g=r,o=r
+
+
 # Grab the br_netfiter module
 - name: "Modprobe the br_netfiter module"
   become: yes
-  modprobe:
+  ansible.builtin.modprobe:
     name: br_netfilter
     state: present
+
 
 # Ensure br_netfilter is loaded on boot
 - name: "Add extra args to the kubelet sysconfig file"
   become: yes
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: "/etc/modules-load.d/br_netfilter.conf"
     line: 'br_netfilter'
     state: present
@@ -134,10 +146,11 @@
     group: root
     mode: u=rw,g=r,o=r
 
+
 # Sysctl stuff
 - name: "Set required sysctl variables"
   become: yes
-  sysctl:
+  ansible.builtin.sysctl:
     name: "{{ item.key }}"
     value: "{{ item.value }}"
     state: present
@@ -148,10 +161,11 @@
     net.bridge.bridge-nf-call-iptables: 1
     net.ipv4.ip_nonlocal_bind: 1
 
+
 # Ensure that kubelet config is set properly
 - name: "Add extra args to the kubelet sysconfig file"
   become: yes
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: "/etc/sysconfig/kubelet"
     line: >
       KUBELET_EXTRA_ARGS=--cgroup-driver=systemd
@@ -167,7 +181,7 @@
 # Systemd stuff
 - name: "Enable systemd services on boot"
   become: yes
-  systemd:
+  ansible.builtin.systemd:
     name: "{{ item }}"
     enabled: yes
     state: started
@@ -177,28 +191,31 @@
     - logrotate.timer
     - dnf-automatic.timer
 
+
 # Enable extra services if they're defined
 - name: "Enable extra systemd services on boot"
   become: yes
-  systemd:
+  ansible.builtin.systemd:
     name: "{{ item }}"
     enabled: yes
     state: started
   with_list: "{{ template_extra_services }}"
   when: template_extra_services is defined
 
+
 # Remove the password for the specified user (kubeadmin)
 - name: "Remove the password from the user {{ username }}"
   become: yes
-  user:
+  ansible.builtin.user:
     name: "{{ username }}"
     password: "!"
     state: present
 
+
 # Disable Password auth
 - name: "Deny password authentication for SSH"
   become: yes
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: "/etc/ssh/sshd_config"
     regexp: '^PasswordAuthentication yes$'
     line: 'PasswordAuthentication no'
@@ -206,9 +223,10 @@
     group: root
     mode: u=rw,g=r,o=r
 
+
 # Shutdown the system. There is no 'comparative' model
 - name: "Poweroff the system"
   become: yes
-  command: /sbin/shutdown -h 1
+  ansible.builtin.command: /sbin/shutdown -h 1
   register: shutdown_cmd
   changed_when: shutdown_cmd.rc != 0

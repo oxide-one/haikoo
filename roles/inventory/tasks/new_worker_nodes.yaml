@@ -2,7 +2,7 @@
 # Odd thing to do, I know. But this will make it so that the domain is properly set.
 # Additionally, create two empty lists
 - name: "Append a '.' to the domain variable if domain is set"
-  set_fact:
+  ansible.builtin.set_fact:
     domain_tmp: ".{{ domain }}"
     main_hostname_hash_list: []
     worker_hostname_hash_list: []
@@ -13,14 +13,15 @@
 
 # Ensure /tmp/kubehost-1...etc are not present for worker nodes
 - name: "Ensure /tmp/kubehost-1..etc are absent so main node hashes can be created"
-  file:
+  ansible.builtin.file:
     path: "/tmp/kubehost-{{ item }}"
     state: absent
   with_sequence: count="{{ worker_node_modify_count }}"
 
+
 # Add a new Worker node to the inventory
 - name: "Add new worker nodes to the inventory, scheduled to be created"
-  add_host:
+  ansible.builtin.add_host:
     name: >-
       {{ cluster_name }}-{{ worker_node_name }}-{{ lookup('password', '/tmp/kubehost-' + item + ' length=6 chars=ascii_letters') | lower }}{{ domain_tmp }}
     groups:
@@ -37,9 +38,10 @@
   with_sequence: count="{{ worker_node_modify_count }}"
   no_log: true
 
+
 # Remove a temporary file created to define the names of the nodes
 - name: "Remove temporary file created by adding the worker nodes"
-  file:
+  ansible.builtin.file:
     path: "/tmp/kubehost-{{ item }}"
     state: absent
   with_sequence: count="{{ worker_node_modify_count }}"

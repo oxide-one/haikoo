@@ -1,14 +1,15 @@
 ---
 # Add nodes to a group, scheduled to be deleted
 - name: "Add worker nodes to the kube_worker_removal group"
-  add_host:
+  ansible.builtin.add_host:
     name: "{{ item }}"
     groups:
       - kube_worker_removal
   with_list: "{{ (groups['kube_worker'] | shuffle)[:(worker_node_modify_count | int)] }}"
 
+
 - name: "Add worker nodes to remain to the kube_worker_remain group"
-  add_host:
+  ansible.builtin.add_host:
     name: "{{ item.name }}"
     groups:
       - kube_worker_remain

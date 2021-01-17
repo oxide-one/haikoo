@@ -1,19 +1,20 @@
 ---
 # Import the template to the cluster.
-- name: "Import template {{ template_name }} to storage domain {{ template_storage_location }}. This will take some time."
-  ovirt_template:
+-  name: "Import template {{ template_name }} to storage domain {{ template_storage_location }}. This will take some time."
+   ovirt.ovirt.ovirt_template:
      auth: "{{ ovirt_auth }}"
      state: imported
      name: "{{ template_name }}"
      image_disk: "Fedora 32 Cloud Base Image v1.6 for x86_64"
      image_provider: "ovirt-image-repository"
      storage_domain: "{{ template_storage_location }}"
-     cluster: "{{ engine_cluster_name }}"
+     cluster: "{{ ovirt_engine_cluster_name }}"
      timeout: "{{ template_import_timeout }}"
      timezone: "{{ template_timezone }}"
      description: "{{ template_description }}"
 
+
 # Run ovirt checks again to set the 'template_exists' variable
-- name: "Import role checks/ovirt again to set the template_exists variable"
-  import_role:
+-  name: "Import role checks/ovirt again to set the template_exists variable"
+   ansible.builtin.import_role:
     role: tests/ovirt
