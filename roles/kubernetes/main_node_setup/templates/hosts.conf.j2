@@ -21,5 +21,5 @@
 {% endif %}
 {% endfor %}
 {% if controlplane_dns_endpoint is defined %}
-{{ controlplane_endpoint }} {{ controlplane_dns_endpoint }}
+{{ kubernetes_control_plane_endpoint_ip }} {{ controlplane_dns_endpoint }}
 {% endif %}

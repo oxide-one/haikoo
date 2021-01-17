@@ -96,7 +96,7 @@ ovirt_engine_endpoint: ""
 #domain:
 
 ## The IP address of the controlplane endpoint. This must be within the same subnet as your mainline nodes. REQUIRED
-#controlplane_endpoint: ""
+#kubernetes_control_plane_endpoint_ip: ""
 
 ## The DNS endpoint of your controlplane endpoint. No default.
 #controlplane_dns_endpoint: ""

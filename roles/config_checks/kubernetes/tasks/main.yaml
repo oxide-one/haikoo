@@ -6,9 +6,9 @@
     fail_msg: |
       Please make sure that the Kubernetes Controlplane endpoint is defined
       Example usage:
-        controlplane_endpoint: "10.0.0.1"
+        kubernetes_control_plane_endpoint_ip: "10.0.0.1"
     that:
-      - controlplane_endpoint is defined
+      - kubernetes_control_plane_endpoint_ip is defined
 
 
 # # Import DNS check tasks
