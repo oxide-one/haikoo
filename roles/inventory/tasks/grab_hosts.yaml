@@ -5,10 +5,10 @@
   ovirt.ovirt.ovirt_vm_info:
     auth: "{{ ovirt_auth }}"
     pattern:
-      name={{ cluster_name }}-{{ main_node_name }}-* and
+      name={{ cluster_name }}-{{ kubernetes_control_plane_node_name }}-* and
       datacenter="{{ ovirt_engine_datacenter_name }}" and
       cluster="{{ ovirt_engine_cluster_name }}"
-  register: main_node_list
+  register: control_plane_node_nodes
 
 
 # When there are NO vms matching the pattern, create a new cluster

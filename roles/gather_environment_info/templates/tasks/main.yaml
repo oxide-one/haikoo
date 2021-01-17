@@ -1,0 +1,54 @@
+---
+##############
+# Templating #
+##############
+# Check if template exists already. Do not assert if not, just set a variable.
+- name: 'Check if Template "{{ template_name }}" exists'
+  ovirt.ovirt.ovirt_template_info:
+    auth: "{{ ovirt_auth }}"
+    pattern:
+      name={{ template_name }} and
+      datacenter={{ ovirt_engine_datacenter_name }} and
+      cluster={{ ovirt_engine_cluster_name }}
+  register: ovirt_template_exists
+
+
+# Set the template.exists variable to true if template exists
+- name: 'Set a variable if template "{{ template_name }}" exists'
+  ansible.builtin.set_fact:
+    template_exists: true
+  when: ovirt_template_exists.ovirt_templates | length>0
+
+
+# Set the template.exists variable to false if template exists
+- name: 'Set a variable if template "{{ template_name }}" does not exist'
+  ansible.builtin.set_fact:
+    template_exists: false
+  when: ovirt_template_exists.ovirt_templates | length==0
+
+
+# Check if the template subversion exists. (aka, if the template has already been modified)
+- name: 'Check if Template {{ template_name }} has the subversion {{ template_subversion_name }}'
+  ovirt.ovirt.ovirt_template_info:
+    auth: "{{ ovirt_auth }}"
+    pattern:
+      name={{ template_name }} and
+      datacenter={{ ovirt_engine_datacenter_name }} and
+      cluster={{ ovirt_engine_cluster_name }} and
+      version_name={{ template_subversion_name }}
+  register: ovirt_template_subversion_exists
+
+
+# Set the template_modified variable to true if template has been modified
+- name: 'Set a variable if template "{{ template_name }}" does not have a subversion (i.e, not been modified)'
+  ansible.builtin.set_fact:
+    template_modified: true
+    template_version_number: "{{ checks_ovirt_template_subversion_exists.ovirt_templates[0].version.version_number }}"
+  when: ovirt_template_subversion_exists.ovirt_templates | length>0
+
+
+# Set the template_modified variable to false if template has not been modified
+- name: 'Set a variable if template "{{ template_name }}" does not have a subversion (i.e, not been modified)'
+  ansible.builtin.set_fact:
+    template_modified: false
+  when: ovirt_template_subversion_exists.ovirt_templates | length==0

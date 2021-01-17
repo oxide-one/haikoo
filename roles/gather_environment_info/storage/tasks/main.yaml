@@ -1,0 +1,24 @@
+---
+##################
+# Storage domain #
+##################
+# Search for the template storage domain in the cluster
+- name: 'Search for Storage domain "{{ template_storage_location }}" in cluster {{ ovirt_engine_cluster_name }}'
+  ovirt.ovirt.ovirt_storage_domain_info:
+    auth: "{{ ovirt_auth }}"
+    pattern:
+      name={{ template_storage_location }} and
+      datacenter={{ ovirt_engine_datacenter_name }} and
+      cluster={{ ovirt_engine_cluster_name }}
+  register: ovirt_template_storage_exists
+
+# Check that the template storage domain actually exists
+- name: 'Assert that Storage domain "{{ template_storage_location }}" exists'
+  ansible.builtin.assert:
+    quiet: yes
+    fail_msg: |
+      Storage domain for template does not exist.
+
+      Current value: {{ template_storage_location }}
+    that:
+      - (ovirt_template_storage_exists.ovirt_storage_domains | length != 0)

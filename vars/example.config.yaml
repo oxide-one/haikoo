@@ -29,8 +29,13 @@ ovirt_engine_endpoint: ""
 #################
 # Template vars #
 #################
-## The Template name to use (default: "k8s")
+## The Template name to use (default: cluster_name)
 #template_name: ""
+
+## The name of the image to import to use as a basis.
+## This will be imported from the glance image provider, so make sure the name matches if you change this :)
+## Default: "Fedora 33 Cloud Base Image v1.2 for x86_64"
+#template_imported_image_name:
 
 ## The Storage domain to import the Template to (default: "data")
 #template_storage_location: ""
@@ -38,7 +43,7 @@ ovirt_engine_endpoint: ""
 ## Import timeout . Increase this if your import fails. (default: 600) AKA 10 Minutes
 #template_import_timeout:
 
-## Description of the imported template. (default: "Created by haikoo")
+## Description of the imported template. (default: "Created by haikoo"")
 #template_description: ""
 
 ## Extra repos to add to the template. (default: none)
@@ -102,54 +107,52 @@ ovirt_engine_endpoint: ""
 ## The DNS endpoint of your controlplane endpoint. No default.
 #kubernetes_control_plane_endpoint_dns: ""
 
-## Skip a DNS check if you are know that the DNS name resolves properly. (default: false)
-#skip_dns_check:
 
-## The Name of the oVirt network to deploy Kubernetes on
-#network:
+## The Name of the oVirt network to deploy Kubernetes on. Default is "ovirtmgmt"
+#kubernetes_cluster_network:
 
 ## The statup timeout (in minutes) to wait for the virtual machines to power on
 #startup_timeout: 60
 ######################################
-# mainline/master node Configuration #
+# Control Plane node Configuration #
 ######################################
 
 ## The name of the main nodes (default: "main")
-#main_node_name: ""
+#kubernetes_control_plane_node_name: ""
 
 ## How many main nodes you would like (default: 3)
-#main_node_count:
+#kubernetes_control_plane_node_count:
 
 ## The number of cores to give to each main node (default: 4)
-#main_node_cpu_cores:
+#kubernetes_control_plane_node_cores:
 
 ## The amount of memory (in MB) to give to the main nodes (default: 4096)
-#main_node_memory:
+#kubernetes_control_plane_node_memory:
 
 ## The Disk size (in GB) to give to the main nodes (default: 30)
-#main_node_disk_size:
+#kubernetes_control_plane_node_disk_size:
 
 ## List of roles to give to the worker node once provisioned. (default: none)
-#main_node_roles: []
+#kubernetes_control_plane_node_roles: []
 
 #############################
 # Worker node configuration #
 #############################
 
 ## The name of the worker nodes (default: "worker")
-#worker_node_name: ""
+#kubernetes_worker_node_name: ""
 
 ## How many main nodes you would like (default: 3)
-#worker_node_count:
+#kubernetes_worker_node_count:
 
 ## The number of cores to give to each main node (default: 4)
-#worker_node_cpu_cores:
+#kubernetes_worker_node_cpu_cores:
 
 ## The amount of memory (in MB) to give to the main nodes (default: 4096)
-#worker_node_memory:
+#kubernetes_worker_node_memory:
 
 ## The Disk size (in GB) to give to the main nodes (default: 30)
-#worker_node_disk_size:
+#kubernetes_worker_node_disk_size:
 
 ## List of roles to give to the worker node once provisioned. (default: none)
-#worker_node_roles: []
+#kubernetes_worker_node_roles: []

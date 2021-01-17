@@ -1,7 +1,0 @@
----
-###############
-# Engine vars #
-###############
-ovirt_engine_datacenter_name: "Default"
-ovirt_engine_cluster_name: "Default"
-startup_timeout: 60

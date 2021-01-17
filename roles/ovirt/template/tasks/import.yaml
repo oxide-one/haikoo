@@ -5,7 +5,7 @@
      auth: "{{ ovirt_auth }}"
      state: imported
      name: "{{ template_name }}"
-     image_disk: "Fedora 32 Cloud Base Image v1.6 for x86_64"
+     image_disk: "{{ template_imported_image_name }}"
      image_provider: "ovirt-image-repository"
      storage_domain: "{{ template_storage_location }}"
      cluster: "{{ ovirt_engine_cluster_name }}"

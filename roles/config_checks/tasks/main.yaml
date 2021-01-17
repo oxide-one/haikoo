@@ -7,12 +7,3 @@
 - name: "Run kubernetes related preflight checks"
   ansible.builtin.import_role:
     name: config_checks/kubernetes
-
-
-#- name: "Run Virtual Machine related preflight checks"
-#  ansible.builtin.import_role:
-#    name: config_checks/virtual_machines
-
-
-#- name: "Import role to handle setting extra facts"
-#  ansible.builtin.import_role: extra_facts.yaml
