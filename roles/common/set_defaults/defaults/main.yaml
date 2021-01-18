@@ -8,7 +8,7 @@ crio_version: "1.18"
 cluster_name: "haikoo"
 startup_timeout: 60
 kubernetes_cluster_network: "ovirtmgmt"
-
+kubernetes_login_username: "kubeadmin"
 # template related
 template_name: "{{ cluster_name }}"
 template_imported_image_name: "Fedora 33 Cloud Base Image v1.2 for x86_64"
@@ -18,7 +18,6 @@ template_description: "Created by haikoo"
 template_upgrade_packages: True
 template_timezone: "Etc/GMT"
 template_selinux_enabled: False
-template_subversion_name: "post-modification"
 
 # control plane
 kubernetes_control_plane_node_name: "control-plane"

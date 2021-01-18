@@ -10,7 +10,7 @@
     template: "{{ template_name }}"
     cluster: "{{ ovirt_engine_cluster_name }}"
     type: "server"
-    operating_system: "other_linux"
+    operating_system: "linux"
     nics:
       - interface: "virtio"
         name: "{{ temp_vm_network }}"
@@ -39,7 +39,7 @@
   ovirt.ovirt.ovirt_vm:
     auth: "{{ ovirt_auth }}"
     cloud_init:
-      user_name: "{{ username }}"
+      user_name: "{{ kubernetes_login_username }}"
       root_password: "{{ temp_vm_password }}"
       custom_script: |
         packages:
@@ -54,6 +54,6 @@
   ansible.builtin.add_host:
     name: "{{ temp_vm_name }}"
     ansible_ssh_pass: "{{ temp_vm_password }}"
-    ansible_user: "{{ username }}"
+    ansible_user: "{{ kubernetes_login_username }}"
     groups:
       - temp_vm_group

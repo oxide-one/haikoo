@@ -24,6 +24,8 @@
       ansible.builtin.add_host:
         name: "{{ ovirt_engine_endpoint_pretty }}"
         groups: ovirt_engine
+        vars:
+          ovirt_engine_endpoint_pretty: "{{ ovirt_engine_endpoint_pretty }}"
 
 
 
@@ -36,18 +38,19 @@
     # Set some defaults for the oVirt engine if they don't exist
     - name: "Set oVirt defaults"
       ansible.builtin.import_role:
-        name: set_defaults
+        name: common/set_defaults
 
 
     # Handle the necessary pre tasks
     - name: "Import role to handle pre tasks"
       ansible.builtin.import_role:
-        name: config_checks
+        name: common/config_checks
+
 
     # Grab an SSH key from a file or github
     - name: "Import role to handle grabbing an SSH key"
       ansible.builtin.import_role:
-        name: grab_ssh_key
+        name: common/grab_ssh_key
 
 
     # Connect to ovirt and set the ovirt_auth var
@@ -56,47 +59,35 @@
         name: ovirt/connect
 
 
+
     # Gather information about the general state of oVirt
     - name: "Import role to gather information about oVirt"
       ansible.builtin.import_role:
-        name: gather_environment_info
+        name: common/gather_env_info
 
-    - fail:
+
     # Handle templating stuff on a local connection as only dealing with ovirt
     - name: "Import role to handle testing ovirt in flight"
       ansible.builtin.import_role:
         name: ovirt/template
 
-
 - name: "Wait for the temporary virtual machine to become available"
   hosts: temp_vm_group
   connection: local
-
   vars:
-    facts_to_import:
-      - "ovirt_auth"
-      - "template_modified"
-      - "template_exists"
+    ovirt_auth: "{{ hostvars[groups['ovirt_engine'][0]].ovirt_auth }}"
 
   pre_tasks:
-    # Import facts from the hosted engine
-    - name: "Import role to handle importing facts from the hosted engine"
+      # Set some defaults for the oVirt engine if they don't exist
+    - name: "Set oVirt defaults"
       ansible.builtin.import_role:
-        name: ovirt/import_facts
-
-
-    # Wait for the Virtual machines to get an IP address, then set their ansible_host vars
+        name: common/set_defaults
+      # Wait for the Virtual machines to get an IP address, then set their ansible_host vars
     - name: "Import role to handle getting IP address information"
       ansible.builtin.import_role:
         name: ovirt/wait_for_ip
+      connection: local
 
-
-
-
-- name: "Run tasks on temporary virtual machine"
-  hosts: temp_vm_group
-
-  pre_tasks:
     # Wait for the virtual machine to become available
     - name: "Wait for the virtual machines to become available to ansible before continuing"
       ansible.builtin.wait_for_connection:
@@ -155,7 +146,7 @@
     # Import facts from 'ovirt' to the machines to prevent re-run
     - name: "Import facts from the ovirt host"
       ansible.builtin.import_role:
-        name: ovirt/import_facts
+        name: common/import_facts_from_engine
 
 
 

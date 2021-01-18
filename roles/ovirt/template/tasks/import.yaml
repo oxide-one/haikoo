@@ -12,9 +12,3 @@
      timeout: "{{ template_import_timeout }}"
      timezone: "{{ template_timezone }}"
      description: "{{ template_description }}"
-
-
-# Run ovirt checks again to set the 'template_exists' variable
--  name: "Import role checks/ovirt again to set the template_exists variable"
-   ansible.builtin.import_role:
-    role: tests/ovirt

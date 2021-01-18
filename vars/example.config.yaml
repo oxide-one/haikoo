@@ -90,6 +90,9 @@ ovirt_engine_endpoint: ""
 ############################
 # Kubernetes Configuration #
 ############################
+## The username to set as the user for the created virtual machines (default: kubeadmin)
+# kubernetes_login_username: "kubeadmin"
+
 ## The CRI-O Version to enable and install (default: 1.18)
 #crio_version: "1.18"
 
@@ -117,7 +120,7 @@ ovirt_engine_endpoint: ""
 # Control Plane node Configuration #
 ######################################
 
-## The name of the main nodes (default: "main")
+## The name of the main nodes (default: "control-plane")
 #kubernetes_control_plane_node_name: ""
 
 ## How many main nodes you would like (default: 3)

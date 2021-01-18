@@ -1,24 +1,24 @@
 ---
 - name: "Import role to gather information on the Cluster and Datacenter"
   ansible.builtin.import_role:
-    name: gather_environment_info/dc_cluster
+    name: common/gather-env-info/dc_cluster
 
 
 - name: "Import role to gather information on storage"
   ansible.builtin.import_role:
-    name: gather_environment_info/storage
+    name: common/gather-env-info/storage
 
 
 - name: "Import role to gather information on networks"
   ansible.builtin.import_role:
-    name: gather_environment_info/networks
+    name: common/gather-env-info/networks
 
 
 - name: "Import role to gather information on templates"
   ansible.builtin.import_role:
-    name: gather_environment_info/templates
+    name: common/gather-env-info/templates
 
 
 - name: "Import role to gather information on virtual machines"
   ansible.builtin.import_role:
-    name: gather_environment_info/virtual_machines
+    name: common/gather-env-info/virtual_machines

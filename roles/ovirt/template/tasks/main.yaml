@@ -6,12 +6,14 @@
     state|default('present') == 'present' and
     not template_exists
 
+
 # Delete template
 - name: "Import task to handle template deletion."
   ansible.builtin.include_tasks: destroy.yaml
   when:
     state|default('present') == 'absent' and
     template_exists
+
 
 # Start a temporary vm and modify template
 - name: "Import task to handle template modification."
@@ -29,6 +31,7 @@
     state|default('present') == 'modify' and
     template_exists|bool and
     not template_modified|bool
+
 
 # Make modifications on a template vm
 - name: "Import task to handle sealing the virtual machine"
