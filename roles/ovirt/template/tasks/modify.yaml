@@ -1,4 +1,15 @@
 ---
+# Ensure /tmp/temp_vm_password are not present for main nodes
+- name: "Ensure /tmp/temp_vm_password is absent so temporary vm password can be set"
+  ansible.builtin.file:
+    path: "/tmp/temp_vm_password"
+    state: absent
+
+# Set a password for the root user of the temporary vm
+- name: "Create a temporary password for the root user"
+  ansible.builtin.set_fact:
+    temp_vm_password: "{{ lookup('password', '/tmp/temp_vm_password length=64 chars=ascii_letters') }}"
+
 # Create a temporary virtual machine from a template
 - name: 'Create ovirt vm "{{ temp_vm_name }}" from template "{{ template_name }}"'
   ovirt.ovirt.ovirt_vm:
@@ -11,22 +22,13 @@
     cluster: "{{ ovirt_engine_cluster_name }}"
     type: "server"
     operating_system: "linux"
+    comment: "{{ temp_vm_password }}"
+    description: "Temporary virtual machine used to generate the 'basis' for the cluster machines."
     nics:
       - interface: "virtio"
         name: "{{ temp_vm_network }}"
         profile_name: "{{ temp_vm_network }}"
   register: ovirt_created_vm
-
-# Ensure /tmp/temp_vm_password are not present for main nodes
-- name: "Ensure /tmp/temp_vm_password is absent so temporary vm password can be set"
-  ansible.builtin.file:
-    path: "/tmp/temp_vm_password"
-    state: absent
-
-# Set a password for the root user of the temporary vm
-- name: "Create a temporary password for the root user"
-  ansible.builtin.set_fact:
-    temp_vm_password: "{{ lookup('password', '/tmp/temp_vm_password length=64 chars=ascii_letters') }}"
 
 # Ensure /tmp/temp_vm_password are not present for main nodes
 - name: "Ensure /tmp/temp_vm_password is absent after vm started for security reasons."
@@ -42,10 +44,9 @@
       user_name: "{{ kubernetes_login_username }}"
       root_password: "{{ temp_vm_password }}"
       custom_script: |
-        packages:
-        - qemu-guest-agent
         runcmd:
-        - systemctl start qemu-guest-agent
+        - [ dnf, install, -y, qemu-guest-agent ]
+        - [ systemctl, start, --no-block, qemu-guest-agent.service ]
         ssh_pwauth: True
     state: "running"
     name: "{{ temp_vm_name }}"

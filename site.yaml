@@ -30,7 +30,7 @@
 
 
 
-- name: "Run configuration checks"
+- name: "Gather information about the environment and handle templating."
   hosts: ovirt_engine
   connection: local
 
@@ -67,26 +67,31 @@
 
 
     # Handle templating stuff on a local connection as only dealing with ovirt
-    - name: "Import role to handle testing ovirt in flight"
+    - name: "Import role to handle templating"
       ansible.builtin.import_role:
         name: ovirt/template
 
 - name: "Wait for the temporary virtual machine to become available"
   hosts: temp_vm_group
-  connection: local
   vars:
     ovirt_auth: "{{ hostvars[groups['ovirt_engine'][0]].ovirt_auth }}"
+    template_exists: "{{ hostvars[groups['ovirt_engine'][0]].template_exists }}"
+    template_modified: "{{ hostvars[groups['ovirt_engine'][0]].template_modified }}"
 
   pre_tasks:
       # Set some defaults for the oVirt engine if they don't exist
     - name: "Set oVirt defaults"
       ansible.builtin.import_role:
         name: common/set_defaults
+      connection: local
+
+
       # Wait for the Virtual machines to get an IP address, then set their ansible_host vars
     - name: "Import role to handle getting IP address information"
       ansible.builtin.import_role:
         name: ovirt/wait_for_ip
       connection: local
+
 
     # Wait for the virtual machine to become available
     - name: "Wait for the virtual machines to become available to ansible before continuing"
@@ -100,10 +105,7 @@
   tasks:
     - name: "Import role to handle running through tasks"
       ansible.builtin.import_role:
-        name: ovirt/template
-      vars:
-        state: modify
-
+        name: kubernetes/prepare_node
 
 
 

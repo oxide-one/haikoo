@@ -1,0 +1,11 @@
+---
+# Disable Password auth
+- name: "Deny password authentication for SSH"
+  become: yes
+  ansible.builtin.lineinfile:
+    path: "/etc/ssh/sshd_config"
+    regexp: '^PasswordAuthentication yes$'
+    line: 'PasswordAuthentication no'
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r

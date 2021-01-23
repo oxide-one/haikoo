@@ -1,0 +1,15 @@
+---
+# Task to prepare a node for use within kubernetes
+- name: "Import task to handle preparation of the node"
+  ansible.builtin.include_tasks: "{{ item }}.yaml"
+  with_items:
+    - repositories
+    - crio
+    - packages
+    - selinux
+    - system
+    - kubelet
+    - systemd
+    - users
+    - sshd
+    - shutdown

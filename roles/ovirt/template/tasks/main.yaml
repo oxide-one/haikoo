@@ -25,15 +25,6 @@
 
 
 # Make modifications on a template vm
-- name: "Import task to handle modifying the virtual machine."
-  ansible.builtin.include_tasks: run_modifications.yaml
-  when:
-    state|default('present') == 'modify' and
-    template_exists|bool and
-    not template_modified|bool
-
-
-# Make modifications on a template vm
 - name: "Import task to handle sealing the virtual machine"
   ansible.builtin.include_tasks: seal.yaml
   when:

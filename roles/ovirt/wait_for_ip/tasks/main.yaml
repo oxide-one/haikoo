@@ -1,19 +1,19 @@
 ---
 # Module to loop over until the specified virtual machine has been given an IP address
 - name: "Query oVirt for virtual machine IP address"
-  ovirt.ovirt.ovirt_nic_info:
+  ovirt.ovirt.ovirt_vm_info:
     auth: "{{ ovirt_auth }}"
-    vm: "{{ inventory_hostname }}"
-    nested_attributes:
-      - 'reporteddevices'
-    name: '*'
-  register: ovirt_nic_info
-  until: ovirt_nic_info.ovirt_nics[0].reported_devices[0].ips is defined
+    pattern: "name={{ inventory_hostname }}"
+    nested_attributes: 'ips'
+    fetch_nested: true
+  register: ovirt_vm_info
+  until: ovirt_vm_info.ovirt_vms[0].reported_devices[0].ips is defined
   delay: 60
   retries: "{{ startup_timeout }}"
+
 
 - name: "Set the ansible_host fact from the returned IP information"
   ansible.builtin.set_fact:
     ansible_host: "{{ item.address }}"
-  with_list: "{{ ovirt_nic_info.ovirt_nics[0].reported_devices[0].ips }}"
+  with_list: "{{ ovirt_vm_info.ovirt_vms[0].reported_devices[0].ips }}"
   when: item.version == 'v4' and item.address != kubernetes_control_plane_endpoint_ip
