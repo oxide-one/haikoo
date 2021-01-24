@@ -1,0 +1,83 @@
+---
+# Check that the required engine variables exist
+- name: 'Assert that mandatory variables for oVirt are defined'
+  ansible.builtin.assert:
+    quiet: yes
+    fail_msg: |
+      Please make sure that all the required engine vars are defined
+
+      Example usage:
+      ovirt_engine_endpoint: "https://endpoint/ovirt-engine"
+      ovirt_engine_username: "username@profile"
+      ovirt_engine_password: "password"
+    that:
+      - ovirt_engine_endpoint is defined
+      - ovirt_engine_username is defined
+      - ovirt_engine_password is defined
+
+
+# Search the engine.endpoint variable for 'ovirt-engine'
+# This is a check to see that the endpoint is defined correctly
+# that the username is formatted correctly
+- name: 'Assert that the endpoint looks correct'
+  ansible.builtin.assert:
+    quiet: yes
+    fail_msg: |
+      Please make sure your endpoint is formatted correctly
+      A properly formatted username ends with /ovirt-engine
+
+      Currently it is: "{{ ovirt_engine_endpoint }}"
+    that:
+      - ovirt_engine_endpoint is search('/ovirt-engine')
+
+
+# Search the engine.username variable for '@'
+# This is a fairly rudimentiary check to see
+# that the username is formatted correctly
+- name: 'Assert that username looks correct'
+  ansible.builtin.assert:
+    quiet: yes
+    fail_msg: |
+      Please make sure your username is formatted correctly
+      A properly formatted username looks like admin@internal
+      Following a pattern of '{username}@{profile}'
+      Currently it is: "{{ ovirt_engine_username }}"
+    that:
+      - ovirt_engine_username is search('@')
+
+
+# Check to see that the datacenter name is correct
+- name: 'Assert that datacenter name is formatted correctly'
+  ansible.builtin.assert:
+    quiet: yes
+    fail_msg: |
+      Please make sure your Datacenter name is formatted correctly
+      Datacenter names may only contain letters, numbers, '-' or '_'.
+      Currently it is: "{{ ovirt_engine_datacenter_name }}"
+    that:
+      - ovirt_engine_datacenter_name is match("^(\w|-|_|\d)*$")
+
+
+# Check to see if the cluster name is correct
+- name: 'Assert that cluster name is formatted correctly'
+  ansible.builtin.assert:
+    quiet: yes
+    fail_msg: |
+      Please make sure your Cluster name is formatted correctly
+      Cluster names may only contain letters, numbers, '-', or '_'.
+      Currently it is: "{{ ovirt_engine_cluster_name }}"
+    that:
+      - ovirt_engine_cluster_name is match("^(\w|-|\.|_|\d)*$")
+
+
+# Validate Template name
+- name: 'Assert that template name is formatted correctly'
+  ansible.builtin.assert:
+    quiet: yes
+    fail_msg: |
+      Please make sure your Template name is formatted correctly
+      Template names may not contain spaces
+      Currently it is: "{{ template_name }}"
+    that:
+      - template_name is match("^(\w|-|\.|_|\d)*$")
+  when: template_name is defined

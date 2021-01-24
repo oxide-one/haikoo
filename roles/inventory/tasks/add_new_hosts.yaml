@@ -1,0 +1,81 @@
+---
+# Odd thing to do, I know. But this will make it so that the domain is properly set.
+# Additionally, create two empty lists
+- name: "Append a '.' to the domain variable if domain is set"
+  ansible.builtin.set_fact:
+    domain_tmp: ".{{ domain }}"
+    main_hostname_hash_list: []
+    worker_hostname_hash_list: []
+  when:
+    domain is defined and
+    domain | length > 0
+
+- debug: msg="ADDING NEW HOST"
+
+
+# Ensure /tmp/kubehost-1...etc are not present for main nodes
+- name: "Ensure /tmp/kubehost-1..etc are absent so main node hashes can be created"
+  ansible.builtin.file:
+    path: "/tmp/kubehost-{{ item }}"
+    state: absent
+  with_sequence: count="{{ main_node_modify_count }}"
+
+# Ensure /tmp/kubehost-1...etc are not present for worker nodes
+- name: "Ensure /tmp/kubehost-1..etc are absent so main node hashes can be created"
+  file:
+    path: "/tmp/kubehost-{{ item }}"
+    state: absent
+  with_sequence: count="{{ worker_node_modify_count }}"
+
+
+# Add a new Main node to the inventory
+- name: "Add new main nodes to the inventory, scheduled to be created"
+  ansible.builtin.add_host:
+    name: >-
+      {{ cluster_name }}-{{ main_node_name }}-{{ lookup('password', '/tmp/kubehost-' + item + ' length=6 chars=ascii_letters') | lower }}{{ domain_tmp }}
+    groups:
+      - kube_cluster
+      - kube_main
+      - kube_main_new
+    network: "{{ network }}"
+    cores: "{{ main_node_cpu_cores }}"
+    memory: "{{ main_node_memory }}"
+    disk_size: "{{ main_node_disk_size }}"
+    roles: "{{ main_node_roles | default(omit) }}"
+    template_version: "{{ template_version_number }}"
+    template: "{{ template_name }}"
+  with_sequence: count="{{ main_node_modify_count }}"
+  no_log: true
+
+# Remove a temporary file created to define the names of the nodes
+- name: "Remove temporary file"
+  ansible.builtin.file:
+    path: "/tmp/kubehost-{{ item }}"
+    state: absent
+  with_sequence: count="{{ main_node_modify_count }}"
+
+# Add a new Worker node to the inventory
+- name: "Add new worker nodes to the inventory, scheduled to be created"
+  ansible.builtin.add_host:
+    name: >-
+      {{ cluster_name }}-{{ worker_node_name }}-{{ lookup('password', '/tmp/kubehost-' + item + ' length=6 chars=ascii_letters') | lower }}{{ domain_tmp }}
+    groups:
+      - kube_cluster
+      - kube_worker
+      - kube_worker_new
+    network: "{{ network }}"
+    cores: "{{ worker_node_cpu_cores }}"
+    memory: "{{ worker_node_memory }}"
+    disk_size: "{{ worker_node_disk_size }}"
+    roles: "{{ worker_node_roles | default(omit) }}"
+    template_version: "{{ template_version_number }}"
+    template: "{{ template_name }}"
+  with_sequence: count="{{ worker_node_modify_count }}"
+  no_log: true
+
+# Remove a temporary file created to define the names of the nodes
+- name: "Remove temporary file created by adding the worker nodes"
+  ansible.builtin.file:
+    path: "/tmp/kubehost-{{ item }}"
+    state: absent
+  with_sequence: count="{{ worker_node_modify_count }}"

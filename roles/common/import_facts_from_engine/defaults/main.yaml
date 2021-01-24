@@ -1,0 +1,12 @@
+---
+# List of facts to import from ovirt-engine
+facts_to_import:
+  - "ovirt_auth"
+  - "new_cluster"
+  - "template_version_number"
+  - "ssh_key"
+  - "ansible_user"
+  # - "increase_worker_nodes"
+  # - "increase_main_nodes"
+  # - "decrease_worker_nodes"
+  # - "decrease_main_nodes"

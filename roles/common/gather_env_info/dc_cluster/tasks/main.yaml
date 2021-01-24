@@ -1,0 +1,46 @@
+---
+##############
+# Datacenter #
+##############
+# Check to see that the ovirt datacenter exists
+- name: 'Search for Datacenter {{ ovirt_engine_datacenter_name }}'
+  ovirt.ovirt.ovirt_datacenter_info:
+    auth: "{{ ovirt_auth }}"
+    pattern:
+      name={{ ovirt_engine_datacenter_name }}
+  register: ovirt_datacentre_exists
+
+# Assert that the datacenter exists
+- name: 'Assert that Datacenter "{{ ovirt_engine_datacenter_name }}" exists'
+  ansible.builtin.assert:
+    quiet: yes
+    fail_msg: |
+      Datacenter does not exist.
+
+      Current value: {{ ovirt_engine_datacenter_name }}
+    that:
+      - (ovirt_datacentre_exists.ovirt_datacenters | length>0)
+
+
+##############
+# Cluster #
+##############
+# Search for clusters within ovirt
+- name: 'Search for cluster {{ ovirt_engine_cluster_name }} in Datacenter {{ ovirt_engine_datacenter_name }}'
+  ovirt.ovirt.ovirt_cluster_info:
+    auth: "{{ ovirt_auth }}"
+    pattern:
+      name={{ ovirt_engine_cluster_name }}
+      datacenter={{ ovirt_engine_datacenter_name }}
+  register: ovirt_cluster_exists
+
+# Check that the cluster actually exists
+- name: 'Assert that Cluster "{{ ovirt_engine_cluster_name }}" exists'
+  ansible.builtin.assert:
+    quiet: yes
+    fail_msg: |
+      Cluster does not exist.
+
+      Current value: {{ ovirt_engine_cluster_name }}
+    that:
+      - (ovirt_cluster_exists.ovirt_clusters | length>0)

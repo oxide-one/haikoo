@@ -1,0 +1,41 @@
+# oVirt related
+ovirt_engine_username: "admin@internal"
+ovirt_engine_datacenter_name: "Default"
+ovirt_engine_cluster_name: "Default"
+
+# kubernetes related
+crio_version: "1.18"
+cluster_name: "haikoo"
+startup_timeout: 60
+kubernetes_cluster_network: "ovirtmgmt"
+kubernetes_login_username: "kubeadmin"
+# template related
+template_name: "{{ cluster_name }}"
+template_imported_image_name: "Fedora 33 Cloud Base Image v1.2 for x86_64"
+template_storage_location: "data"
+template_import_timeout: 600
+template_description: "Created by haikoo"
+template_upgrade_packages: True
+template_timezone: "Etc/GMT"
+template_selinux_enabled: False
+
+# control plane
+kubernetes_control_plane_node_name: "control-plane"
+kubernetes_control_plane_node_count: 3
+kubernetes_control_plane_node_cores: 4
+kubernetes_control_plane_node_memory: 4096
+kubernetes_control_plane_node_disk_size: 30
+
+# worker nodes
+kubernetes_worker_node_name: "worker"
+kubernetes_worker_node_count: 3
+kubernetes_worker_node_cpu_cores: 4
+kubernetes_worker_node_memory: 4096
+kubernetes_worker_node_disk_size: 30
+
+# temp vm related
+temp_vm_name: "haikoo-temp-vm"
+temp_vm_network: "ovirtmgmt"
+temp_vm_cores: 6
+temp_vm_memory: 3072
+temp_vm_shutdown_retries: 45

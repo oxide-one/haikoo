@@ -1,0 +1,11 @@
+---
+######################
+# Role Specific vars #
+######################
+main_node_modify_count: 0
+increase_main_nodes: False
+decrease_main_nodes: False
+
+worker_node_modify_count: 0
+increase_worker_nodes: False
+decrease_worker_nodes: False

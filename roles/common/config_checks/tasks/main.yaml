@@ -1,0 +1,9 @@
+---
+- name: "Run ovirt related preflight checks"
+  ansible.builtin.import_role:
+    name: common/config_checks/ovirt
+
+
+- name: "Run kubernetes related preflight checks"
+  ansible.builtin.import_role:
+    name: common/config_checks/kubernetes

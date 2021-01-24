@@ -1,6 +1,0 @@
-###############
-# Engine vars #
-###############
-engine_username: "admin@internal"
-engine_datacenter_name: "Default"
-engine_cluster_name: "Default"

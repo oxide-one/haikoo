@@ -1,0 +1,161 @@
+###############
+# Auth vars   #
+###############
+## Set the SSH key to add as an authorized key
+## One of two of these variables must be defined
+# By Default, ssh_key_path will be ~/.ssh/id_rsa.pub
+#ssh_key_path:
+#ssh_key_github:
+
+###############
+# Engine vars #
+###############
+## The default username for the Engine (default: "admin@internal")
+#ovirt_engine_username: ""
+
+## Engine password. REQUIRED, NO DEFAULT
+ovirt_engine_password: ""
+
+## Engine endpoint (ends with /ovirt-engine). REQUIRED, NO DEFAULT
+ovirt_engine_endpoint: ""
+
+## The datacenter name (default: "Default")
+#ovirt_engine_datacenter_name: ""
+
+## The Cluster name. (default: "Default")
+#ovirt_engine_cluster_name: ""
+
+
+#################
+# Template vars #
+#################
+## The Template name to use (default: cluster_name)
+#template_name: ""
+
+## The name of the image to import to use as a basis.
+## This will be imported from the glance image provider, so make sure the name matches if you change this :)
+## Default: "Fedora 33 Cloud Base Image v1.2 for x86_64"
+#template_imported_image_name:
+
+## The Storage domain to import the Template to (default: "data")
+#template_storage_location: ""
+
+## Import timeout . Increase this if your import fails. (default: 600) AKA 10 Minutes
+#template_import_timeout:
+
+## Description of the imported template. (default: "Created by haikoo"")
+#template_description: ""
+
+## Extra repos to add to the template. (default: none)
+#template_extra_repos: {}
+#  - name: "REPONAME"
+#    url: "REPOURL"
+#    gpgkey: "REPO_GPG_KEY"
+
+## Upgrade all packages on the template at runtime (default: True)
+#template_upgrade_packages: True
+
+## Timezone of the imported template. (default: "Etc/GMT")
+#template_timezone: ""
+
+## Install extra packages. (default: none)
+#template_extra_packages: []
+
+## Extra systemd services to enable (default: none)
+#template_extra_services: []
+
+## Enable SELINUX (default: False)
+#template_selinux_enabled:
+
+## Template subversion name to save the template as (default: "post-modification" )
+# template_subversion_name: ""
+##############################
+# Temporary VM configuration #
+##############################
+## Name of the temporary VM to create. (default: "haikoo-temp-vm")
+#temp_vm_name:
+
+## Name of the network to provision the vm on (default: "ovirtmgmt")
+#temp_vm_network: ""
+
+## Number of cores to give the temporary vm (default: 6)
+#temp_vm_cores:
+
+## Memory to give the temporary vm [in MB] (default: 3072)
+#temp_vm_memory:
+
+## Number of retries (x60s) for template to complete operation (default: 45) AKA 45 Minutes.
+#temp_vm_shutdown_retries:
+
+############################
+# Kubernetes Configuration #
+############################
+## The username to set as the user for the created virtual machines (default: kubeadmin)
+# kubernetes_login_username: "kubeadmin"
+
+## The CRI-O Version to enable and install (default: 1.18)
+#crio_version: "1.18"
+
+## The name of the cluster. (default: haikoo)
+#cluster_name: ""
+
+## Cluster name suffix
+## (alternatively, domain)
+## A string that will be appended onto the end of the hostnames for each node. default is none.
+#domain:
+
+## The IP address of the controlplane endpoint. This must be within the same subnet as your mainline nodes. REQUIRED
+#kubernetes_control_plane_endpoint_ip: ""
+
+## The DNS endpoint of your controlplane endpoint. No default.
+#kubernetes_control_plane_endpoint_dns: ""
+
+
+## The Name of the oVirt network to deploy Kubernetes on. Default is "ovirtmgmt"
+#kubernetes_cluster_network:
+
+## The statup timeout (in minutes) to wait for the virtual machines to power on
+#startup_timeout: 60
+######################################
+# Control Plane node Configuration #
+######################################
+
+## The name of the main nodes (default: "control-plane")
+#kubernetes_control_plane_node_name: ""
+
+## How many main nodes you would like (default: 3)
+#kubernetes_control_plane_node_count:
+
+## The number of cores to give to each main node (default: 4)
+#kubernetes_control_plane_node_cores:
+
+## The amount of memory (in MB) to give to the main nodes (default: 4096)
+#kubernetes_control_plane_node_memory:
+
+## The Disk size (in GB) to give to the main nodes (default: 30)
+#kubernetes_control_plane_node_disk_size:
+
+## List of roles to give to the worker node once provisioned. (default: none)
+#kubernetes_control_plane_node_roles: []
+
+#############################
+# Worker node configuration #
+#############################
+
+## The name of the worker nodes (default: "worker")
+#kubernetes_worker_node_name: ""
+
+## How many main nodes you would like (default: 3)
+#kubernetes_worker_node_count:
+
+## The number of cores to give to each main node (default: 4)
+#kubernetes_worker_node_cpu_cores:
+
+## The amount of memory (in MB) to give to the main nodes (default: 4096)
+#kubernetes_worker_node_memory:
+
+## The Disk size (in GB) to give to the main nodes (default: 30)
+#kubernetes_worker_node_disk_size:
+
+## List of roles to give to the worker node once provisioned. (default: none)
+#kubernetes_worker_node_roles: []

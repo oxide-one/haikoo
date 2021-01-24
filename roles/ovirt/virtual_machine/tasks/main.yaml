@@ -1,0 +1,24 @@
+---
+
+# Create a Virtual Machine
+- name: "Import tasks to handle creation of a virtual machine"
+  ansible.builtin.import_tasks: create.yaml
+  when: state|default('present') == 'present'
+
+
+## Start the Virtual Machine
+- name: "Import tasks to handle starting a virtual machine"
+  ansible.builtin.import_tasks: start.yaml
+  when: state|default('present') == 'started'
+
+
+# Stop the Virtual Machine
+- name: "Import tasks to handle stopping a virtual machine"
+  ansible.builtin.import_tasks: stop.yaml
+  when: state|default('present') == 'stopped'
+
+
+# Delete the Virtual Machine
+- name: "Import tasks to handle deletion of a virtual machine"
+  ansible.builtin.import_tasks: destroy.yaml
+  when: state|default('present') == 'absent'

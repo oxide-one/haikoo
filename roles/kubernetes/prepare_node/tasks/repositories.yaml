@@ -1,0 +1,31 @@
+---
+# Enable kubernetes repo
+- name: "Enable the Kubernetes Repo"
+  become: yes
+  ansible.builtin.yum_repository:
+    name: Kubernetes
+    file: kubernetes
+    description: The Kubernetes repos
+    baseurl: https://packages.cloud.google.com/yum/repos/kubernetes-el7-$basearch
+    gpgkey:
+      - https://packages.cloud.google.com/yum/doc/yum-key.gpg
+      - https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+    gpgcheck: yes
+    exclude:
+      - kubelet
+      - kubeadm
+      - kubectl
+    enabled: yes
+
+
+# Enable extra repos if they're defined
+- name: "Enable extra repos"
+  become: yes
+  ansible.builtin.yum_repository:
+    name: "{{ item.name }}"
+    baseurl: "{{ item.url }}"
+    gpgcheck: yes
+    gpgkey: "{{ item.gpgkey }}"
+    enabled: yes
+  when: template_extra_repos is defined
+  with_list: "{{ template_extra_repos }}"

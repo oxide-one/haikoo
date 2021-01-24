@@ -1,22 +1,33 @@
 ---
 # Create template from image provider
 - name: "Import task to handle template import."
-  include_tasks: import.yaml
+  ansible.builtin.include_tasks: import.yaml
   when:
     state|default('present') == 'present' and
     not template_exists
 
+
 # Delete template
 - name: "Import task to handle template deletion."
-  include_tasks: destroy.yaml
+  ansible.builtin.include_tasks: destroy.yaml
   when:
     state|default('present') == 'absent' and
     template_exists
 
+
 # Start a temporary vm and modify template
 - name: "Import task to handle template modification."
-  include_tasks: modify.yaml
+  ansible.builtin.include_tasks: modify.yaml
   when:
     state|default('present') == 'present' and
     template_exists and
     not template_modified
+
+
+# Make modifications on a template vm
+- name: "Import task to handle sealing the virtual machine"
+  ansible.builtin.include_tasks: seal.yaml
+  when:
+    state|default('present') == 'seal' and
+    template_exists|bool and
+    not template_modified|bool

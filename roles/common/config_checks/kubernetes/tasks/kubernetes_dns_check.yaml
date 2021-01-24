@@ -1,0 +1,42 @@
+---
+- name: "Perform a DNS lookup to see if the Controlplane endpoint resolves properly."
+  ansible.builtin.set_fact:
+    dns_check: "{{ lookup('dig', kubernetes_control_plane_endpoint_dns ) }}"
+
+
+# Check that the Controlplane DNS endpoint resolves properly
+- name: 'Assert that the Kubernetes Controlplane endpoint is defined'
+  ansible.builtin.assert:
+    quiet: yes
+    fail_msg: |
+      Please make sure that your controlplane DNS endpoint resolves properly.
+
+      The DNS endpoint '{{ kubernetes_control_plane_endpoint_dns }}' resolves to '{{ dns_check }}'
+      According to the configuration, it SHOULD be {{ kubernetes_control_plane_endpoint_ip }}
+
+      If you are ABSOLUTELY SURE that it will resolve properly in the network you are
+      deploying the cluster into, then please add the following to your config:
+        skip_dns_check: True
+
+      Otherwise, please check the variables 'kubernetes_control_plane_endpoint_ip' and 'kubernetes_control_plane_endpoint_dns'
+    that:
+      - dns_check != "NXDOMAIN"
+      - dns_check == kubernetes_control_plane_endpoint_ip
+
+
+# Set the fact if the check passes validation
+- name: "Set the dns_check_passed variable for later use"
+  ansible.builtin.set_fact:
+    dns_check_passed: True
+  when:
+    dns_check == kubernetes_control_plane_endpoint_ip and
+    dns_check != "NXDOMAIN"
+
+
+# Set the fact if the check fails validation
+- name: "Set the dns_check_passed variable for later use"
+  ansible.builtin.set_fact:
+    dns_check_passed: False
+  when:
+    dns_check != kubernetes_control_plane_endpoint_ip or
+    dns_check == "NXDOMAIN"

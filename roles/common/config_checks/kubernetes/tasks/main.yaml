@@ -1,0 +1,19 @@
+---
+# Check that the required kubernetes variables exist
+- name: 'Assert that the Kubernetes Controlplane endpoint is defined'
+  ansible.builtin.assert:
+    quiet: yes
+    fail_msg: |
+      Please make sure that the Kubernetes Controlplane endpoint is defined
+      Example usage:
+        kubernetes_control_plane_endpoint_ip: "10.0.0.1"
+    that:
+      - kubernetes_control_plane_endpoint_ip is defined
+
+
+# # Import DNS check tasks
+# - name: "Import DNS checks for the kubernetes controlplane endpoint"
+#   ansible.builtin.import_tasks: kubernetes_dns_check.yaml
+#   when:
+#     kubernetes_control_plane_endpoint_dns is defined and
+#     not skip_dns_check

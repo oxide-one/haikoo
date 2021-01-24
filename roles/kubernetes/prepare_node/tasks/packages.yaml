@@ -1,0 +1,34 @@
+---
+# Update all the packages
+# Ansible lint complains about this but whatever.
+- name: "Update all packages"
+  become: yes
+  ansible.builtin.dnf:
+    name: '*'
+    state: latest
+  when: template_upgrade_packages
+
+
+# Get kubernetes
+- name: "Download kubernetes packages"
+  become: yes
+  ansible.builtin.dnf:
+    name:
+      - kubelet
+      - kubeadm
+      - kubectl
+    disable_excludes: all
+    state: present
+
+
+# Download and install packages
+- name: "Install base template packages"
+  become: yes
+  ansible.builtin.dnf:
+    name:
+      - dnf-automatic
+      - nfs-utils
+      - ceph-common
+      - kubernetes-cni
+      - logrotate
+      - crun

@@ -1,0 +1,39 @@
+---
+# Add am Existing Main node to the inventory
+# Not logging as it prints out a load of bs
+- name: "Add existing main nodes to the inventory, scheduled to be created"
+  ansible.builtin.add_host:
+    name: "{{ item.name }}"
+    groups:
+      - kube_cluster
+      - kube_main
+      - kube_main_existing
+    network: "{{ network }}"
+    cores: "{{ main_node_cpu_cores }}"
+    memory: "{{ main_node_memory }}"
+    disk_size: "{{ main_node_disk_size }}"
+    roles: "{{ main_node_roles | default(omit) }}"
+    template_version: "{{ template_version_number }}"
+    template: "{{ template_name }}"
+  with_list: "{{ main_node_list.ovirt_vms }}"
+  no_log: True
+
+
+# Add an Existing Worker node to the inventory
+# Not logging as it prints out a load of bs
+- name: "Add existing worker nodes to the inventory, scheduled to be created"
+  ansible.builtin.add_host:
+    name: "{{ item.name }}"
+    groups:
+      - kube_cluster
+      - kube_worker
+      - kube_worker_existing
+    network: "{{ network }}"
+    cores: "{{ worker_node_cpu_cores }}"
+    memory: "{{ worker_node_memory }}"
+    disk_size: "{{ worker_node_disk_size }}"
+    roles: "{{ worker_node_roles | default(omit) }}"
+    template_version: "{{ template_version_number }}"
+    template: "{{ template_name }}"
+  with_list: "{{ worker_node_list.ovirt_vms }}"
+  no_log: True

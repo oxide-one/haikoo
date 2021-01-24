@@ -1,0 +1,55 @@
+---
+# Calculate a diff of the nodes needed vs the nodes present
+- name: "Calculate the node differences"
+  ansible.builtin.set_fact:
+    main_node_count_diff: "{{ (main_node_count | int) - (main_node_list.ovirt_vms | length) }}"
+    worker_node_count_diff: "{{ (worker_node_count | int) - (worker_node_list.ovirt_vms | length) }}"
+
+
+# Calculate the number of main nodes to add/subtract
+- name: "Check if we need to add more main nodes"
+  ansible.builtin.set_fact:
+    main_node_modify_count: "{{ main_node_count_diff | int }}"
+    increase_main_nodes: True
+  when:
+    main_node_count_diff | int > 0
+
+
+- name: "Check if we need less main main node"
+  ansible.builtin.set_fact:
+    main_node_modify_count: "{{ main_node_count_diff  | int | abs }}"
+    decrease_main_nodes: True
+  when:
+    main_node_count_diff | int < 0
+
+
+- name: "Check if we need less main main node"
+  ansible.builtin.set_fact:
+    keep_main_nodes: True
+  when:
+    main_node_count_diff | int == 0
+
+
+
+# Calculate the number of worker nodes to add/subtract
+- name: "Check if we need to add more main nodes"
+  ansible.builtin.set_fact:
+    worker_node_modify_count: "{{ worker_node_count_diff | int }}"
+    increase_worker_nodes: True
+  when:
+    worker_node_count_diff | int > 0
+
+
+- name: "Check if we need less main main node"
+  ansible.builtin.set_fact:
+    worker_node_modify_count: "{{ worker_node_count_diff | int | abs }}"
+    decrease_worker_nodes: True
+  when:
+    worker_node_count_diff | int < 0
+
+
+- name: "Check if we need less main main node"
+  ansible.builtin.set_fact:
+    keep_worker_nodes: True
+  when:
+    worker_node_count_diff | int == 0

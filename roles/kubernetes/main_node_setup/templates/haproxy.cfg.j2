@@ -1,0 +1,64 @@
+global
+    log         127.0.0.1 local2
+
+    chroot      /var/lib/haproxy
+    pidfile     /var/run/haproxy.pid
+    maxconn     4000
+    user        haproxy
+    group       haproxy
+    daemon
+
+    # turn on stats unix socket
+    stats socket /var/lib/haproxy/stats
+
+    # utilize system-wide crypto-policies
+    ssl-default-bind-ciphers PROFILE=SYSTEM
+    ssl-default-server-ciphers PROFILE=SYSTEM
+defaults
+    mode                    http
+    log                     global
+    option                  httplog
+    option                  dontlognull
+    option http-server-close
+    option forwardfor
+    option                  redispatch
+    retries                 3
+    timeout http-request    10s
+    timeout queue           1m
+    timeout connect         10s
+    timeout client          1m
+    timeout server          1m
+    timeout http-keep-alive 10s
+    timeout check           10s
+    maxconn                 3000
+
+
+frontend http_stats
+   bind *:8080
+   mode http
+   stats uri /haproxy?stats
+
+frontend haproxy_kube
+    bind 0.0.0.0:6445
+    mode tcp
+    option tcplog
+    timeout client  10800s
+    default_backend main_nodes
+
+
+backend main_nodes
+    mode tcp
+    option tcplog
+    option tcp-check
+    balance leastconn
+    timeout connect        10s
+    timeout server          1m
+{% for host in groups['kube_main'] %}
+{% if groups['kube_main_removal'] is defined %}
+{% if host not in groups['kube_main_removal'] %}
+    server {{ hostvars[host].inventory_hostname_short }} {{ host }}:6443 check fall 3 rise 2
+{% endif %}
+{% else %}
+    server {{ hostvars[host].inventory_hostname_short }} {{ host }}:6443 check fall 3 rise 2
+{% endif %}
+{% endfor %}

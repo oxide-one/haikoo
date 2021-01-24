@@ -1,0 +1,13 @@
+---
+# Role to handle importing of facts from the main ovirt instance
+
+# Set engine variable information
+- name: "Grab host variables for the ovirt engine"
+  ansible.builtin.set_fact:
+    engine_info: "{{ hostvars[groups['ovirt_engine'] | first] }}"
+
+
+# Iterate over the dict "facts_to_import"
+- name: "Pull over variables from the ovirt engine"
+  ansible.builtin.set_fact: {"{{ item }}":"{{ engine_info[item] }}"}
+  with_list: "{{ facts_to_import }}"

@@ -1,0 +1,15 @@
+---
+# Ensure that kubelet config is set properly
+- name: "Add extra args to the kubelet sysconfig file"
+  become: yes
+  ansible.builtin.lineinfile:
+    path: "/etc/sysconfig/kubelet"
+    line: >
+      KUBELET_EXTRA_ARGS=--cgroup-driver=systemd
+      --container-runtime=remote
+      --container-runtime-endpoint="unix:///var/run/crio/crio.sock
+      --runtime-request-timeout=5m
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+    state: present

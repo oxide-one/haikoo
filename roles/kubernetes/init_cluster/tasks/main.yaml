@@ -1,0 +1,214 @@
+# Create a certificate key for use later
+- name: "Create certificate key"
+  become: yes
+  ansible.builtin.shell:
+    cmd: "kubeadm alpha certs certificate-key >> /etc/kubernetes/{{ cluster_name }}.cert"
+    creates: "/etc/kubernetes/{{ cluster_name }}.cert"
+  register: certificate_key
+  changed_when: certificate_key.rc != 0
+
+
+# Create a kubernetes token
+- name: "Create a token to join"
+  become: yes
+  ansible.builtin.shell:
+    cmd: "kubeadm token generate >> /etc/kubernetes/{{ cluster_name }}.token"
+    creates: "/etc/kubernetes/{{ cluster_name }}.token"
+  register: token
+  changed_when: token.rc != 0
+
+
+# Read the certificate key from the kubernetes directory
+- name: "Slurp the certificate key"
+  ansible.builtin.slurp:
+    src: "/etc/kubernetes/{{ cluster_name }}.cert"
+  register: certificate_key
+
+
+# Read the token from the token directory
+- name: "Slurp the token"
+  ansible.builtin.slurp:
+    src: "/etc/kubernetes/{{ cluster_name }}.token"
+  register: token
+
+
+# Set the variables, as slurp encodes things as base64
+- name: "Set the token and certificate key variable, additionally set the path of the cluster config"
+  ansible.builtin.set_fact:
+    certificate_key: "{{ certificate_key.content | b64decode }}"
+    token: "{{ token.content | b64decode }}"
+    kube_config: "/etc/kubernetes/{{ cluster_name }}-cluster.conf"
+
+
+# Set a fact to determine what the endpoint will be
+- name: "Set a fact to determine whether to use the dns endpoint or IP endpoint"
+  ansible.builtin.set_fact:
+    endpoint: "{{ kubernetes_control_plane_endpoint_dns }}"
+  when:
+    - kubernetes_control_plane_endpoint_dns is defined and ( skip_dns_check or dns_check_passed )
+
+
+# Set a fact to determine what the endpoint will be
+- name: "Set a fact to determine whether to use the dns endpoint or IP endpoint"
+  ansible.builtin.set_fact:
+    endpoint: "{{ kubernetes_control_plane_endpoint_ip }}"
+  when:
+    - kubernetes_control_plane_endpoint_dns is not defined
+
+
+# Template out the config as it's used heavily from now on.
+- name: "Template out a configuration file"
+  become: yes
+  ansible.builtin.template:
+    src: cluster.conf.j2
+    dest: "{{ kube_config }}"
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+
+
+# Pull all the required images for kubernetes to run now
+- name: "Pull the Images for kubernetes"
+  become: yes
+  ansible.builtin.command: "kubeadm config images pull --config {{ kube_config }}"
+  register: kubeadm_init
+  changed_when: kubeadm_init.rc != 0
+
+
+# Run all and any pre-flight checks and bail out
+- name: "Run pre-flight checks"
+  become: yes
+  ansible.builtin.command: "kubeadm init phase preflight --config {{ kube_config }}"
+  register: kubeadm_init
+  changed_when: kubeadm_init.rc != 0
+
+
+# Generate all the certificates that kubernetes needs
+- name: "Perform Certificate generation"
+  become: yes
+  ansible.builtin.command:
+    cmd: "kubeadm init phase certs all --config {{ kube_config }}"
+    creates: "/etc/kubernetes/pki/ca.crt"
+  register: kubeadm_init
+  changed_when: kubeadm_init.rc != 0
+
+
+# Generate the admin.conf and other things
+- name: "Generate all kubeconfig files necessary to establish the control plane and the admin kubeconfig file"
+  become: yes
+  ansible.builtin.command:
+    cmd: "kubeadm init phase kubeconfig all --config {{ kube_config }}"
+    creates: "/etc/kubernetes/admin.conf"
+  register: kubeadm_init
+  changed_when: kubeadm_init.rc != 0
+
+
+# Write out the kubelet settings
+- name: "Write kubelet settings and (re)start the kubelet"
+  become: yes
+  ansible.builtin.command:
+    cmd: "kubeadm init phase kubelet-start --config {{ kube_config }}"
+    creates: "/var/lib/kubelet/config.yaml"
+  register: kubeadm_init
+  changed_when: kubeadm_init.rc != 0
+
+
+# Generate the pod manifests for api-server etc.
+- name: "Generate all static Pod manifest files necessary to establish the control plane"
+  become: yes
+  ansible.builtin.command:
+    cmd: "kubeadm init phase control-plane all --config {{ kube_config }}"
+    creates: "/etc/kubernetes/manifests/kube-apiserver.yaml"
+  register: kubeadm_init
+  changed_when: kubeadm_init.rc != 0
+
+
+# Generate the manifests for etcd to run locally
+- name: "Generate static Pod manifest file for etcd"
+  become: yes
+  ansible.builtin.command:
+    cmd: "kubeadm init phase etcd local --config {{ kube_config }}"
+    creates: "/etc/kubernetes/manifests/etcd.yaml"
+  register: kubeadm_init
+  changed_when: kubeadm_init.rc != 0
+
+
+# Upload kubeadm and kubelet stuff to etcd via a configmap
+- name: "Upload the kubeadm and kubelet configuration to a ConfigMap"
+  become: yes
+  ansible.builtin.command:
+    cmd: "kubeadm init phase upload-config all --config {{ kube_config }}"
+  register: kubeadm_init
+  changed_when: kubeadm_init.rc != 0
+
+
+# Upload the certs to kubeadm-certs
+- name: "Upload certificates to kubeadm-certs"
+  become: yes
+  ansible.builtin.command:
+    cmd: "kubeadm init phase upload-certs --upload-certs --skip-certificate-key-print --config {{ kube_config }}"
+  register: kubeadm_init
+  changed_when: kubeadm_init.rc != 0
+
+
+# Set the node as a controlpane
+- name: "Mark the node {{ inventory_hostname_short }} as a control-plane"
+  become: yes
+  ansible.builtin.command:
+    cmd: "kubeadm init phase mark-control-plane --config {{ kube_config }}"
+  register: kubeadm_init
+  changed_when: kubeadm_init.rc != 0
+
+
+# Generate a boostrap token. don't really need this but it validates configs so it's useful to have.
+- name: "Generates bootstrap tokens used to join a node to a cluster"
+  become: yes
+  ansible.builtin.command:
+    cmd: "kubeadm init phase bootstrap-token --skip-token-print --config {{ kube_config }}"
+  register: kubeadm_init
+  changed_when: kubeadm_init.rc != 0
+
+
+# Enable an experimental feature in kubelet that allows for certificate rotation.
+- name: "Enable kubelet client certificate rotation"
+  become: yes
+  ansible.builtin.command:
+    cmd: "kubeadm init phase kubelet-finalize all --config {{ kube_config }}"
+  register: kubeadm_init
+  changed_when: kubeadm_init.rc != 0
+
+
+# Install CoreDNS and kube-proxy
+- name: "Install all the addons"
+  become: yes
+  ansible.builtin.command:
+    cmd: "kubeadm init phase addon all --config {{ kube_config }}"
+  register: kubeadm_init
+  changed_when: kubeadm_init.rc != 0
+
+
+# Add the node to a group
+- name: "Now that the cluster is initalized, add {{ inventory_hostname_short }} to the 'kube_main_existing' group"
+  ansible.builtin.add_host:
+    name: "{{ inventory_hostname }}"
+    groups:
+      - kube_main_existing
+      - kube_main_init_host
+
+
+- name: "Set a fact to declare that the node is not yet ready"
+  ansible.builtin.set_fact:
+    node_ready: False
+
+
+- name: "Import task to grab pod information and wait until all are ready before continuing"
+  ansible.builtin.import_tasks: loop_ready.yaml
+  retries: 30
+  delay: 5
+  until: node_ready
+
+
+- name: "Pause for 3 minutes to allow for the node to be properly setup."
+  ansible.builtin.pause:
+    minutes: 3
+    prompt: "Pausing the script for 3 minutes to allow for the node to properly spin up."

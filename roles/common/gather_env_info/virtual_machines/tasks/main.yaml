@@ -1,0 +1,31 @@
+---
+# Grab all of the main nodes from ovirt
+# Matches a pattern of {{ cluster_name }}-worker-*
+- name: "Grab a list of the main nodes (if any) from Ovirt"
+  ovirt.ovirt.ovirt_vm_info:
+    auth: "{{ ovirt_auth }}"
+    pattern:
+      name={{ cluster_name }}-{{ kubernetes_control_plane_node_name }}-* and
+      datacenter="{{ ovirt_engine_datacenter_name }}" and
+      cluster="{{ ovirt_engine_cluster_name }}"
+  register: control_plane_nodes_info
+
+
+# When there are NO vms matching the pattern, create a new cluster
+- name: "Set a var to initialize a new cluster when no {{ main_node_name }} nodes returned"
+  ansible.builtin.set_fact:
+    new_cluster: True
+  when:
+    control_plane_nodes_info.ovirt_vms | length == 0
+
+
+# Grab all of the worker nodes from ovirt.
+# Matches a pattern of {{ cluster_name }}-worker-*
+- name: "Grab a list of the worker nodes (if any) from Ovirt"
+  ovirt.ovirt.ovirt_vm_info:
+    auth: "{{ ovirt_auth }}"
+    pattern:
+      name={{ cluster_name }}-{{ kubernetes_worker_node_name }}-* and
+      datacenter="{{ ovirt_engine_datacenter_name }}" and
+      cluster="{{ ovirt_engine_cluster_name }}"
+  register: worker_nodes_info

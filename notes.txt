@@ -1,0 +1,33 @@
+ORDER
+  #.  Check if cluster exists (set new_cluster)
+
+  #.  Perform DNS check (dns_check_passed )
+
+  #.  Check if main nodes exist (set increase_main_nodes, decrease_main_nodes, main_node_modify_count)
+
+  #.  Check if worker nodes exist (set increase_worker_nodes, decrease_worker_nodes, worker_node_modify_count)
+
+  #.  Create new main virtual machines
+  #.  Evict main nodes from cluster
+      - Stop KeepaliveD so can no longer be the main
+      - Template out all configs for the to-remove node
+      - Evict node
+
+  #.  Setup haproxy/keepalived on main machines, adding and removing hosts at will
+        - If new main nodes are added, then add them to the haproxy/keepalived config for all
+        - If main nodes are removed, then remove them from all config before deprovisioning
+
+  #.  If new cluster, init new cluster (new_cluster)
+
+  #.  Grab Join token for main nodes
+
+  #.  Join nodes to new cluster
+
+  NEW WORKER NODES
+  #.  Create new worker virtual machines
+  #.  Grab Join token for worker nodes
+  #.  Join worker nodes to cluster
+
+  DEL WORKER NODES
+  #.  Delete node from cluster
+  #.  Remove Virtual Machine

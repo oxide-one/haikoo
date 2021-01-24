@@ -1,0 +1,45 @@
+---
+#######################################
+# Networks (Temporary Virtual Machine)#
+#######################################
+# Search for the template network in the cluster
+- name: 'Search for Network "{{ temp_vm_network }}" in datacenter {{ ovirt_engine_datacenter_name }}'
+  ovirt.ovirt.ovirt_network_info:
+    auth: "{{ ovirt_auth }}"
+    pattern:
+      name={{ temp_vm_network }} and
+      datacenter={{ ovirt_engine_datacenter_name }}
+  register: ovirt_temp_vm_network_exists
+
+
+- name: 'Search for Network "{{ temp_vm_network }}" in datacenter {{ ovirt_engine_datacenter_name }}'
+  ovirt.ovirt.ovirt_network_info:
+    auth: "{{ ovirt_auth }}"
+    pattern:
+      name={{ kubernetes_cluster_network }} and
+      datacenter={{ ovirt_engine_datacenter_name }}
+  register: ovirt_kubernetes_network_exists
+
+
+# Check that the template network actually exists
+- name: 'Assert that Network "{{ temp_vm_network }}" exists'
+  ansible.builtin.assert:
+    quiet: yes
+    fail_msg: |
+      Network for template vm does not exist.
+
+      Current value: {{ temp_vm_network }}
+    that:
+      - ( ovirt_temp_vm_network_exists.ovirt_networks | length != 0 )
+
+
+# Check that the kubernetes network actually exists
+- name: 'Assert that Network "{{ kubernetes_cluster_network }}" exists'
+  ansible.builtin.assert:
+    quiet: yes
+    fail_msg: |
+      Network for template vm does not exist.
+
+      Current value: {{ kubernetes_cluster_network }}
+    that:
+      - ( ovirt_kubernetes_network_exists.ovirt_networks | length != 0 )

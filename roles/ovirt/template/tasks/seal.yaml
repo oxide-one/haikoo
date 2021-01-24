@@ -1,0 +1,39 @@
+# Make sure that the vm is down before operating
+- name: 'Ensure vm "{{ temp_vm_name }}" is shutdown'
+  ovirt.ovirt.ovirt_vm:
+    auth: "{{ ovirt_auth }}"
+    state: stopped
+    name: "{{ temp_vm_name }}"
+
+# Remove the NIC from the vm so it doesn't get saved in the template
+- name: 'Remove nic "{{ temp_vm_network }}" from vm "{{ temp_vm_name }}"'
+  ovirt.ovirt.ovirt_nic:
+    auth: "{{ ovirt_auth }}"
+    state: absent
+    vm: "{{ temp_vm_name }}"
+    name: "{{ temp_vm_network }}"
+
+# Save over OLD tempalte with new changes
+- name: 'Update template "{{ template_name }}" with the changes made from vm {{ temp_vm_name }}'
+  ovirt.ovirt.ovirt_template:
+    auth: "{{ ovirt_auth }}"
+    name: "{{ template_name }}"
+    seal: "yes"
+    cluster: "{{ ovirt_engine_cluster_name }}"
+    vm: "{{ temp_vm_name }}"
+    timeout: "{{ template_import_timeout }}"
+    description: "{{ template_description }}"
+    version:
+      name: "post-modification"
+
+# Remove VM from ovirt
+- name: 'Remove vm "{{ temp_vm_name }}" from ovirt'
+  ovirt.ovirt.ovirt_vm:
+    auth: "{{ ovirt_auth }}"
+    name: "{{ temp_vm_name }}"
+    state: absent
+
+# Run ovirt checks again to set the 'template_exists' variable
+- name: "Import role checks/ovirt again to set the template_exists variable"
+  ansible.builtin.import_role:
+    role: tests/ovirt

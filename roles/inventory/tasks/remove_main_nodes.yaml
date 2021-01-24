@@ -1,0 +1,17 @@
+---
+# Add nodes to a group, scheduled to be deleted
+- name: "Add main nodes to the kube_main_removal group"
+  ansible.builtin.add_host:
+    name: "{{ item }}"
+    groups:
+      - kube_main_removal
+  with_list: "{{ (groups['kube_main'] | shuffle)[:(main_node_modify_count | int)] }}"
+
+- name: "Add main nodes to remain to the kube_main_remain group"
+  ansible.builtin.add_host:
+    name: "{{ item.name }}"
+    groups:
+      - kube_main_remain
+  with_list: "{{ main_node_list.ovirt_vms }}"
+  when: item.name not in groups['kube_main_removal']
+  no_log: True
