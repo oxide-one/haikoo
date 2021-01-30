@@ -3,7 +3,7 @@ ORDER
 
   #.  Perform DNS check (dns_check_passed )
 
-  #.  Check if main nodes exist (set increase_main_nodes, decrease_main_nodes, main_node_modify_count)
+  #.  Check if main nodes exist (set increase_control_plane_nodes, decrease_control_plane_nodes, kubernetes_control_plane_node_modify_count)
 
   #.  Check if worker nodes exist (set increase_worker_nodes, decrease_worker_nodes, worker_node_modify_count)
 
@@ -31,3 +31,39 @@ ORDER
   DEL WORKER NODES
   #.  Delete node from cluster
   #.  Remove Virtual Machine
+
+
+#### GROUPS
+kubernetes_cluster
+  Essentially All Hosts
+kubernetes_cluster_existing
+  All hosts that currently exist as a virtual machine
+kubernetes_worker_node
+  All worker nodes
+kubernetes_control_plane_node
+  All Control plane nodes
+kubernetes_cluster_scheduled
+  All nodes scheduled to be created
+
+#### General
+ovirt_auth
+template_modified
+template_exists
+new_cluster
+ssh_key
+#### Cluster
+increase_control_plane_nodes
+decrease_control_plane_nodes
+maintain_control_plane_nodes
+
+increase_worker_nodes
+decrease_worker_nodes
+maintain_worker_nodes
+
+
+
+#### Targeting specific groups
+All that do not currently exist
+(All in kubernetes_cluster that are not in ...existing)
+kubernetes_cluster:!kubernetes_cluster_existing
+https://docs.ansible.com/ansible/latest/user_guide/intro_patterns.html

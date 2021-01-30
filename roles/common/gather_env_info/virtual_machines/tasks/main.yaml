@@ -1,31 +1,28 @@
 ---
-# Grab all of the main nodes from ovirt
-# Matches a pattern of {{ cluster_name }}-worker-*
-- name: "Grab a list of the main nodes (if any) from Ovirt"
-  ovirt.ovirt.ovirt_vm_info:
-    auth: "{{ ovirt_auth }}"
-    pattern:
-      name={{ cluster_name }}-{{ kubernetes_control_plane_node_name }}-* and
-      datacenter="{{ ovirt_engine_datacenter_name }}" and
-      cluster="{{ ovirt_engine_cluster_name }}"
-  register: control_plane_nodes_info
+# Gather a list of VMs and set them as kubernetes_control_plane_nodes_list, and kubernetes_worker_nodes_list
+# Additionally, set new_cluster to False or New
+- name: "Import task to gather virtual machines from oVirt"
+  ansible.builtin.import_tasks: gather_vms.yaml
 
 
-# When there are NO vms matching the pattern, create a new cluster
-- name: "Set a var to initialize a new cluster when no {{ main_node_name }} nodes returned"
+# Detect if a domain is set
+- name: "Append a '.' to the domain variable if domain is set"
   ansible.builtin.set_fact:
-    new_cluster: True
+    domain_tmp: ".{{ domain }}"
   when:
-    control_plane_nodes_info.ovirt_vms | length == 0
+    domain is defined and
+    domain | length > 0
 
 
-# Grab all of the worker nodes from ovirt.
-# Matches a pattern of {{ cluster_name }}-worker-*
-- name: "Grab a list of the worker nodes (if any) from Ovirt"
-  ovirt.ovirt.ovirt_vm_info:
-    auth: "{{ ovirt_auth }}"
-    pattern:
-      name={{ cluster_name }}-{{ kubernetes_worker_node_name }}-* and
-      datacenter="{{ ovirt_engine_datacenter_name }}" and
-      cluster="{{ ovirt_engine_cluster_name }}"
-  register: worker_nodes_info
+# Manage control plane nodes
+- name: "Import task to calculate needed control_plane_nodes"
+  ansible.builtin.import_tasks: control_plane_nodes.yaml
+
+
+# Manage worker nodes
+- name: "Import task to calculate needed worker nodes"
+  ansible.builtin.import_tasks: worker_nodes.yaml
+
+
+- name: "Add facts to each host"
+  ansible.builtin.import_tasks: add_facts.yaml

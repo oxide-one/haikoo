@@ -13,12 +13,14 @@
   connection: local
 
   pre_tasks:
+
     # This just makes it look nice :)
     - name: "Make the ovirt_engine_endpoint variable pretty."
       ansible.builtin.set_fact:
         ovirt_engine_endpoint_pretty: "{{ ovirt_engine_endpoint | urlsplit('hostname') }}"
 
   tasks:
+
     # Add ovirt engine host to inventory
     - name: "Add host {{ ovirt_engine_endpoint_pretty }} to inventory for better logging"
       ansible.builtin.add_host:
@@ -30,18 +32,20 @@
 
 
 
+# Handle templating and environment setup
 - name: "Gather information about the environment and handle templating."
   hosts: ovirt_engine
   connection: local
 
   tasks:
+
     # Set some defaults for the oVirt engine if they don't exist
     - name: "Set oVirt defaults"
       ansible.builtin.import_role:
         name: common/set_defaults
 
 
-    # Handle the necessary pre tasks
+    # Run configuration checks to ensure that no common errors are made
     - name: "Import role to handle pre tasks"
       ansible.builtin.import_role:
         name: common/config_checks
@@ -59,41 +63,41 @@
         name: ovirt/connect
 
 
-
-    # Gather information about the general state of oVirt
+    # Gather information about the general state of oVirt and the cluster
     - name: "Import role to gather information about oVirt"
       ansible.builtin.import_role:
         name: common/gather_env_info
 
 
-    # Handle templating stuff on a local connection as only dealing with ovirt
+    # Handle templating stuff on a local connection
     - name: "Import role to handle templating"
       ansible.builtin.import_role:
         name: ovirt/template
 
+
+
+
+# Prepare the template for use
 - name: "Wait for the temporary virtual machine to become available"
   hosts: temp_vm_group
-  vars:
-    ovirt_auth: "{{ hostvars[groups['ovirt_engine'][0]].ovirt_auth }}"
-    template_exists: "{{ hostvars[groups['ovirt_engine'][0]].template_exists }}"
-    template_modified: "{{ hostvars[groups['ovirt_engine'][0]].template_modified }}"
 
   pre_tasks:
-      # Set some defaults for the oVirt engine if they don't exist
+
+    # Set some defaults for the oVirt engine if they don't exist
     - name: "Set oVirt defaults"
       ansible.builtin.import_role:
         name: common/set_defaults
       connection: local
 
 
-      # Wait for the Virtual machines to get an IP address, then set their ansible_host vars
+    # Wait for the Virtual machines to get an IP address, then set their ansible_host vars
     - name: "Import role to handle getting IP address information"
       ansible.builtin.import_role:
         name: ovirt/wait_for_ip
       connection: local
 
 
-    # Wait for the virtual machine to become available
+    # Wait for the virtual machine to become available to ansible
     - name: "Wait for the virtual machines to become available to ansible before continuing"
       ansible.builtin.wait_for_connection:
 
@@ -103,69 +107,46 @@
       ansible.builtin.setup:
 
   tasks:
+
+    # Prepare the node to be used in a kubernetes cluster
     - name: "Import role to handle running through tasks"
       ansible.builtin.import_role:
         name: kubernetes/prepare_node
 
 
-
-- name: "Seal the template"
-  hosts: ovirt
-  connection: local
-
-  tasks:
     # Seal the template on a local connection
     - name: "Import role to handle sealing the template"
       ansible.builtin.import_role:
         name: ovirt/template
       vars:
         state: seal
+      connection: local
 
 
 
 
-########################
-# Inventory management #
-########################
-- name: "Create an inventory of hosts"
-  hosts: ovirt
-  connection: local
-
-  tasks:
-    # Create an inventory of hosts based on existing and new hosts
-    - name: "Import role to create inventory of hosts"
-      ansible.builtin.import_role:
-        name: inventory
-
-
-
-
-- name: "Import facts to the entire cluster"
-  hosts: kube_cluster
-  connection: local
-
-  tasks:
-    # Import facts from 'ovirt' to the machines to prevent re-run
-    - name: "Import facts from the ovirt host"
-      ansible.builtin.import_role:
-        name: common/import_facts_from_engine
-
-
-
-
+# Grab IP addresses from all existing nodes
 - name: "If nodes exist already, grab their IP addresses"
-  hosts: kube_worker_existing, kube_main_existing
+  hosts: kubernetes_cluster_existing
   connection: local
 
+  pre_tasks:
+
+    # Set some defaults for the oVirt engine if they don't exist
+    - name: "Set oVirt defaults"
+      ansible.builtin.import_role:
+        name: common/set_defaults
+
   tasks:
-    # Start the VM
+
+    # Ensure all of the kubernetes nodes that exist are started
     - name: "Import a role to start a virtual machine"
       ansible.builtin.import_role:
         name: ovirt/virtual_machine
       vars:
         state: started
 
-
+    # Ensure that all of the kubernetes nodes that exist have an IP address
     - name: "Grab an IP address from the existing nodes"
       ansible.builtin.import_role:
         name: ovirt/wait_for_ip
@@ -173,128 +154,37 @@
 
 
 
-#######################################
-# Decreasing the number of Main nodes #
-#######################################
-- name: "Handle removing main nodes from the cluster"
-  hosts: kube_main_removal
+#############################
+#### New Node management ####
+#############################
 
-  tasks:
-    - name: "Drain the node so that pods can be evicted"
-      become: yes
-      ansible.builtin.command: >
-        kubectl drain {{ inventory_hostname }}
-        --ignore-daemonsets --delete-local-data
-        --kubeconfig '/etc/kubernetes/admin.conf'
-      register: drain_cmd
-      failed_when: drain_cmd.rc != 0
-
-
-    - name: "Run kubeadm reset to remove the node fully."
-      become: yes
-      ansible.builtin.command: kubeadm reset -f
-      register: kubeadm_reset_cmd
-      failed_when: kubeadm_reset_cmd.rc != 0
-
-
-
-
-- name: "Handle removing worker nodes from the cluster"
-  hosts: kube_main_existing[0]
-
-  pre_tasks:
-    # End the play if decrease_worker_nodes is false
-    - name: "Do not run the playbook if nodes do not need to be decreased"
-      ansible.builtin.meta: end_play
-      when: not decrease_main_nodes
-
-  tasks:
-    # Start the VM
-    - name: "Drain the node so that pods can be evicted"
-      become: yes
-      ansible.builtin.command: >
-        kubectl delete node {{ item }}
-        --kubeconfig '/etc/kubernetes/admin.conf'
-      register: drain_cmd
-      with_list: "{{ groups['kube_main_removal'] }}"
-      failed_when: drain_cmd.rc != 0
-
-
-
-
-#########################################
-# Decreasing the number of Worker nodes #
-#########################################
-- name: "Handle removing worker nodes from the cluster"
-  hosts: kube_main_existing[0]
-
-  pre_tasks:
-    # End the play if decrease_worker_nodes is false
-    - name: "Do not run the playbook if nodes do not need to be decreased"
-      ansible.builtin.meta: end_play
-      when: not decrease_worker_nodes
-
-  tasks:
-    # Start the VM
-    - name: "Drain the node so that pods can be evicted"
-      become: yes
-      ansible.builtin.command: >
-        kubectl drain {{ item }}
-        --ignore-daemonsets --delete-local-data
-        --kubeconfig '/etc/kubernetes/admin.conf'
-      register: drain_cmd
-      with_list: "{{ groups['kube_worker_removal'] }}"
-      failed_when: drain_cmd.rc != 0
-
-
-    # Start the VM
-    - name: "Drain the node so that pods can be evicted"
-      become: yes
-      ansible.builtin.command: >
-        kubectl delete node {{ item }}
-        --kubeconfig '/etc/kubernetes/admin.conf'
-      register: remove_cmd
-      with_list: "{{ groups['kube_worker_removal'] }}"
-      failed_when: remove_cmd.rc != 0
-
-
-
-
-##########################################################################
-# Handle deletion of nodes after they have been removed from the cluster #
-##########################################################################
-- name: "Handle deletion of nodes after they have been removed from the cluster"
-  hosts: kube_worker_removal, kube_main_removal
-  connection: local
-
-  tasks:
-    # Start the VM
-    - name: "Import a role to start a virtual machine"
-      ansible.builtin.import_role:
-        name: ovirt/virtual_machine
-      vars:
-        state: stopped
-
-
-    # Remove the VM
-    - name: "Import a role to start a virtual machine"
-      ansible.builtin.import_role:
-        name: ovirt/virtual_machine
-      vars:
-        state: absent
-
-
-
-
-#######################################
-# Increasing the number of Main nodes #
-#######################################
-- name: "Provision the new virtual machines"
+# Provision new Control plane nodes
+- name: "Provision new Control plane nodes"
   # Run on all new nodes so that the VMs can be created
-  hosts: kube_main_new, kube_worker_new
+  hosts: kubernetes_cluster_scheduled:&kubernetes_control_plane_node
   connection: local
 
+  pre_tasks:
+
+    # End the play if maintain_control_plane_nodes is True
+    - name: "Do not run the playbook if worker nodes need to be maintained"
+      ansible.builtin.meta: end_play
+      when: maintain_control_plane_nodes
+
+
+    # End the play if increase_control_plane_nodes is False
+    - name: "Do not run the playbook if worker nodes do not need to be decreased"
+      ansible.builtin.meta: end_play
+      when: not increase_control_plane_nodes
+
+
+    # Set some defaults for the oVirt engine if they don't exist
+    - name: "Set oVirt defaults"
+      ansible.builtin.import_role:
+        name: common/set_defaults
+
   tasks:
+
     # Create a virtual machine
     - name: "Import role to create a virtual machine"
       ansible.builtin.import_role:
@@ -317,17 +207,89 @@
         state: started
 
 
-
-
-- name: "Grab an IP address for the new nodes"
-  hosts: kube_main_new, kube_worker_new
-  connection: local
-
-  tasks:
     # Wait for the Virtual machines to get an IP address, then set their ansible_host vars
     - name: "Import role to handle getting IP address information"
       ansible.builtin.import_role:
         name: ovirt/wait_for_ip
+
+
+    # Wait for a connection
+    - name: "Wait for the virtual machines to become available to ansible before continuing"
+      ansible.builtin.wait_for_connection:
+      connection: ssh
+
+
+    # Run the Setup module to gather facts
+    - name: "Run the setup module to gather facts"
+      ansible.builtin.setup:
+      connection: ssh
+
+
+
+
+# Provision new Worker nodes
+- name: "Provision new worker nodes"
+  # Run on all new nodes so that the VMs can be created
+  hosts: kubernetes_cluster_scheduled:&kubernetes_worker_node
+  connection: local
+
+  pre_tasks:
+
+    # End the play if maintain_worker_nodes is True
+    - name: "Do not run the playbook if worker nodes need to be maintained"
+      ansible.builtin.meta: end_play
+      when: maintain_worker_nodes
+
+
+    # End the play if increase_worker_nodes is True
+    - name: "Do not run the playbook if worker nodes do not need to be increased"
+      ansible.builtin.meta: end_play
+      when: not increase_worker_nodes
+
+
+    # Set some defaults for the oVirt engine if they don't exist
+    - name: "Set oVirt defaults"
+      ansible.builtin.import_role:
+        name: common/set_defaults
+
+  tasks:
+
+    # Create a virtual machine
+    - name: "Import role to create a virtual machine"
+      ansible.builtin.import_role:
+        name: ovirt/virtual_machine
+      vars:
+        state: present
+
+
+    # Resize the disks
+    - name: "Import a role to resize the disks"
+      ansible.builtin.import_role:
+        name: ovirt/resize_disk
+
+
+    # Start the VM
+    - name: "Import a role to start a virtual machine"
+      ansible.builtin.import_role:
+        name: ovirt/virtual_machine
+      vars:
+        state: started
+
+
+    # Wait for the Virtual machines to get an IP address, then set their ansible_host vars
+    - name: "Import role to handle getting IP address information"
+      ansible.builtin.import_role:
+        name: ovirt/wait_for_ip
+
+    # Wait for a connection
+    - name: "Wait for the virtual machines to become available to ansible before continuing"
+      ansible.builtin.wait_for_connection:
+      connection: ssh
+
+    # Run the Setup module to gather facts
+    - name: "Run the setup module to gather facts"
+      ansible.builtin.setup:
+      connection: ssh
 
 
 
@@ -337,8 +299,6 @@
 
   # Run on ALL main nodes as we need to retemplate the haproxy and keepalived files
   pre_tasks:
-    - ansible.builtin.debug: msg="{{ ansible_host }} {{ inventory_hostname }}"
-
 
     - name: Wait 300 seconds for port 22 to become open and contain "OpenSSH"
       ansible.builtin.wait_for:
@@ -409,7 +369,7 @@
   pre_tasks:
     - name: "End the play if new cluster does not need to be initalized"
       ansible.builtin.meta: end_play
-      when: not increase_main_nodes|bool
+      when: not increase_control_plane_nodes|bool
 
   tasks:
     # This will initalize and re-upload certificates to be able to add new main nodes to the cluster
@@ -437,7 +397,7 @@
     # Skip the play if there are no new nodes to be created
     - name: "End the play if new cluster does not need to be initalized"
       ansible.builtin.meta: end_play
-      when: not increase_main_nodes|bool
+      when: not increase_control_plane_nodes|bool
 
 
     # Set facts from an existing main node.

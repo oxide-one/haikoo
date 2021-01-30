@@ -7,7 +7,7 @@
     cloud_init:
       host_name: "{{ inventory_hostname }}"
       authorized_ssh_keys: "{{ ssh_key }}"
-      user_name: "{{ username }}"
+      user_name: "{{ kubernetes_login_username }}"
       root_password: "{{ password | default(omit) }}"
       custom_script: |
         {% if runtime_commands is defined %}

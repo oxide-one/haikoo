@@ -1,0 +1,78 @@
+---
+# Increase
+- name: "Check whether to increase the number of Control Plane nodes"
+  ansible.builtin.set_fact:
+    kubernetes_worker_node_modify_count: "{{ kubernetes_worker_node_count_difference | int }}"
+    increase_worker_nodes: True
+    decrease_worker_nodes: False
+    maintain_worker_nodes: False
+  when:
+    - (kubernetes_worker_node_count_difference | int) > 0
+
+# Decrease
+- name: "Check whether to decrease the number of Control Plane nodes"
+  ansible.builtin.set_fact:
+    kubernetes_worker_node_modify_count: "{{ kubernetes_worker_node_count_difference | int | abs }}"
+    decrease_worker_nodes: True
+    increase_worker_nodes: False
+    maintain_worker_nodes: False
+  when:
+    - (kubernetes_worker_node_count_difference | int) < 0
+
+# Maintain
+- name: "Check whether to maintain the number of Control Plane nodes"
+  ansible.builtin.set_fact:
+    maintain_worker_nodes: True
+    decrease_worker_nodes: False
+    increase_worker_nodes: False
+  when:
+    - kubernetes_worker_node_count_difference | int == 0
+
+
+
+
+# Add existing nodes to the inventory
+- name: "Import task to add existing worker nodes to inventory"
+  ansible.builtin.import_role:
+    name: common/gather_env_info/virtual_machines/add_nodes_to_inventory
+  vars:
+    type_of_node: "worker"
+    groups_to_assign:
+      - kubernetes_cluster
+      - kubernetes_cluster_existing
+      - kubernetes_worker_node
+    cores_to_assign: "{{ kubernetes_worker_node_cpu_cores }}"
+    memory_to_assign: "{{ kubernetes_worker_node_memory }}"
+    disk_size_to_assign: "{{ kubernetes_worker_node_disk_size }}"
+    roles_to_assign: "{{ kubernetes_worker_node_roles | default(omit) }}"
+    node_list: "{{ kubernetes_worker_nodes_list.ovirt_vms }}"
+
+# Add existing nodes to the inventory
+- name: "Import task to add existing worker nodes to inventory"
+  ansible.builtin.import_role:
+    name: common/gather_env_info/virtual_machines/schedule_new_nodes
+  vars:
+    type_of_node: "worker"
+    tmp_name: "{{ kubernetes_worker_node_name }}"
+    groups_to_assign:
+      - kubernetes_cluster
+      - kubernetes_cluster_scheduled
+      - kubernetes_worker_node
+    cores_to_assign: "{{ kubernetes_worker_node_cpu_cores }}"
+    memory_to_assign: "{{ kubernetes_worker_node_memory }}"
+    disk_size_to_assign: "{{ kubernetes_worker_node_disk_size }}"
+    roles_to_assign: "{{ kubernetes_worker_node_roles | default(omit) }}"
+    node_count: "{{ kubernetes_worker_node_modify_count }}"
+  when:
+    - increase_worker_nodes
+
+# Add existing nodes to the inventory
+- name: "Import task to add schedule worker nodes to be deleted"
+  ansible.builtin.import_role:
+    name: common/gather_env_info/virtual_machines/schedule_deleted_nodes
+  vars:
+    type_of_node: "worker"
+    node_list: "{{ (groups['kubernetes_worker_node'] | shuffle)[:(kubernetes_worker_node_modify_count | int)] }}"
+    removal_group_name: "kubernetes_cluster_scheduled"
+  when:
+    - decrease_worker_nodes

@@ -1,0 +1,47 @@
+
+################################################
+# Decreasing the number of Control plane nodes #
+################################################
+# Triggers to end the play
+# maintain_control_plane_nodes = True
+# decrease_control_plane_nodes = False
+
+# Runs on scheduled worker nodes only
+- name: "Handle removing worker nodes from the cluster"
+  hosts: kubernetes_cluster_scheduled:&kubernetes_worker_node
+
+  pre_tasks:
+    # End the play if maintain_control_plane_nodes is True
+    - name: "Do not run the playbook if control plane nodes need to be maintained"
+      ansible.builtin.meta: end_play
+      when: maintain_control_plane_nodes
+
+
+    # End the play if decrease_control_plane_nodes is True
+    - name: "Do not run the playbook if control plane nodes do not need to be decreased"
+      ansible.builtin.meta: end_play
+      when: not decrease_control_plane_nodes
+
+
+  tasks:
+    # Start the VM
+    - name: "Drain the node so that pods can be evicted"
+      become: yes
+      ansible.builtin.command: >
+        kubectl drain {{ item }}
+        --ignore-daemonsets --delete-local-data
+        --kubeconfig '/etc/kubernetes/admin.conf'
+      register: drain_cmd
+      with_list: "{{ groups['kube_worker_removal'] }}"
+      failed_when: drain_cmd.rc != 0
+
+
+    # Start the VM
+    - name: "Drain the node so that pods can be evicted"
+      become: yes
+      ansible.builtin.command: >
+        kubectl delete node {{ item }}
+        --kubeconfig '/etc/kubernetes/admin.conf'
+      register: remove_cmd
+      with_list: "{{ groups['kube_worker_removal'] }}"
+      failed_when: remove_cmd.rc != 0

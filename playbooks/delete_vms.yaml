@@ -1,0 +1,22 @@
+##########################################################################
+# Handle deletion of nodes after they have been removed from the cluster #
+##########################################################################
+- name: "Handle deletion of nodes after they have been removed from the cluster"
+  hosts: kube_worker_removal, kube_main_removal
+  connection: local
+
+  tasks:
+    # Start the VM
+    - name: "Import a role to start a virtual machine"
+      ansible.builtin.import_role:
+        name: ovirt/virtual_machine
+      vars:
+        state: stopped
+
+
+    # Remove the VM
+    - name: "Import a role to start a virtual machine"
+      ansible.builtin.import_role:
+        name: ovirt/virtual_machine
+      vars:
+        state: absent

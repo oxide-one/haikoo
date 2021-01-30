@@ -1,0 +1,8 @@
+---
+# Add nodes to a group, scheduled to be deleted
+- name: "Add {{ type_of_node }} to the {{ removal_group_name }} group"
+  ansible.builtin.add_host:
+    name: "{{ item }}"
+    groups:
+      - "kubernetes_cluster_scheduled"
+  with_list: "{{ node_list }}"

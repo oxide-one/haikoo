@@ -1,0 +1,55 @@
+#########################################
+# Decreasing the number of Worker nodes #
+#########################################
+
+# Triggers to end the play
+# maintain_worker_nodes = True
+# decrease_worker_nodes = False
+
+# Runs on scheduled worker nodes only
+- name: "Handle draining worker nodes from the cluster"
+  hosts: kubernetes_cluster_scheduled:&kubernetes_worker_node
+
+  pre_tasks:
+
+    # End the play if decrease_worker_nodes is True
+    - name: "Do not run the playbook if worker nodes need to be maintained"
+      ansible.builtin.meta: end_play
+      when: maintain_worker_nodes
+
+
+    # End the play if increase_worker_nodes is True
+    - name: "Do not run the playbook if worker nodes do not need to be decreased"
+      ansible.builtin.meta: end_play
+      when: not decrease_worker_nodes
+
+  tasks:
+
+    # Drain the node of all pods before evicting
+    - name: "Drain the node so that pods can be evicted"
+      become: yes
+      ansible.builtin.command: >
+        kubectl drain {{ inventory_hostname }}
+        --ignore-daemonsets --delete-local-data
+        --kubeconfig '/etc/kubernetes/admin.conf'
+      register: drain_cmd
+      failed_when: drain_cmd.rc != 0
+
+
+    # Run kubeadm reset to remove the node from the cluster locally
+    - name: "Run kubeadm reset to remove the node fully."
+      become: yes
+      ansible.builtin.command: kubeadm reset -f
+      register: kubeadm_reset_cmd
+      failed_when: kubeadm_reset_cmd.rc != 0
+
+
+    # Delete the node from the control plane
+    - name: "Drain the node so that pods can be evicted"
+      become: yes
+      ansible.builtin.command: >
+        kubectl delete node {{ inventory_hostname }}
+        --kubeconfig '/etc/kubernetes/admin.conf'
+      register: drain_cmd
+      failed_when: drain_cmd.rc != 0
+      delegate_to: "{{ groups['kubernetes_control_plane_nodes'][0] }}"

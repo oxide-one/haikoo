@@ -2,8 +2,8 @@
 - name: "Create certificate key"
   become: yes
   ansible.builtin.shell:
-    cmd: "kubeadm alpha certs certificate-key >> /etc/kubernetes/{{ cluster_name }}.cert"
-    creates: "/etc/kubernetes/{{ cluster_name }}.cert"
+    cmd: "kubeadm alpha certs certificate-key >> /etc/kubernetes/{{ kubernetes_cluster_name }}.cert"
+    creates: "/etc/kubernetes/{{ kubernetes_cluster_name }}.cert"
   register: certificate_key
   changed_when: certificate_key.rc != 0
 
@@ -12,8 +12,8 @@
 - name: "Create a token to join"
   become: yes
   ansible.builtin.shell:
-    cmd: "kubeadm token generate >> /etc/kubernetes/{{ cluster_name }}.token"
-    creates: "/etc/kubernetes/{{ cluster_name }}.token"
+    cmd: "kubeadm token generate >> /etc/kubernetes/{{ kubernetes_cluster_name }}.token"
+    creates: "/etc/kubernetes/{{ kubernetes_cluster_name }}.token"
   register: token
   changed_when: token.rc != 0
 
@@ -21,14 +21,14 @@
 # Read the certificate key from the kubernetes directory
 - name: "Slurp the certificate key"
   ansible.builtin.slurp:
-    src: "/etc/kubernetes/{{ cluster_name }}.cert"
+    src: "/etc/kubernetes/{{ kubernetes_cluster_name }}.cert"
   register: certificate_key
 
 
 # Read the token from the token directory
 - name: "Slurp the token"
   ansible.builtin.slurp:
-    src: "/etc/kubernetes/{{ cluster_name }}.token"
+    src: "/etc/kubernetes/{{ kubernetes_cluster_name }}.token"
   register: token
 
 
@@ -37,7 +37,7 @@
   ansible.builtin.set_fact:
     certificate_key: "{{ certificate_key.content | b64decode }}"
     token: "{{ token.content | b64decode }}"
-    kube_config: "/etc/kubernetes/{{ cluster_name }}-cluster.conf"
+    kube_config: "/etc/kubernetes/{{ kubernetes_cluster_name }}-cluster.conf"
 
 
 # Set a fact to determine what the endpoint will be

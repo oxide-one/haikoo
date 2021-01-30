@@ -56,5 +56,8 @@
     name: "{{ temp_vm_name }}"
     ansible_ssh_pass: "{{ temp_vm_password }}"
     ansible_user: "{{ kubernetes_login_username }}"
+    ovirt_auth: "{{ ovirt_auth }}"
+    template_exists: "{{ template_exists }}"
+    template_modified: "{{ template_modified }}"
     groups:
       - temp_vm_group

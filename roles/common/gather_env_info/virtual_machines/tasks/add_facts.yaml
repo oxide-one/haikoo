@@ -1,0 +1,16 @@
+- name: "Add assigned facts to hosts"
+  ansible.builtin.add_host:
+    name: "{{ item }}"
+    ovirt_auth: "{{ ovirt_auth }}"
+    new_cluster: "{{ new_cluster }}"
+    ssh_key: "{{ ssh_key }}"
+
+    increase_control_plane_nodes: "{{ increase_control_plane_nodes }}"
+    decrease_control_plane_nodes: "{{ decrease_control_plane_nodes }}"
+    maintain_control_plane_nodes: "{{ maintain_control_plane_nodes }}"
+
+    increase_worker_nodes: "{{ increase_worker_nodes }}"
+    decrease_worker_nodes: "{{ decrease_worker_nodes }}"
+    maintain_worker_nodes: "{{ maintain_worker_nodes }}"
+  no_log: True
+  with_list: "{{ groups['kubernetes_cluster'] }}"

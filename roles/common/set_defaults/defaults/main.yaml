@@ -5,12 +5,12 @@ ovirt_engine_cluster_name: "Default"
 
 # kubernetes related
 crio_version: "1.18"
-cluster_name: "haikoo"
+kubernetes_cluster_name: "haikoo"
 startup_timeout: 60
 kubernetes_cluster_network: "ovirtmgmt"
 kubernetes_login_username: "kubeadmin"
 # template related
-template_name: "{{ cluster_name }}"
+template_name: "{{ kubernetes_cluster_name }}"
 template_imported_image_name: "Fedora 33 Cloud Base Image v1.2 for x86_64"
 template_storage_location: "data"
 template_import_timeout: 600

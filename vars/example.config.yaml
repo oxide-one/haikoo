@@ -29,7 +29,7 @@ ovirt_engine_endpoint: ""
 #################
 # Template vars #
 #################
-## The Template name to use (default: cluster_name)
+## The Template name to use (default: kubernetes_cluster_name)
 #template_name: ""
 
 ## The name of the image to import to use as a basis.
@@ -97,7 +97,7 @@ ovirt_engine_endpoint: ""
 #crio_version: "1.18"
 
 ## The name of the cluster. (default: haikoo)
-#cluster_name: ""
+#kubernetes_cluster_name: ""
 
 ## Cluster name suffix
 ## (alternatively, domain)

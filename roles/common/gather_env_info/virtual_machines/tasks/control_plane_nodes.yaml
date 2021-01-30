@@ -1,0 +1,79 @@
+---
+# Increase
+- name: "Check whether to increase the number of Control Plane nodes"
+  ansible.builtin.set_fact:
+    kubernetes_control_plane_node_modify_count: "{{ kubernetes_control_plane_count_difference | int }}"
+    increase_control_plane_nodes: True
+    decrease_control_plane_nodes: False
+    maintain_control_plane_nodes: False
+  when:
+    - kubernetes_control_plane_count_difference | int > 0
+
+
+# Decrease
+- name: "Check whether to decrease the number of Control Plane nodes"
+  ansible.builtin.set_fact:
+    kubernetes_control_plane_node_modify_count: "{{ kubernetes_control_plane_count_difference | int | abs }}"
+    decrease_control_plane_nodes: True
+    increase_control_plane_nodes: False
+    maintain_control_plane_nodes: False
+  when:
+    - kubernetes_control_plane_count_difference | int < 0
+
+
+# Maintain
+- name: "Check whether to maintain the number of Control Plane nodes"
+  ansible.builtin.set_fact:
+    maintain_control_plane_nodes: True
+    decrease_control_plane_nodes: False
+    increase_control_plane_nodes: False
+  when:
+    - kubernetes_control_plane_count_difference | int == 0
+
+
+# Add existing nodes to the inventory
+- name: "Import task to add existing control plane nodes to inventory"
+  ansible.builtin.import_role:
+    name: common/gather_env_info/virtual_machines/add_nodes_to_inventory
+  vars:
+    type_of_node: "Control plane"
+    groups_to_assign:
+      - kubernetes_cluster
+      - kubernetes_cluster_existing
+      - kubernetes_control_plane_node
+    cores_to_assign: "{{ kubernetes_control_plane_node_cores }}"
+    memory_to_assign: "{{ kubernetes_control_plane_node_memory }}"
+    disk_size_to_assign: "{{ kubernetes_control_plane_node_disk_size }}"
+    roles_to_assign: "{{ kubernetes_control_plane_node_roles | default(omit) }}"
+    node_list: "{{ kubernetes_control_plane_nodes_list.ovirt_vms }}"
+
+
+# Add existing nodes to the inventory
+- name: "Import task to schedule control plane ndoes to be created"
+  ansible.builtin.import_role:
+    name: common/gather_env_info/virtual_machines/schedule_new_nodes
+  vars:
+    type_of_node: "Control plane"
+    tmp_name: "{{ kubernetes_control_plane_node_name }}"
+    groups_to_assign:
+      - kubernetes_cluster
+      - kubernetes_cluster_scheduled
+      - kubernetes_control_plane_node
+    cores_to_assign: "{{ kubernetes_control_plane_node_cores }}"
+    memory_to_assign: "{{ kubernetes_control_plane_node_memory }}"
+    disk_size_to_assign: "{{ kubernetes_control_plane_node_disk_size }}"
+    roles_to_assign: "{{ kubernetes_control_plane_node_roles | default(omit) }}"
+    node_count: "{{ kubernetes_control_plane_node_modify_count }}"
+  when:
+    - increase_control_plane_nodes
+
+
+# Add existing nodes to the inventory
+- name: "Import task to add schedule control plane nodes to be deleted"
+  ansible.builtin.import_role:
+    name: common/gather_env_info/virtual_machines/schedule_deleted_nodes
+  vars:
+    type_of_node: "Control plane"
+    node_list: "{{ (groups['kubernetes_control_plane_node'] | shuffle)[:(kubernetes_control_plane_node_modify_count | int)] }}"
+  when:
+    - decrease_control_plane_nodes
