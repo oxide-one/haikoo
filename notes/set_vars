@@ -1,0 +1,14 @@
+#### General
+ovirt_auth
+template_modified
+template_exists
+new_cluster
+
+#### Cluster
+increase_control_plane_nodes
+decrease_control_plane_nodes
+maintain_control_plane_nodes
+
+increase_worker_nodes
+decrease_worker_nodes
+maintain_worker_nodes

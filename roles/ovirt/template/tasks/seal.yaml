@@ -2,6 +2,7 @@
 - name: 'Ensure vm "{{ temp_vm_name }}" is shutdown'
   ovirt.ovirt.ovirt_vm:
     auth: "{{ ovirt_auth }}"
+    comment: ""
     state: stopped
     name: "{{ temp_vm_name }}"
 
@@ -32,8 +33,3 @@
     auth: "{{ ovirt_auth }}"
     name: "{{ temp_vm_name }}"
     state: absent
-
-# Run ovirt checks again to set the 'template_exists' variable
-- name: "Import role checks/ovirt again to set the template_exists variable"
-  ansible.builtin.import_role:
-    role: tests/ovirt

@@ -9,7 +9,7 @@
     state: "present"
     name: "{{ inventory_hostname }}"
     template: "{{ template }}"
-    template_version: "{{ template_version_number }}"
+    template_version: "{{ template_version_number | default(omit) }}"
     memory: "{{ memory }}MiB"
     disk_format: "cow"
     cluster: "{{ ovirt_engine_cluster_name }}"

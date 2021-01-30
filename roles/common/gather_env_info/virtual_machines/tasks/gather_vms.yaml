@@ -1,0 +1,45 @@
+---
+# Grab all of the control plane nodes from oVirt
+# Matches a pattern of {{ kubernetes_cluster_name }}-worker-*
+- name: "Grab a list of the main nodes (if any) from Ovirt"
+  ovirt.ovirt.ovirt_vm_info:
+    auth: "{{ ovirt_auth }}"
+    pattern:
+      name={{ kubernetes_cluster_name }}-{{ kubernetes_control_plane_node_name }}-* and
+      datacenter="{{ ovirt_engine_datacenter_name }}" and
+      cluster="{{ ovirt_engine_cluster_name }}"
+  register: kubernetes_control_plane_nodes_list
+
+
+# Grab all of the worker nodes from ovirt.
+# Matches a pattern of {{ kubernetes_cluster_name }}-worker-*
+- name: "Grab a list of the worker nodes (if any) from Ovirt"
+  ovirt.ovirt.ovirt_vm_info:
+    auth: "{{ ovirt_auth }}"
+    pattern:
+      name={{ kubernetes_cluster_name }}-{{ kubernetes_worker_node_name }}-* and
+      datacenter="{{ ovirt_engine_datacenter_name }}" and
+      cluster="{{ ovirt_engine_cluster_name }}"
+  register: kubernetes_worker_nodes_list
+
+
+# When there are NO control plane vms matching the pattern, set a fact to create a new cluster
+- name: "Set a fact to initialize a new cluster when no {{ kubernetes_control_plane_node_name }} nodes returned"
+  ansible.builtin.set_fact:
+    new_cluster: True
+  when:
+    kubernetes_control_plane_nodes_list.ovirt_vms | length == 0
+
+
+# When there are at least one control plane vms matching the pattern, set a fact to not create a new cluster
+- name: "Set a fact to initialize a new cluster when no {{ kubernetes_control_plane_node_name }} nodes returned"
+  ansible.builtin.set_fact:
+    new_cluster: False
+  when:
+    kubernetes_control_plane_nodes_list.ovirt_vms | length > 0
+
+# Calculate a diff of the nodes needed vs the nodes present
+- name: "Calculate the node differences"
+  ansible.builtin.set_fact:
+    kubernetes_control_plane_count_difference: "{{ (kubernetes_control_plane_node_count | int) - (kubernetes_control_plane_nodes_list.ovirt_vms | length) }}"
+    kubernetes_worker_node_count_difference: "{{ (kubernetes_worker_node_count | int) - (kubernetes_worker_nodes_list.ovirt_vms | length) }}"

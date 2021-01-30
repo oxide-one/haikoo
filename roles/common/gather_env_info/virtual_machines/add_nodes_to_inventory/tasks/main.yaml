@@ -1,0 +1,16 @@
+---
+# Add am Existing Control plane node to the inventory
+# Not logging as it prints out a load of bs
+- name: "Add existing {{ type_of_node }} nodes to the inventory"
+  ansible.builtin.add_host:
+    name: "{{ item.name }}"
+    groups: "{{ groups_to_assign }}"
+    network: "{{ kubernetes_cluster_network }}"
+    cores: "{{ cores_to_assign }}"
+    memory: "{{ memory_to_assign }}"
+    disk_size: "{{ disk_size_to_assign }}"
+    roles: "{{ roles_to_assign | default(omit) }}"
+    template_version: "{{ template_version_number | default(omit) }}"
+    template: "{{ template_name }}"
+  with_list: "{{ node_list }}"
+  no_log: True

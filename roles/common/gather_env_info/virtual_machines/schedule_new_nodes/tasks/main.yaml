@@ -1,0 +1,32 @@
+---
+# Ensure /tmp/kubehost-1...etc are not present for main nodes
+- name: "Ensure /tmp/kubehost-1..etc are absent so {{ type_of_node }} node hashes can be created"
+  ansible.builtin.file:
+    path: "/tmp/kubehost-{{ item }}"
+    state: absent
+  with_sequence: count="{{ node_count }}"
+
+
+# Add a new Main node to the inventory
+- name: "Add new {{ type_of_node }} nodes to the inventory, scheduled to be created"
+  ansible.builtin.add_host:
+    name: >-
+      {{ kubernetes_cluster_name }}-{{ tmp_name }}-{{ lookup('password', '/tmp/kubehost-' + item + ' length=6 chars=ascii_letters') | lower }}{{ domain_tmp | default('') }}
+    groups: "{{ groups_to_assign }}"
+    network: "{{ kubernetes_cluster_network }}"
+    cores: "{{ cores_to_assign }}"
+    memory: "{{ memory_to_assign }}"
+    disk_size: "{{ disk_size_to_assign }}"
+    roles: "{{ roles_to_assign | default(omit) }}"
+    template_version: "{{ template_version_number | default(omit) }}"
+    template: "{{ template_name }}"
+  with_sequence: count="{{ node_count }}"
+  no_log: false
+
+
+# Remove a temporary file created to define the names of the nodes
+- name: "Remove temporary file"
+  ansible.builtin.file:
+    path: "/tmp/kubehost-{{ item }}"
+    state: absent
+  with_sequence: count="{{ node_count }}"
