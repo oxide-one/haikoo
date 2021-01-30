@@ -1,8 +1,18 @@
+---
+title: "Haikoo"
+subtitle: "Because High Availability kubernetes on oVirt should be easy"
+author: "OkamiDash"
+website: "https://haikoo.oxide.one"
+logo: img/logo.png
+---
+
 # Haikoo
 
 ![Ansible Lint](https://github.com/oxide-one/haikoo/workflows/Ansible%20Lint/badge.svg)
 
 Because High availability kubernetes on oVirt should be easy, right?
+
+[Docs](https://haikoo.oxide.one)
 
 ---
 
