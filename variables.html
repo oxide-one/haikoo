@@ -7,16 +7,16 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <meta charset="utf-8"/>
 <title>
-      Default Variables | haikoo 0.1 documentation
+      Runtime Variables | haikoo 0.1 documentation
     </title>
 <link href="_static/pygments.css" rel="stylesheet"/>
 <link href="_static/theme.css" rel="stylesheet"/>
 <link href="search.html" rel="search" title="Search"/>
 <link href="genindex.html" rel="index" title="Index"/>
-<link href="roles/common.html" rel="next" title="Common Role Documentation"/>
+<link href="workflow.html" rel="next" title="Playbook Workflow"/>
 <link href="quickstart.html" rel="prev" title="Quick Start"/>
 </head><body class="text-gray-900 antialiased min-h-screen md:h-screen flex flex-col">
-<a class="block text-xl bg-white px-8 py-4 z-20 absolute top-0 inset-x-0 text-center transform -translate-y-full focus:translate-y-0 focus:outline-none transition-transform duration-75" href="#default-variables" title="Skip navigation links">Skip to content</a>
+<a class="block text-xl bg-white px-8 py-4 z-20 absolute top-0 inset-x-0 text-center transform -translate-y-full focus:translate-y-0 focus:outline-none transition-transform duration-75" href="#runtime-variables" title="Skip navigation links">Skip to content</a>
 <header class="md:sticky top-0 bg-gray-900 shadow-md flex md:flex-row justify-between items-center z-10"><a aria-label="Back to homepage" class="py-4 hover:bg-gray-700 focus:bg-gray-700 tooltipped tooltipped-se" href="index.html">
 <img alt="Logo" class="h-8 mx-5" src="_static/logo-bright.png"/>
 </a><h2 class="text-xl text-gray-100 mx-5 py-4">haikoo 0.1 documentation</h2><form action="search.html" class="hidden md:flex my-auto mx-5 justify-between items-center print:hidden" id="searchbox" method="get">
@@ -30,80 +30,53 @@
 <div class="nav-toc"><p class="caption">Contents</p>
 <ul class="current">
 <li class="toctree-l1"><div class="nav-link"><a class="reference internal" href="quickstart.html">Quick Start</a></div></li>
-<li class="toctree-l1 current expanded"><div class="nav-link"><svg aria-hidden="true" class="expand" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg><a class="current reference internal" href="#">Default Variables</a></div><ul>
+<li class="toctree-l1 current expanded"><div class="nav-link"><svg aria-hidden="true" class="expand" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg><a class="current reference internal" href="#">Runtime Variables</a></div><ul>
 <li class="toctree-l2"><div class="nav-link"><svg aria-hidden="true" class="expand" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg><a class="reference internal" href="#ovirt">oVirt</a></div><ul>
-<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#ovirt-engine-username">ovirt_engine_username</a></div></li>
-<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#ovirt-engine-password">ovirt_engine_password</a></div></li>
-<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#ovirt-engine-endpoint">ovirt_engine_endpoint</a></div></li>
-<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#ovirt-engine-datacenter-name">ovirt_engine_datacenter_name</a></div></li>
-<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#ovirt-engine-cluster-name">ovirt_engine_cluster_name</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#ovirt-auth">ovirt_auth</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#ovirt-datacentre-exists">ovirt_datacentre_exists</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#ovirt-cluster-exists">ovirt_cluster_exists</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#ovirt-temp-vm-network-exists">ovirt_temp_vm_network_exists</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#ovirt-kubernetes-network-exists">ovirt_kubernetes_network_exists</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#ovirt-template-storage-exists">ovirt_template_storage_exists</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#ovirt-template-exists">ovirt_template_exists</a></div></li>
 </ul>
 </li>
 <li class="toctree-l2"><div class="nav-link"><svg aria-hidden="true" class="expand" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg><a class="reference internal" href="#template">Template</a></div><ul>
-<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#template-name">template_name</a></div></li>
-<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#template-imported-image-name">template_imported_image_name</a></div></li>
-<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#template-storage-location">template_storage_location</a></div></li>
-<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#template-import-timeout">template_import_timeout</a></div></li>
-<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#template-description">template_description</a></div></li>
-<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#template-extra-repos">template_extra_repos</a></div></li>
-<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#template-upgrade-packages">template_upgrade_packages</a></div></li>
-<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#template-timezone">template_timezone</a></div></li>
-<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#template-extra-packages">template_extra_packages</a></div></li>
-<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#template-extra-services">template_extra_services</a></div></li>
-<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#template-selinux-enabled">template_selinux_enabled</a></div></li>
-<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#template-subversion-name">template_subversion_name</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#template-exists">template_exists</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#template-modified">template_modified</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#template-version-number">template_version_number</a></div></li>
 </ul>
 </li>
-<li class="toctree-l2"><div class="nav-link"><svg aria-hidden="true" class="expand" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg><a class="reference internal" href="#temporary-virtual-machine">Temporary virtual machine</a></div><ul>
-<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#temp-vm-name">temp_vm_name</a></div></li>
-<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#temp-vm-network">temp_vm_network</a></div></li>
-<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#temp-vm-cores">temp_vm_cores</a></div></li>
-<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#temp-vm-memory">temp_vm_memory</a></div></li>
+<li class="toctree-l2"><div class="nav-link"><svg aria-hidden="true" class="expand" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg><a class="reference internal" href="#common">Common</a></div><ul>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#ssh-key">ssh_key</a></div></li>
 </ul>
 </li>
 <li class="toctree-l2"><div class="nav-link"><svg aria-hidden="true" class="expand" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg><a class="reference internal" href="#kubernetes">Kubernetes</a></div><ul>
-<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#kubernetes-login-username">kubernetes_login_username</a></div></li>
-<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#crio-version">crio_version</a></div></li>
-<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#kubernetes-cluster-name">kubernetes_cluster_name</a></div></li>
-<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#domain">domain</a></div></li>
-<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#kubernetes-control-plane-endpoint-ip">kubernetes_control_plane_endpoint_ip</a></div></li>
-<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#kubernetes-control-plane-endpoint-dns">kubernetes_control_plane_endpoint_dns</a></div></li>
-<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#kubernetes-cluster-network">kubernetes_cluster_network</a></div></li>
-<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#startup-timeout">startup_timeout</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#new-cluster">new_cluster</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#certificate-key">certificate_key</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#token">token</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#kube-config">kube_config</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#kubeadm-init">kubeadm_init</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#endpoint">endpoint</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#node-ready">node_ready</a></div></li>
 </ul>
 </li>
 <li class="toctree-l2"><div class="nav-link"><svg aria-hidden="true" class="expand" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg><a class="reference internal" href="#control-plane-nodes">Control Plane Nodes</a></div><ul>
-<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#kubernetes-control-plane-node-name">kubernetes_control_plane_node_name</a></div></li>
-<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#kubernetes-control-plane-node-count">kubernetes_control_plane_node_count</a></div></li>
-<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#kubernetes-control-plane-node-cores">kubernetes_control_plane_node_cores</a></div></li>
-<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#kubernetes-control-plane-node-memory">kubernetes_control_plane_node_memory</a></div></li>
-<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#kubernetes-control-plane-node-disk-size">kubernetes_control_plane_node_disk_size</a></div></li>
-<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#kubernetes-control-plane-node-roles">kubernetes_control_plane_node_roles</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#kubernetes-control-plane-nodes-list">kubernetes_control_plane_nodes_list</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#kubernetes-control-plane-count-difference">kubernetes_control_plane_count_difference</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#increase-control-plane-nodes">increase_control_plane_nodes</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#decrease-control-plane-nodes">decrease_control_plane_nodes</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#maintain-control-plane-nodes">maintain_control_plane_nodes</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#kubernetes-control-plane-node-modify-count">kubernetes_control_plane_node_modify_count</a></div></li>
 </ul>
 </li>
 <li class="toctree-l2"><div class="nav-link"><svg aria-hidden="true" class="expand" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg><a class="reference internal" href="#worker-nodes">Worker nodes</a></div><ul>
-<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#kubernetes-worker-node-name">kubernetes_worker_node_name</a></div></li>
-<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#kubernetes-worker-node-count">kubernetes_worker_node_count</a></div></li>
-<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#kubernetes-worker-node-cpu-cores">kubernetes_worker_node_cpu_cores</a></div></li>
-<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#kubernetes-worker-node-memory">kubernetes_worker_node_memory</a></div></li>
-<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#kubernetes-worker-node-disk-size">kubernetes_worker_node_disk_size</a></div></li>
-<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#kubernetes-worker-node-roles">kubernetes_worker_node_roles</a></div></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l1"><div class="nav-link"><svg aria-hidden="true" class="expand" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg><a class="reference internal" href="roles/common.html">Common Role Documentation</a></div><ul>
-<li class="toctree-l2"><div class="nav-link"><svg aria-hidden="true" class="expand" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg><a class="reference internal" href="roles/common.html#config-checks">Config Checks</a></div><ul>
-<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="roles/common.html#kubernetes">Kubernetes</a></div></li>
-<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="roles/common.html#ovirt">oVirt</a></div></li>
-</ul>
-</li>
-<li class="toctree-l2"><div class="nav-link"><svg aria-hidden="true" class="expand" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg><a class="reference internal" href="roles/common.html#gather-environment-info">Gather Environment Info</a></div><ul>
-<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="roles/common.html#datacentre-cluster">Datacentre/Cluster</a></div></li>
-<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="roles/common.html#networks">Networks</a></div></li>
-<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="roles/common.html#storage">Storage</a></div></li>
-<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="roles/common.html#templates">Templates</a></div></li>
-<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="roles/common.html#virtual-machines">Virtual Machines</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#kubernetes-worker-nodes-list">kubernetes_worker_nodes_list</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#kubernetes-worker-node-count-difference">kubernetes_worker_node_count_difference</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#kubernetes-worker-node-modify-count">kubernetes_worker_node_modify_count</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#increase-worker-nodes">increase_worker_nodes</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#decrease-worker-nodes">decrease_worker_nodes</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="#maintain-worker-nodes">maintain_worker_nodes</a></div></li>
 </ul>
 </li>
 </ul>
@@ -118,352 +91,263 @@
 <div class="overflow-y-auto md:w-full flex flex-col flex-1" id="main-wrapper">
 <main class="px-5 md:ml-fluid flex-1" role="main"><nav aria-label="breadcrumbs" class="mt-16 mb-12 text-sm text-gray-700 leading-tight print:hidden" role="navigation">
 <a class="text-blue-700" href="index.html">haikoo 0.1 documentation</a>
-<span class="text-gray-700 mr-1">/</span><span aria-current="page">Default Variables</span>
+<span class="text-gray-700 mr-1">/</span><span aria-current="page">Runtime Variables</span>
 </nav>
-<section id="default-variables">
-<h1>Default Variables<a aria-label="Copy link to section: Default Variables." class="headerlink tooltipped tooltipped-ne" href="#default-variables" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h1>
+<section id="runtime-variables">
+<h1>Runtime Variables<a aria-label="Copy link to section: Runtime Variables." class="headerlink tooltipped tooltipped-ne" href="#runtime-variables" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h1>
 <section id="ovirt">
 <h2>oVirt<a aria-label="Copy link to section: oVirt." class="headerlink tooltipped tooltipped-ne" href="#ovirt" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
-<section id="ovirt-engine-username">
-<h3>ovirt_engine_username<a aria-label="Copy link to section: ovirt_engine_username." class="headerlink tooltipped tooltipped-ne" href="#ovirt-engine-username" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<section id="ovirt-auth">
+<h3>ovirt_auth<a aria-label="Copy link to section: ovirt_auth." class="headerlink tooltipped tooltipped-ne" href="#ovirt-auth" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>An authentication token needed to perform authentication to oVirt.</p>
+<p><strong>Type:</strong> String</p>
+<p><strong>Created In:</strong> <code class="docutils literal notranslate">roles/ovirt/connect</code></p>
+</section>
+<section id="ovirt-datacentre-exists">
+<h3>ovirt_datacentre_exists<a aria-label="Copy link to section: ovirt_datacentre_exists." class="headerlink tooltipped tooltipped-ne" href="#ovirt-datacentre-exists" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>A list of datacenters returned by the <code class="docutils literal notranslate">ovirt.ovirt.ovirt_datacenter_info</code> module.</p>
+<p>Used to to assert that the <a class="reference internal" href="defaults.html#ovirt-engine-datacenter-name"><span class="std std-ref">datacenter</span></a> exists.</p>
+<p><strong>Type:</strong> List</p>
+<p><strong>Role:</strong> <a class="reference internal" href="roles.html#gather-env-info"><span class="std std-ref">gather_env_info</span></a></p>
+<p><strong>Source:</strong> <a class="reference external" href="https://github.com/oxide-one/haikoo/blob/main/roles/common/gather_env_info/dc_cluster/tasks/main.yaml">common/gather_env_info/dc_cluster/tasks/main.yaml<svg aria-hidden="true" class="external-link-icon" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 19H5V5h7V3H5a2 2 0 00-2 2v14a2 2 0 002 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"></path></svg></a></p>
+</section>
+<section id="ovirt-cluster-exists">
+<h3>ovirt_cluster_exists<a aria-label="Copy link to section: ovirt_cluster_exists." class="headerlink tooltipped tooltipped-ne" href="#ovirt-cluster-exists" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>A list of clusters returned by the <code class="docutils literal notranslate">ovirt.ovirt.ovirt_cluster_info</code> module.</p>
+<p>Used to to assert that the <a class="reference internal" href="defaults.html#ovirt-engine-cluster-name"><span class="std std-ref">cluster</span></a> exists.</p>
+<p><strong>Type:</strong> List</p>
+<p><strong>Role:</strong> <a class="reference internal" href="roles.html#gather-env-info"><span class="std std-ref">gather_env_info</span></a></p>
+<p><strong>Source:</strong> <a class="reference external" href="https://github.com/oxide-one/haikoo/blob/main/roles/common/gather_env_info/dc_cluster/tasks/main.yaml">common/gather_env_info/dc_cluster/tasks/main.yaml<svg aria-hidden="true" class="external-link-icon" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 19H5V5h7V3H5a2 2 0 00-2 2v14a2 2 0 002 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"></path></svg></a></p>
+</section>
+<section id="ovirt-temp-vm-network-exists">
+<h3>ovirt_temp_vm_network_exists<a aria-label="Copy link to section: ovirt_temp_vm_network_exists." class="headerlink tooltipped tooltipped-ne" href="#ovirt-temp-vm-network-exists" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>A list of networks returned by the <code class="docutils literal notranslate">ovirt.ovirt.ovirt_network_info</code> module.</p>
+<p>Used to to assert that the <a class="reference internal" href="defaults.html#temp-vm-network"><span class="std std-ref">temporary vm network</span></a> exists.</p>
+<p><strong>Type:</strong> List</p>
+<p><strong>Role:</strong> <a class="reference internal" href="roles.html#gather-env-info"><span class="std std-ref">gather_env_info</span></a></p>
+<p><strong>Source:</strong> <a class="reference external" href="https://github.com/oxide-one/haikoo/blob/main/roles/common/gather_env_info/networks/tasks/main.yaml">common/gather_env_info/networks/tasks/main.yaml<svg aria-hidden="true" class="external-link-icon" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 19H5V5h7V3H5a2 2 0 00-2 2v14a2 2 0 002 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"></path></svg></a></p>
+</section>
+<section id="ovirt-kubernetes-network-exists">
+<h3>ovirt_kubernetes_network_exists<a aria-label="Copy link to section: ovirt_kubernetes_network_exists." class="headerlink tooltipped tooltipped-ne" href="#ovirt-kubernetes-network-exists" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>A list of networks returned by the <code class="docutils literal notranslate">ovirt.ovirt.ovirt_network_info</code> module.</p>
+<p>Used to to assert that the <a class="reference internal" href="defaults.html#kubernetes-cluster-network"><span class="std std-ref">kubernetes network</span></a> exists.</p>
+<p><strong>Type:</strong> List</p>
+<p><strong>Role:</strong> <a class="reference internal" href="roles.html#gather-env-info"><span class="std std-ref">gather_env_info</span></a></p>
+<p><strong>Source:</strong> <a class="reference external" href="https://github.com/oxide-one/haikoo/blob/main/roles/common/gather_env_info/networks/tasks/main.yaml">common/gather_env_info/networks/tasks/main.yaml<svg aria-hidden="true" class="external-link-icon" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 19H5V5h7V3H5a2 2 0 00-2 2v14a2 2 0 002 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"></path></svg></a></p>
+</section>
+<section id="ovirt-template-storage-exists">
+<h3>ovirt_template_storage_exists<a aria-label="Copy link to section: ovirt_template_storage_exists." class="headerlink tooltipped tooltipped-ne" href="#ovirt-template-storage-exists" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>A list of storage domains returned by the <code class="docutils literal notranslate">ovirt.ovirt.ovirt_storage_domain_info</code> module.</p>
+<p>Used to to assert that the <a class="reference internal" href="defaults.html#template-storage-location"><span class="std std-ref">storage domain</span></a> exists.</p>
+<p><strong>Type:</strong> List</p>
+<p><strong>Role:</strong> <a class="reference internal" href="roles.html#gather-env-info"><span class="std std-ref">gather_env_info</span></a></p>
+<p><strong>Source:</strong> <a class="reference external" href="https://github.com/oxide-one/haikoo/blob/main/roles/common/gather_env_info/storage/tasks/main.yaml">common/gather_env_info/storage/tasks/main.yaml<svg aria-hidden="true" class="external-link-icon" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 19H5V5h7V3H5a2 2 0 00-2 2v14a2 2 0 002 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"></path></svg></a></p>
+</section>
+<section id="ovirt-template-exists">
+<h3>ovirt_template_exists<a aria-label="Copy link to section: ovirt_template_exists." class="headerlink tooltipped tooltipped-ne" href="#ovirt-template-exists" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>A list of templates returned by the <code class="docutils literal notranslate">ovirt.ovirt.ovirt_template_info</code> module.</p>
+<p>Used to determine if the template has been made, and if so, how many.</p>
+<p><strong>Type:</strong> List</p>
+<p><strong>Role:</strong> <a class="reference internal" href="roles.html#gather-env-info"><span class="std std-ref">gather_env_info</span></a></p>
+<p><strong>Source:</strong> <a class="reference external" href="https://github.com/oxide-one/haikoo/blob/main/roles/common/gather_env_info/templates/tasks/main.yaml">common/gather_env_info/templates/tasks/main.yaml<svg aria-hidden="true" class="external-link-icon" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 19H5V5h7V3H5a2 2 0 00-2 2v14a2 2 0 002 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"></path></svg></a></p>
+</section>
+</section>
+<section id="template">
+<h2>Template<a aria-label="Copy link to section: Template." class="headerlink tooltipped tooltipped-ne" href="#template" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<section id="template-exists">
+<h3>template_exists<a aria-label="Copy link to section: template_exists." class="headerlink tooltipped tooltipped-ne" href="#template-exists" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>Boolean value used to determine if the template <em>exists</em>.</p>
+<p><strong>Type:</strong> Boolean</p>
+<p><strong>Role:</strong> <a class="reference internal" href="roles.html#gather-env-info"><span class="std std-ref">gather_env_info</span></a></p>
+<p><strong>Source:</strong> <a class="reference external" href="https://github.com/oxide-one/haikoo/blob/main/roles/common/gather_env_info/templates/tasks/main.yaml">common/gather_env_info/templates/tasks/main.yaml<svg aria-hidden="true" class="external-link-icon" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 19H5V5h7V3H5a2 2 0 00-2 2v14a2 2 0 002 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"></path></svg></a></p>
+</section>
+<section id="template-modified">
+<h3>template_modified<a aria-label="Copy link to section: template_modified." class="headerlink tooltipped tooltipped-ne" href="#template-modified" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>Boolean value used to determine if the template has been <em>modified</em> to create the base image yet.</p>
+<p><strong>Type:</strong> Boolean</p>
+<p><strong>Role:</strong> <a class="reference internal" href="roles.html#gather-env-info"><span class="std std-ref">gather_env_info</span></a></p>
+<p><strong>Source:</strong> <a class="reference external" href="https://github.com/oxide-one/haikoo/blob/main/roles/common/gather_env_info/templates/tasks/main.yaml">common/gather_env_info/templates/tasks/main.yaml<svg aria-hidden="true" class="external-link-icon" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 19H5V5h7V3H5a2 2 0 00-2 2v14a2 2 0 002 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"></path></svg></a></p>
+</section>
+<section id="template-version-number">
+<h3>template_version_number<a aria-label="Copy link to section: template_version_number." class="headerlink tooltipped tooltipped-ne" href="#template-version-number" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>The version number of the template that is most recent.</p>
+<p><strong>Type:</strong> Boolean</p>
+<p><strong>Role:</strong> <a class="reference internal" href="roles.html#gather-env-info"><span class="std std-ref">gather_env_info</span></a></p>
+<p><strong>Source:</strong> <a class="reference external" href="https://github.com/oxide-one/haikoo/blob/main/roles/common/gather_env_info/templates/tasks/main.yaml">common/gather_env_info/templates/tasks/main.yaml<svg aria-hidden="true" class="external-link-icon" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 19H5V5h7V3H5a2 2 0 00-2 2v14a2 2 0 002 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"></path></svg></a></p>
+</section>
+</section>
+<section id="common">
+<h2>Common<a aria-label="Copy link to section: Common." class="headerlink tooltipped tooltipped-ne" href="#common" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<section id="ssh-key">
+<h3>ssh_key<a aria-label="Copy link to section: ssh_key." class="headerlink tooltipped tooltipped-ne" href="#ssh-key" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>Contents of an SSH Public key retrieved either from Github or local filesystem.</p>
+<p><strong>Type:</strong> String</p>
+<p><strong>Role:</strong> <a class="reference internal" href="roles.html#grab-ssh-key"><span class="std std-ref">grab_ssh_key</span></a></p>
+<p><strong>Source:</strong> <a class="reference external" href="https://github.com/oxide-one/haikoo/blob/main/roles/common/grab_ssh_key/tasks/main.yaml">common/grab_ssh_key/tasks/main.yaml<svg aria-hidden="true" class="external-link-icon" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 19H5V5h7V3H5a2 2 0 00-2 2v14a2 2 0 002 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"></path></svg></a></p>
+</section>
+</section>
+<section id="kubernetes">
+<h2>Kubernetes<a aria-label="Copy link to section: Kubernetes." class="headerlink tooltipped tooltipped-ne" href="#kubernetes" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<section id="new-cluster">
+<h3>new_cluster<a aria-label="Copy link to section: new_cluster." class="headerlink tooltipped tooltipped-ne" href="#new-cluster" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>Boolean set when there are no control plane nodes detected.</p>
+<p><strong>Type:</strong> Boolean</p>
+<p><strong>Role:</strong> <a class="reference internal" href="roles.html#gather-env-info"><span class="std std-ref">gather_env_info</span></a></p>
+<p><strong>Source:</strong> <a class="reference external" href="https://github.com/oxide-one/haikoo/blob/main/roles/common/gather_env_info/virtual_machines/tasks/gather_vms.yaml">common/gather_env_info/virtual_machines/tasks/gather_vms.yaml<svg aria-hidden="true" class="external-link-icon" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 19H5V5h7V3H5a2 2 0 00-2 2v14a2 2 0 002 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"></path></svg></a></p>
+</section>
+<section id="certificate-key">
+<h3>certificate_key<a aria-label="Copy link to section: certificate_key." class="headerlink tooltipped tooltipped-ne" href="#certificate-key" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>Boolean set when there are no control plane nodes detected.</p>
+<p><strong>Type:</strong> Boolean</p>
+<p><strong>Role:</strong> <a class="reference internal" href="roles.html#gather-env-info"><span class="std std-ref">gather_env_info</span></a></p>
+<p><strong>Source:</strong> <a class="reference external" href="https://github.com/oxide-one/haikoo/blob/main/roles/common/gather_env_info/virtual_machines/tasks/gather_vms.yaml">common/gather_env_info/virtual_machines/tasks/gather_vms.yaml<svg aria-hidden="true" class="external-link-icon" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 19H5V5h7V3H5a2 2 0 00-2 2v14a2 2 0 002 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"></path></svg></a></p>
+</section>
+<section id="token">
+<h3>token<a aria-label="Copy link to section: token." class="headerlink tooltipped tooltipped-ne" href="#token" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>Boolean set when there are no control plane nodes detected.</p>
+<p><strong>Type:</strong> Boolean</p>
+<p><strong>Role:</strong> <a class="reference internal" href="roles.html#gather-env-info"><span class="std std-ref">gather_env_info</span></a></p>
+<p><strong>Source:</strong> <a class="reference external" href="https://github.com/oxide-one/haikoo/blob/main/roles/common/gather_env_info/virtual_machines/tasks/gather_vms.yaml">common/gather_env_info/virtual_machines/tasks/gather_vms.yaml<svg aria-hidden="true" class="external-link-icon" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 19H5V5h7V3H5a2 2 0 00-2 2v14a2 2 0 002 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"></path></svg></a></p>
+</section>
+<section id="kube-config">
+<h3>kube_config<a aria-label="Copy link to section: kube_config." class="headerlink tooltipped tooltipped-ne" href="#kube-config" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>Boolean set when there are no control plane nodes detected.</p>
+<p><strong>Type:</strong> Boolean</p>
+<p><strong>Role:</strong> <a class="reference internal" href="roles.html#gather-env-info"><span class="std std-ref">gather_env_info</span></a></p>
+<p><strong>Source:</strong> <a class="reference external" href="https://github.com/oxide-one/haikoo/blob/main/roles/common/gather_env_info/virtual_machines/tasks/gather_vms.yaml">common/gather_env_info/virtual_machines/tasks/gather_vms.yaml<svg aria-hidden="true" class="external-link-icon" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 19H5V5h7V3H5a2 2 0 00-2 2v14a2 2 0 002 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"></path></svg></a></p>
+</section>
+<section id="kubeadm-init">
+<h3>kubeadm_init<a aria-label="Copy link to section: kubeadm_init." class="headerlink tooltipped tooltipped-ne" href="#kubeadm-init" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>Boolean set when there are no control plane nodes detected.</p>
+<p><strong>Type:</strong> Boolean</p>
+<p><strong>Role:</strong> <a class="reference internal" href="roles.html#gather-env-info"><span class="std std-ref">gather_env_info</span></a></p>
+<p><strong>Source:</strong> <a class="reference external" href="https://github.com/oxide-one/haikoo/blob/main/roles/common/gather_env_info/virtual_machines/tasks/gather_vms.yaml">common/gather_env_info/virtual_machines/tasks/gather_vms.yaml<svg aria-hidden="true" class="external-link-icon" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 19H5V5h7V3H5a2 2 0 00-2 2v14a2 2 0 002 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"></path></svg></a></p>
+</section>
+<section id="endpoint">
+<h3>endpoint<a aria-label="Copy link to section: endpoint." class="headerlink tooltipped tooltipped-ne" href="#endpoint" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>Boolean set when there are no control plane nodes detected.</p>
+<p><strong>Type:</strong> Boolean</p>
+<p><strong>Role:</strong> <a class="reference internal" href="roles.html#gather-env-info"><span class="std std-ref">gather_env_info</span></a></p>
+<p><strong>Source:</strong> <a class="reference external" href="https://github.com/oxide-one/haikoo/blob/main/roles/common/gather_env_info/virtual_machines/tasks/gather_vms.yaml">common/gather_env_info/virtual_machines/tasks/gather_vms.yaml<svg aria-hidden="true" class="external-link-icon" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 19H5V5h7V3H5a2 2 0 00-2 2v14a2 2 0 002 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"></path></svg></a></p>
+</section>
+<section id="node-ready">
+<h3>node_ready<a aria-label="Copy link to section: node_ready." class="headerlink tooltipped tooltipped-ne" href="#node-ready" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>Boolean set when there are no control plane nodes detected.</p>
+<p><strong>Type:</strong> Boolean</p>
+<p><strong>Role:</strong> <a class="reference internal" href="roles.html#gather-env-info"><span class="std std-ref">gather_env_info</span></a></p>
+<p><strong>Source:</strong> <a class="reference external" href="https://github.com/oxide-one/haikoo/blob/main/roles/common/gather_env_info/virtual_machines/tasks/gather_vms.yaml">common/gather_env_info/virtual_machines/tasks/gather_vms.yaml<svg aria-hidden="true" class="external-link-icon" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 19H5V5h7V3H5a2 2 0 00-2 2v14a2 2 0 002 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"></path></svg></a></p>
+</section>
+</section>
+<section id="control-plane-nodes">
+<h2>Control Plane Nodes<a aria-label="Copy link to section: Control Plane Nodes." class="headerlink tooltipped tooltipped-ne" href="#control-plane-nodes" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<section id="kubernetes-control-plane-nodes-list">
+<h3>kubernetes_control_plane_nodes_list<a aria-label="Copy link to section: kubernetes_control_plane_nodes_list." class="headerlink tooltipped tooltipped-ne" href="#kubernetes-control-plane-nodes-list" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>List of control plane nodes that match the pattern of:
+<a class="reference internal" href="defaults.html#kubernetes-cluster-name"><span class="std std-ref">kubernetes_cluster_name</span></a>-<a class="reference internal" href="defaults.html#kubernetes-control-plane-node-name"><span class="std std-ref">kubernetes_control_plane_node_name</span></a>-*</p>
+<p><strong>Type:</strong> List</p>
+<p><strong>Role:</strong> <a class="reference internal" href="roles.html#gather-env-info"><span class="std std-ref">gather_env_info</span></a></p>
+<p><strong>Source:</strong> <a class="reference external" href="https://github.com/oxide-one/haikoo/blob/main/roles/gather_env_info/virtual_machines/tasks/gather_vms.yaml">gather_env_info/virtual_machines/tasks/gather_vms.yaml<svg aria-hidden="true" class="external-link-icon" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 19H5V5h7V3H5a2 2 0 00-2 2v14a2 2 0 002 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"></path></svg></a></p>
+</section>
+<section id="kubernetes-control-plane-count-difference">
+<h3>kubernetes_control_plane_count_difference<a aria-label="Copy link to section: kubernetes_control_plane_count_difference." class="headerlink tooltipped tooltipped-ne" href="#kubernetes-control-plane-count-difference" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
 <p>The username to perform all oVirt operations with.</p>
 <p>Must contain an <code class="docutils literal notranslate">@</code> (usually <code class="docutils literal notranslate">@local</code>)</p>
 <p><strong>Default:</strong> <code class="docutils literal notranslate">admin@internal</code></p>
 <p><strong>Optional:</strong> Yes</p>
 <p><strong>Type:</strong> String</p>
+<p><strong>Created In:</strong> <code class="docutils literal notranslate">roles/common/</code></p>
 </section>
-<section id="ovirt-engine-password">
-<h3>ovirt_engine_password<a aria-label="Copy link to section: ovirt_engine_password." class="headerlink tooltipped tooltipped-ne" href="#ovirt-engine-password" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>The password to connect to oVirt with.</p>
-<p><strong>Default:</strong> <code class="docutils literal notranslate">NONE</code></p>
-<p><strong>Optional:</strong> No</p>
-<p><strong>Type:</strong> String</p>
-<div class="admonition caution" id="ovirt-engine-password-note-1">
-<p class="admonition-title">Caution<a aria-label="Copy link to this caution." class="headerlink tooltipped tooltipped-ne" href="#ovirt-engine-password-note-1" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></p>
-<p>This is a required variable</p>
-</div>
-</section>
-<section id="ovirt-engine-endpoint">
-<h3>ovirt_engine_endpoint<a aria-label="Copy link to section: ovirt_engine_endpoint." class="headerlink tooltipped tooltipped-ne" href="#ovirt-engine-endpoint" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>The endpoint of your oVirt engine.</p>
-<p><strong>Default:</strong> <code class="docutils literal notranslate">NONE</code></p>
-<p><strong>Optional:</strong> No</p>
-<p><strong>Type:</strong> String</p>
-<div class="admonition caution" id="ovirt-engine-endpoint-note-2">
-<p class="admonition-title">Caution<a aria-label="Copy link to this caution." class="headerlink tooltipped tooltipped-ne" href="#ovirt-engine-endpoint-note-2" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></p>
-<p>The endpoint must be defined.</p>
-<p>If the endpoint does not end with <code class="docutils literal notranslate">/ovirt-engine</code> the playbook will fail.</p>
-</div>
-</section>
-<section id="ovirt-engine-datacenter-name">
-<h3>ovirt_engine_datacenter_name<a aria-label="Copy link to section: ovirt_engine_datacenter_name." class="headerlink tooltipped tooltipped-ne" href="#ovirt-engine-datacenter-name" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>The datacenter name you want to deploy Haikoo into.</p>
-<p><strong>Default:</strong> <code class="docutils literal notranslate">Default</code></p>
+<section id="increase-control-plane-nodes">
+<h3>increase_control_plane_nodes<a aria-label="Copy link to section: increase_control_plane_nodes." class="headerlink tooltipped tooltipped-ne" href="#increase-control-plane-nodes" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>The username to perform all oVirt operations with.</p>
+<p>Must contain an <code class="docutils literal notranslate">@</code> (usually <code class="docutils literal notranslate">@local</code>)</p>
+<p><strong>Default:</strong> <code class="docutils literal notranslate">admin@internal</code></p>
 <p><strong>Optional:</strong> Yes</p>
 <p><strong>Type:</strong> String</p>
+<p><strong>Created In:</strong> <code class="docutils literal notranslate">roles/common/</code></p>
 </section>
-<section id="ovirt-engine-cluster-name">
-<h3>ovirt_engine_cluster_name<a aria-label="Copy link to section: ovirt_engine_cluster_name." class="headerlink tooltipped tooltipped-ne" href="#ovirt-engine-cluster-name" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>The Cluster name you want to deploy Haikoo into.</p>
-<p><strong>Default:</strong> <code class="docutils literal notranslate">Default</code></p>
+<section id="decrease-control-plane-nodes">
+<h3>decrease_control_plane_nodes<a aria-label="Copy link to section: decrease_control_plane_nodes." class="headerlink tooltipped tooltipped-ne" href="#decrease-control-plane-nodes" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>The username to perform all oVirt operations with.</p>
+<p>Must contain an <code class="docutils literal notranslate">@</code> (usually <code class="docutils literal notranslate">@local</code>)</p>
+<p><strong>Default:</strong> <code class="docutils literal notranslate">admin@internal</code></p>
 <p><strong>Optional:</strong> Yes</p>
 <p><strong>Type:</strong> String</p>
+<p><strong>Created In:</strong> <code class="docutils literal notranslate">roles/common/</code></p>
 </section>
-</section>
-<hr class="docutils"/>
-<section id="template">
-<h2>Template<a aria-label="Copy link to section: Template." class="headerlink tooltipped tooltipped-ne" href="#template" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
-<section id="template-name">
-<h3>template_name<a aria-label="Copy link to section: template_name." class="headerlink tooltipped tooltipped-ne" href="#template-name" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>The name of the template to be created.</p>
-<p>Defaults to the cluster name.</p>
-<p><strong>Default:</strong> <code class="docutils literal notranslate">{{ kubernetes_cluster_name }}</code></p>
+<section id="maintain-control-plane-nodes">
+<h3>maintain_control_plane_nodes<a aria-label="Copy link to section: maintain_control_plane_nodes." class="headerlink tooltipped tooltipped-ne" href="#maintain-control-plane-nodes" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>The username to perform all oVirt operations with.</p>
+<p>Must contain an <code class="docutils literal notranslate">@</code> (usually <code class="docutils literal notranslate">@local</code>)</p>
+<p><strong>Default:</strong> <code class="docutils literal notranslate">admin@internal</code></p>
 <p><strong>Optional:</strong> Yes</p>
 <p><strong>Type:</strong> String</p>
+<p><strong>Created In:</strong> <code class="docutils literal notranslate">roles/common/</code></p>
 </section>
-<section id="template-imported-image-name">
-<h3>template_imported_image_name<a aria-label="Copy link to section: template_imported_image_name." class="headerlink tooltipped tooltipped-ne" href="#template-imported-image-name" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>The name of the image to import from the ovirt-image-repository storage
-domain.</p>
-<p>Currently Haikoo supports Fedora based systems only.</p>
-<p><strong>Default:</strong> <code class="docutils literal notranslate">Fedora 33 Cloud Base Image v1.2 for x86_64</code></p>
-<p><strong>Optional:</strong> Yes</p>
+<section id="kubernetes-control-plane-node-modify-count">
+<h3>kubernetes_control_plane_node_modify_count<a aria-label="Copy link to section: kubernetes_control_plane_node_modify_count." class="headerlink tooltipped tooltipped-ne" href="#kubernetes-control-plane-node-modify-count" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>The username to perform all oVirt operations with.</p>
+<p>Must contain an <code class="docutils literal notranslate">@</code> (usually <code class="docutils literal notranslate">@local</code>)</p>
 <p><strong>Type:</strong> String</p>
-</section>
-<section id="template-storage-location">
-<h3>template_storage_location<a aria-label="Copy link to section: template_storage_location." class="headerlink tooltipped tooltipped-ne" href="#template-storage-location" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>The Storage domain to import and save the Template(s) to.</p>
-<p><strong>Default:</strong> <code class="docutils literal notranslate">data</code></p>
-<p><strong>Optional:</strong> Yes</p>
-<p><strong>Type:</strong> String</p>
-</section>
-<section id="template-import-timeout">
-<h3>template_import_timeout<a aria-label="Copy link to section: template_import_timeout." class="headerlink tooltipped tooltipped-ne" href="#template-import-timeout" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>The time, in seconds to wait for the import to run.</p>
-<p>Increase this if your import fails.</p>
-<p><strong>Default:</strong> <code class="docutils literal notranslate">600</code></p>
-<p><strong>Optional:</strong> Yes</p>
-<p><strong>Type:</strong> Integer</p>
-</section>
-<section id="template-description">
-<h3>template_description<a aria-label="Copy link to section: template_description." class="headerlink tooltipped tooltipped-ne" href="#template-description" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>The description to give to the imported template.</p>
-<p><strong>Default:</strong> <code class="docutils literal notranslate">Created by haikoo</code></p>
-<p><strong>Optional:</strong> <em>Yes</em></p>
-<p><strong>Type:</strong> String</p>
-</section>
-<section id="template-extra-repos">
-<h3>template_extra_repos<a aria-label="Copy link to section: template_extra_repos." class="headerlink tooltipped tooltipped-ne" href="#template-extra-repos" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>A list of extra repos to package into the template.</p>
-<p><strong>Default:</strong> <code class="docutils literal notranslate">Created by haikoo</code></p>
-<p><strong>Optional:</strong> <em>Yes</em></p>
-<p><strong>Type:</strong> List</p>
-</section>
-<section id="template-upgrade-packages">
-<h3>template_upgrade_packages<a aria-label="Copy link to section: template_upgrade_packages." class="headerlink tooltipped tooltipped-ne" href="#template-upgrade-packages" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>A boolean to determine whether to upgrade all the packages on the
-template before packaging into the base image. Disable if template takes
-too long.</p>
-<p><strong>Default:</strong> <code class="docutils literal notranslate">True</code></p>
-<p><strong>Optional:</strong> <em>Yes</em></p>
-<p><strong>Type:</strong> Boolean</p>
-</section>
-<section id="template-timezone">
-<h3>template_timezone<a aria-label="Copy link to section: template_timezone." class="headerlink tooltipped tooltipped-ne" href="#template-timezone" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>The timezone of the template.</p>
-<p><strong>Default:</strong> <code class="docutils literal notranslate">Etc/GMT</code></p>
-<p><strong>Optional:</strong> <em>Yes</em></p>
-<p><strong>Type:</strong> String</p>
-</section>
-<section id="template-extra-packages">
-<h3>template_extra_packages<a aria-label="Copy link to section: template_extra_packages." class="headerlink tooltipped tooltipped-ne" href="#template-extra-packages" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>A list of extra packages to install into the base image.</p>
-<p><strong>Default:</strong> <code class="docutils literal notranslate">NONE</code></p>
-<p><strong>Optional:</strong> <em>Yes</em></p>
-<p><strong>Type:</strong> List</p>
-</section>
-<section id="template-extra-services">
-<h3>template_extra_services<a aria-label="Copy link to section: template_extra_services." class="headerlink tooltipped tooltipped-ne" href="#template-extra-services" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>A list of extra services to enable on boot.</p>
-<p><strong>Default:</strong> <code class="docutils literal notranslate">NONE</code></p>
-<p><strong>Optional:</strong> <em>Yes</em></p>
-<p><strong>Type:</strong> List</p>
-</section>
-<section id="template-selinux-enabled">
-<h3>template_selinux_enabled<a aria-label="Copy link to section: template_selinux_enabled." class="headerlink tooltipped tooltipped-ne" href="#template-selinux-enabled" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>Boolean to determine whether to enable SELinux.</p>
-<p><strong>Default:</strong> <code class="docutils literal notranslate">False</code></p>
-<p><strong>Optional:</strong> <em>Yes</em></p>
-<p><strong>Type:</strong> Boolean</p>
-<div class="admonition warning" id="template-selinux-enabled-note-3">
-<p class="admonition-title">Warning<a aria-label="Copy link to this warning." class="headerlink tooltipped tooltipped-ne" href="#template-selinux-enabled-note-3" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></p>
-<p>Enabling SELinux at this stage will only cause pain.</p>
-</div>
-</section>
-<section id="template-subversion-name">
-<h3>template_subversion_name<a aria-label="Copy link to section: template_subversion_name." class="headerlink tooltipped tooltipped-ne" href="#template-subversion-name" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>The subversion name to give to the template after modifications have
-been made.</p>
-<p><strong>Default:</strong> <code class="docutils literal notranslate">post-modification</code></p>
-<p><strong>Optional:</strong> <em>Yes</em></p>
-<p><strong>Type:</strong> String</p>
+<p><strong>Role:</strong> <a class="reference internal" href="roles.html#grab-ssh-key"><span class="std std-ref">grab_ssh_key</span></a></p>
+<p><strong>Source:</strong> <a class="reference external" href="https://github.com/oxide-one/haikoo/blob/main/roles/common/grab_ssh_key/tasks/main.yaml">common/grab_ssh_key/tasks/main.yaml<svg aria-hidden="true" class="external-link-icon" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 19H5V5h7V3H5a2 2 0 00-2 2v14a2 2 0 002 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"></path></svg></a></p>
 </section>
 </section>
-<hr class="docutils"/>
-<section id="temporary-virtual-machine">
-<h2>Temporary virtual machine<a aria-label="Copy link to section: Temporary virtual machine." class="headerlink tooltipped tooltipped-ne" href="#temporary-virtual-machine" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
-<section id="temp-vm-name">
-<h3>temp_vm_name<a aria-label="Copy link to section: temp_vm_name." class="headerlink tooltipped tooltipped-ne" href="#temp-vm-name" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>The name of the temporary virtual machine to create.</p>
-<p><strong>Default:</strong> <code class="docutils literal notranslate">haikoo-temp-vm</code></p>
-<p><strong>Optional:</strong> <em>Yes</em></p>
-<p><strong>Type:</strong> String</p>
-</section>
-<section id="temp-vm-network">
-<h3>temp_vm_network<a aria-label="Copy link to section: temp_vm_network." class="headerlink tooltipped tooltipped-ne" href="#temp-vm-network" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>The network to assign the temporary virtual machine to</p>
-<p><strong>Default:</strong> <code class="docutils literal notranslate">ovirtmgmt</code></p>
-<p><strong>Optional:</strong> <em>Yes</em></p>
-<p><strong>Type:</strong> String</p>
-</section>
-<section id="temp-vm-cores">
-<h3>temp_vm_cores<a aria-label="Copy link to section: temp_vm_cores." class="headerlink tooltipped tooltipped-ne" href="#temp-vm-cores" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>The number of cores to give the temporary virtual machine.</p>
-<p>Change this value if you do not have enough cores on a single
-hypervisor.</p>
-<p><strong>Default:</strong> <code class="docutils literal notranslate">6</code></p>
-<p><strong>Optional:</strong> <em>Yes</em></p>
-<p><strong>Type:</strong> Integer</p>
-</section>
-<section id="temp-vm-memory">
-<h3>temp_vm_memory<a aria-label="Copy link to section: temp_vm_memory." class="headerlink tooltipped tooltipped-ne" href="#temp-vm-memory" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>The amount (in MB) to give the temporary virtual machine.</p>
-<p><strong>Default:</strong> <code class="docutils literal notranslate">3072</code></p>
-<p><strong>Optional:</strong> <em>Yes</em></p>
-<p><strong>Type:</strong> Integer</p>
-</section>
-</section>
-<hr class="docutils"/>
-<section id="kubernetes">
-<h2>Kubernetes<a aria-label="Copy link to section: Kubernetes." class="headerlink tooltipped tooltipped-ne" href="#kubernetes" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
-<section id="kubernetes-login-username">
-<h3>kubernetes_login_username<a aria-label="Copy link to section: kubernetes_login_username." class="headerlink tooltipped tooltipped-ne" href="#kubernetes-login-username" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>The username to provision as the administrator within the template, and
-the cluster.</p>
-<p><strong>Default:</strong> <code class="docutils literal notranslate">kubeadmin</code></p>
-<p><strong>Optional:</strong> <em>Yes</em></p>
-<p><strong>Type:</strong> String</p>
-</section>
-<section id="crio-version">
-<h3>crio_version<a aria-label="Copy link to section: crio_version." class="headerlink tooltipped tooltipped-ne" href="#crio-version" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>The version of cri-o to enable within the cluster.</p>
-<p><strong>Default:</strong> <code class="docutils literal notranslate">1.18</code></p>
-<p><strong>Optional:</strong> <em>Yes</em></p>
-<p><strong>Type:</strong> String</p>
-</section>
-<section id="kubernetes-cluster-name">
-<h3>kubernetes_cluster_name<a aria-label="Copy link to section: kubernetes_cluster_name." class="headerlink tooltipped tooltipped-ne" href="#kubernetes-cluster-name" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>The name of the cluster to deploy.</p>
-<p><strong>Default:</strong> <code class="docutils literal notranslate">haikoo</code></p>
-<p><strong>Optional:</strong> <em>Yes</em></p>
-<p><strong>Type:</strong> String</p>
-</section>
-<section id="domain">
-<h3>domain<a aria-label="Copy link to section: domain." class="headerlink tooltipped tooltipped-ne" href="#domain" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>The domain to append onto the end of all node names.</p>
-<p><strong>Default:</strong> <code class="docutils literal notranslate">NONE</code></p>
-<p><strong>Optional:</strong> <em>Yes</em></p>
-<p><strong>Type:</strong> String</p>
-</section>
-<section id="kubernetes-control-plane-endpoint-ip">
-<h3>kubernetes_control_plane_endpoint_ip<a aria-label="Copy link to section: kubernetes_control_plane_endpoint_ip." class="headerlink tooltipped tooltipped-ne" href="#kubernetes-control-plane-endpoint-ip" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>The endpoint IP that the control plane nodes will share over VRRP.</p>
-<p><strong>Default:</strong> <code class="docutils literal notranslate">NONE</code></p>
-<p><strong>Optional:</strong> <em>No</em></p>
-<p><strong>Type:</strong> String</p>
-</section>
-<section id="kubernetes-control-plane-endpoint-dns">
-<h3>kubernetes_control_plane_endpoint_dns<a aria-label="Copy link to section: kubernetes_control_plane_endpoint_dns." class="headerlink tooltipped tooltipped-ne" href="#kubernetes-control-plane-endpoint-dns" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>A DNS endpoint that the cluster will be available at.</p>
-<p><strong>Default:</strong> <code class="docutils literal notranslate">NONE</code></p>
-<p><strong>Optional:</strong> <em>Yes</em></p>
-<p><strong>Type:</strong> String</p>
-</section>
-<section id="kubernetes-cluster-network">
-<h3>kubernetes_cluster_network<a aria-label="Copy link to section: kubernetes_cluster_network." class="headerlink tooltipped tooltipped-ne" href="#kubernetes-cluster-network" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>The network to deploy the kubernetes cluster into.</p>
-<p><strong>Default:</strong> <code class="docutils literal notranslate">ovirtmgmt</code></p>
-<p><strong>Optional:</strong> <em>Yes</em></p>
-<p><strong>Type:</strong> String</p>
-</section>
-<section id="startup-timeout">
-<h3>startup_timeout<a aria-label="Copy link to section: startup_timeout." class="headerlink tooltipped tooltipped-ne" href="#startup-timeout" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>The timeout, in minutes to wait for all the virtual machines to power
-on.</p>
-<p><strong>Default:</strong> <code class="docutils literal notranslate">60</code></p>
-<p><strong>Optional:</strong> <em>Yes</em></p>
-<p><strong>Type:</strong> Integer</p>
-</section>
-</section>
-<hr class="docutils"/>
-<section id="control-plane-nodes">
-<h2>Control Plane Nodes<a aria-label="Copy link to section: Control Plane Nodes." class="headerlink tooltipped tooltipped-ne" href="#control-plane-nodes" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
-<section id="kubernetes-control-plane-node-name">
-<h3>kubernetes_control_plane_node_name<a aria-label="Copy link to section: kubernetes_control_plane_node_name." class="headerlink tooltipped tooltipped-ne" href="#kubernetes-control-plane-node-name" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>The naming sheme for control plane nodes.</p>
-<p>Done in case you want your nodes to be named something other than
-<code class="docutils literal notranslate">control-plane</code></p>
-<p><strong>Default:</strong> <code class="docutils literal notranslate">control-plane</code></p>
-<p><strong>Optional:</strong> <em>Yes</em></p>
-<p><strong>Type:</strong> String</p>
-</section>
-<section id="kubernetes-control-plane-node-count">
-<h3>kubernetes_control_plane_node_count<a aria-label="Copy link to section: kubernetes_control_plane_node_count." class="headerlink tooltipped tooltipped-ne" href="#kubernetes-control-plane-node-count" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>The number of control plane nodes to <em>result</em> in.</p>
-<p>If the number deployed is different, the playbooks will ensure the end
-result is equal to this amount.</p>
-<p><strong>Default:</strong> <code class="docutils literal notranslate">3</code></p>
-<p><strong>Optional:</strong> <em>Yes</em></p>
-<p><strong>Type:</strong> Integer</p>
-</section>
-<section id="kubernetes-control-plane-node-cores">
-<h3>kubernetes_control_plane_node_cores<a aria-label="Copy link to section: kubernetes_control_plane_node_cores." class="headerlink tooltipped tooltipped-ne" href="#kubernetes-control-plane-node-cores" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>The number of cores to give to each control plane node.</p>
-<p><strong>Default:</strong> <code class="docutils literal notranslate">4</code></p>
-<p><strong>Optional:</strong> <em>Yes</em></p>
-<p><strong>Type:</strong> Integer</p>
-</section>
-<section id="kubernetes-control-plane-node-memory">
-<h3>kubernetes_control_plane_node_memory<a aria-label="Copy link to section: kubernetes_control_plane_node_memory." class="headerlink tooltipped tooltipped-ne" href="#kubernetes-control-plane-node-memory" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>The amount (in MB) to give each control plane node</p>
-<p><strong>Default:</strong> <code class="docutils literal notranslate">4096</code></p>
-<p><strong>Optional:</strong> <em>Yes</em></p>
-<p><strong>Type:</strong> Integer</p>
-</section>
-<section id="kubernetes-control-plane-node-disk-size">
-<h3>kubernetes_control_plane_node_disk_size<a aria-label="Copy link to section: kubernetes_control_plane_node_disk_size." class="headerlink tooltipped tooltipped-ne" href="#kubernetes-control-plane-node-disk-size" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>The size (in GB) to give to each control plane node.</p>
-<p><strong>Default:</strong> <code class="docutils literal notranslate">30</code></p>
-<p><strong>Optional:</strong> <em>Yes</em></p>
-<p><strong>Type:</strong> Integer</p>
-</section>
-<section id="kubernetes-control-plane-node-roles">
-<h3>kubernetes_control_plane_node_roles<a aria-label="Copy link to section: kubernetes_control_plane_node_roles." class="headerlink tooltipped tooltipped-ne" href="#kubernetes-control-plane-node-roles" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>A list of roles to assign to each new control plane node.</p>
-<p><strong>Default:</strong> <code class="docutils literal notranslate">NONE</code></p>
-<p><strong>Optional:</strong> <em>Yes</em></p>
-<p><strong>Type:</strong> List</p>
-</section>
-</section>
-<hr class="docutils"/>
 <section id="worker-nodes">
 <h2>Worker nodes<a aria-label="Copy link to section: Worker nodes." class="headerlink tooltipped tooltipped-ne" href="#worker-nodes" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
-<section id="kubernetes-worker-node-name">
-<h3>kubernetes_worker_node_name<a aria-label="Copy link to section: kubernetes_worker_node_name." class="headerlink tooltipped tooltipped-ne" href="#kubernetes-worker-node-name" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>The naming sheme for worker nodes.</p>
-<p>Done in case you want your nodes to be named something other than
-<code class="docutils literal notranslate">worker</code>.</p>
-<p>Please don’t name it the same as your control plane nodes.</p>
-<p><strong>Default:</strong> <code class="docutils literal notranslate">worker</code></p>
-<p><strong>Optional:</strong> <em>Yes</em></p>
+<section id="kubernetes-worker-nodes-list">
+<h3>kubernetes_worker_nodes_list<a aria-label="Copy link to section: kubernetes_worker_nodes_list." class="headerlink tooltipped tooltipped-ne" href="#kubernetes-worker-nodes-list" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>The username to perform all oVirt operations with.</p>
+<p>Must contain an <code class="docutils literal notranslate">@</code> (usually <code class="docutils literal notranslate">@local</code>)</p>
+<p><strong>Default:</strong> <code class="docutils literal notranslate">admin@internal</code></p>
+<p><strong>Optional:</strong> Yes</p>
 <p><strong>Type:</strong> String</p>
+<p><strong>Created In:</strong> <code class="docutils literal notranslate">roles/common/</code></p>
 </section>
-<section id="kubernetes-worker-node-count">
-<h3>kubernetes_worker_node_count<a aria-label="Copy link to section: kubernetes_worker_node_count." class="headerlink tooltipped tooltipped-ne" href="#kubernetes-worker-node-count" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>The number of worker nodes to <em>result</em> in.</p>
-<p>If the number deployed is different, the playbooks will ensure the end
-result is equal to this amount.</p>
-<p><strong>Default:</strong> <code class="docutils literal notranslate">3</code></p>
-<p><strong>Optional:</strong> <em>Yes</em></p>
-<p><strong>Type:</strong> Integer</p>
+<section id="kubernetes-worker-node-count-difference">
+<h3>kubernetes_worker_node_count_difference<a aria-label="Copy link to section: kubernetes_worker_node_count_difference." class="headerlink tooltipped tooltipped-ne" href="#kubernetes-worker-node-count-difference" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>The username to perform all oVirt operations with.</p>
+<p>Must contain an <code class="docutils literal notranslate">@</code> (usually <code class="docutils literal notranslate">@local</code>)</p>
+<p><strong>Default:</strong> <code class="docutils literal notranslate">admin@internal</code></p>
+<p><strong>Optional:</strong> Yes</p>
+<p><strong>Type:</strong> String</p>
+<p><strong>Created In:</strong> <code class="docutils literal notranslate">roles/common/</code></p>
 </section>
-<section id="kubernetes-worker-node-cpu-cores">
-<h3>kubernetes_worker_node_cpu_cores<a aria-label="Copy link to section: kubernetes_worker_node_cpu_cores." class="headerlink tooltipped tooltipped-ne" href="#kubernetes-worker-node-cpu-cores" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>The number of cores to give to each worker node.</p>
-<p><strong>Default:</strong> <code class="docutils literal notranslate">4</code></p>
-<p><strong>Optional:</strong> <em>Yes</em></p>
-<p><strong>Type:</strong> Integer</p>
+<section id="kubernetes-worker-node-modify-count">
+<h3>kubernetes_worker_node_modify_count<a aria-label="Copy link to section: kubernetes_worker_node_modify_count." class="headerlink tooltipped tooltipped-ne" href="#kubernetes-worker-node-modify-count" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>The username to perform all oVirt operations with.</p>
+<p>Must contain an <code class="docutils literal notranslate">@</code> (usually <code class="docutils literal notranslate">@local</code>)</p>
+<p><strong>Default:</strong> <code class="docutils literal notranslate">admin@internal</code></p>
+<p><strong>Optional:</strong> Yes</p>
+<p><strong>Type:</strong> String</p>
+<p><strong>Created In:</strong> <code class="docutils literal notranslate">roles/common/</code></p>
 </section>
-<section id="kubernetes-worker-node-memory">
-<h3>kubernetes_worker_node_memory<a aria-label="Copy link to section: kubernetes_worker_node_memory." class="headerlink tooltipped tooltipped-ne" href="#kubernetes-worker-node-memory" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>The amount (in MB) to give each worker node</p>
-<p><strong>Default:</strong> <code class="docutils literal notranslate">4096</code></p>
-<p><strong>Optional:</strong> <em>Yes</em></p>
-<p><strong>Type:</strong> Integer</p>
+<section id="increase-worker-nodes">
+<h3>increase_worker_nodes<a aria-label="Copy link to section: increase_worker_nodes." class="headerlink tooltipped tooltipped-ne" href="#increase-worker-nodes" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>The username to perform all oVirt operations with.</p>
+<p>Must contain an <code class="docutils literal notranslate">@</code> (usually <code class="docutils literal notranslate">@local</code>)</p>
+<p><strong>Default:</strong> <code class="docutils literal notranslate">admin@internal</code></p>
+<p><strong>Optional:</strong> Yes</p>
+<p><strong>Type:</strong> String</p>
+<p><strong>Created In:</strong> <code class="docutils literal notranslate">roles/common/</code></p>
 </section>
-<section id="kubernetes-worker-node-disk-size">
-<h3>kubernetes_worker_node_disk_size<a aria-label="Copy link to section: kubernetes_worker_node_disk_size." class="headerlink tooltipped tooltipped-ne" href="#kubernetes-worker-node-disk-size" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>The size (in GB) to give to each worker node.</p>
-<p><strong>Default:</strong> <code class="docutils literal notranslate">30</code></p>
-<p><strong>Optional:</strong> <em>Yes</em></p>
-<p><strong>Type:</strong> Integer</p>
+<section id="decrease-worker-nodes">
+<h3>decrease_worker_nodes<a aria-label="Copy link to section: decrease_worker_nodes." class="headerlink tooltipped tooltipped-ne" href="#decrease-worker-nodes" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>The username to perform all oVirt operations with.</p>
+<p>Must contain an <code class="docutils literal notranslate">@</code> (usually <code class="docutils literal notranslate">@local</code>)</p>
+<p><strong>Default:</strong> <code class="docutils literal notranslate">admin@internal</code></p>
+<p><strong>Optional:</strong> Yes</p>
+<p><strong>Type:</strong> String</p>
+<p><strong>Created In:</strong> <code class="docutils literal notranslate">roles/common/</code></p>
 </section>
-<section id="kubernetes-worker-node-roles">
-<h3>kubernetes_worker_node_roles<a aria-label="Copy link to section: kubernetes_worker_node_roles." class="headerlink tooltipped tooltipped-ne" href="#kubernetes-worker-node-roles" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
-<p>A list of roles to assign to each new worker node.</p>
-<p><strong>Default:</strong> <code class="docutils literal notranslate">NONE</code></p>
-<p><strong>Optional:</strong> <em>Yes</em></p>
-<p><strong>Type:</strong> List</p>
+<section id="maintain-worker-nodes">
+<h3>maintain_worker_nodes<a aria-label="Copy link to section: maintain_worker_nodes." class="headerlink tooltipped tooltipped-ne" href="#maintain-worker-nodes" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>The username to perform all oVirt operations with.</p>
+<p>Must contain an <code class="docutils literal notranslate">@</code> (usually <code class="docutils literal notranslate">@local</code>)</p>
+<p><strong>Default:</strong> <code class="docutils literal notranslate">admin@internal</code></p>
+<p><strong>Optional:</strong> Yes</p>
+<p><strong>Type:</strong> String</p>
+<p><strong>Created In:</strong> <code class="docutils literal notranslate">roles/common/</code></p>
 </section>
 </section>
 </section>

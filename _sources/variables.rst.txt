@@ -1,11 +1,479 @@
-Default Variables
+Runtime Variables
 *****************
+
+
+
+
 
 
 oVirt
 =====
 
-ovirt_engine_username
+
+
+
+ovirt_auth
+----------
+
+An authentication token needed to perform authentication to oVirt.
+
+**Type:** String
+
+**Created In:** ``roles/ovirt/connect``
+
+
+
+
+ovirt_datacentre_exists
+-----------------------
+
+A list of datacenters returned by the ``ovirt.ovirt.ovirt_datacenter_info`` module.
+
+Used to to assert that the :ref:`datacenter <defaults:ovirt_engine_datacenter_name>` exists.
+
+**Type:** List
+
+**Role:** :ref:`roles:gather_env_info`
+
+**Source:** :role:`common/gather_env_info/dc_cluster/tasks/main.yaml`
+
+
+
+
+ovirt_cluster_exists
+--------------------
+
+A list of clusters returned by the ``ovirt.ovirt.ovirt_cluster_info`` module.
+
+Used to to assert that the :ref:`cluster <defaults:ovirt_engine_cluster_name>` exists.
+
+**Type:** List
+
+**Role:** :ref:`roles:gather_env_info`
+
+**Source:** :role:`common/gather_env_info/dc_cluster/tasks/main.yaml`
+
+
+
+
+ovirt_temp_vm_network_exists
+----------------------------
+
+A list of networks returned by the ``ovirt.ovirt.ovirt_network_info`` module.
+
+Used to to assert that the :ref:`temporary vm network <defaults:temp_vm_network>` exists.
+
+**Type:** List
+
+**Role:** :ref:`roles:gather_env_info`
+
+**Source:** :role:`common/gather_env_info/networks/tasks/main.yaml`
+
+
+
+
+ovirt_kubernetes_network_exists
+-------------------------------
+
+A list of networks returned by the ``ovirt.ovirt.ovirt_network_info`` module.
+
+Used to to assert that the :ref:`kubernetes network <defaults:kubernetes_cluster_network>` exists.
+
+**Type:** List
+
+**Role:** :ref:`roles:gather_env_info`
+
+**Source:** :role:`common/gather_env_info/networks/tasks/main.yaml`
+
+
+
+
+ovirt_template_storage_exists
+-----------------------------
+
+A list of storage domains returned by the ``ovirt.ovirt.ovirt_storage_domain_info`` module.
+
+Used to to assert that the :ref:`storage domain <defaults:template_storage_location>` exists.
+
+
+**Type:** List
+
+**Role:** :ref:`roles:gather_env_info`
+
+**Source:** :role:`common/gather_env_info/storage/tasks/main.yaml`
+
+
+
+
+
+ovirt_template_exists
+---------------------
+
+A list of templates returned by the ``ovirt.ovirt.ovirt_template_info`` module.
+
+Used to determine if the template has been made, and if so, how many.
+
+**Type:** List
+
+**Role:** :ref:`roles:gather_env_info`
+
+**Source:** :role:`common/gather_env_info/templates/tasks/main.yaml`
+
+
+
+
+
+
+Template
+========
+
+
+
+
+template_exists
+---------------
+
+Boolean value used to determine if the template *exists*.
+
+**Type:** Boolean
+
+**Role:** :ref:`roles:gather_env_info`
+
+**Source:** :role:`common/gather_env_info/templates/tasks/main.yaml`
+
+
+
+
+template_modified
+-----------------
+
+Boolean value used to determine if the template has been *modified* to create the base image yet.
+
+**Type:** Boolean
+
+**Role:** :ref:`roles:gather_env_info`
+
+**Source:** :role:`common/gather_env_info/templates/tasks/main.yaml`
+
+
+
+
+template_version_number
+-----------------------
+
+The version number of the template that is most recent.
+
+**Type:** Boolean
+
+**Role:** :ref:`roles:gather_env_info`
+
+**Source:** :role:`common/gather_env_info/templates/tasks/main.yaml`
+
+
+
+
+
+
+Common
+======
+
+
+
+
+ssh_key
+-------
+
+Contents of an SSH Public key retrieved either from Github or local filesystem.
+
+**Type:** String
+
+**Role:** :ref:`roles:grab_ssh_key`
+
+**Source:** :role:`common/grab_ssh_key/tasks/main.yaml`
+
+
+
+
+
+
+Kubernetes
+==========
+
+
+
+
+new_cluster
+-----------
+
+Boolean set when there are no control plane nodes detected.
+
+**Type:** Boolean
+
+**Role:** :ref:`roles:gather_env_info`
+
+**Source:** :role:`common/gather_env_info/virtual_machines/tasks/gather_vms.yaml`
+
+
+
+
+certificate_key
+---------------
+
+Boolean set when there are no control plane nodes detected.
+
+**Type:** Boolean
+
+**Role:** :ref:`roles:gather_env_info`
+
+**Source:** :role:`common/gather_env_info/virtual_machines/tasks/gather_vms.yaml`
+
+
+
+
+
+token
+-----
+
+Boolean set when there are no control plane nodes detected.
+
+**Type:** Boolean
+
+**Role:** :ref:`roles:gather_env_info`
+
+**Source:** :role:`common/gather_env_info/virtual_machines/tasks/gather_vms.yaml`
+
+
+
+
+kube_config
+-----------
+
+Boolean set when there are no control plane nodes detected.
+
+**Type:** Boolean
+
+**Role:** :ref:`roles:gather_env_info`
+
+**Source:** :role:`common/gather_env_info/virtual_machines/tasks/gather_vms.yaml`
+
+
+
+
+kubeadm_init
+------------
+
+Boolean set when there are no control plane nodes detected.
+
+**Type:** Boolean
+
+**Role:** :ref:`roles:gather_env_info`
+
+**Source:** :role:`common/gather_env_info/virtual_machines/tasks/gather_vms.yaml`
+
+
+
+
+endpoint
+--------
+
+Boolean set when there are no control plane nodes detected.
+
+**Type:** Boolean
+
+**Role:** :ref:`roles:gather_env_info`
+
+**Source:** :role:`common/gather_env_info/virtual_machines/tasks/gather_vms.yaml`
+
+
+
+
+node_ready
+----------
+
+Boolean set when there are no control plane nodes detected.
+
+**Type:** Boolean
+
+**Role:** :ref:`roles:gather_env_info`
+
+**Source:** :role:`common/gather_env_info/virtual_machines/tasks/gather_vms.yaml`
+
+
+
+
+
+Control Plane Nodes
+===================
+
+
+
+
+kubernetes_control_plane_nodes_list
+-----------------------------------
+
+List of control plane nodes that match the pattern of:
+:ref:`kubernetes_cluster_name<defaults:kubernetes_cluster_name>`-:ref:`kubernetes_control_plane_node_name<defaults:kubernetes_control_plane_node_name>`-*
+
+**Type:** List
+
+**Role:** :ref:`roles:gather_env_info`
+
+**Source:** :role:`gather_env_info/virtual_machines/tasks/gather_vms.yaml`
+
+
+
+
+kubernetes_control_plane_count_difference
+-----------------------------------------
+
+The username to perform all oVirt operations with.
+
+Must contain an ``@`` (usually ``@local``)
+
+**Default:** ``admin@internal``
+
+**Optional:** Yes
+
+**Type:** String
+
+**Created In:** ``roles/common/``
+
+
+
+
+increase_control_plane_nodes
+----------------------------
+
+The username to perform all oVirt operations with.
+
+Must contain an ``@`` (usually ``@local``)
+
+**Default:** ``admin@internal``
+
+**Optional:** Yes
+
+**Type:** String
+
+**Created In:** ``roles/common/``
+
+
+
+
+decrease_control_plane_nodes
+----------------------------
+
+The username to perform all oVirt operations with.
+
+Must contain an ``@`` (usually ``@local``)
+
+**Default:** ``admin@internal``
+
+**Optional:** Yes
+
+**Type:** String
+
+**Created In:** ``roles/common/``
+
+
+
+
+maintain_control_plane_nodes
+----------------------------
+
+The username to perform all oVirt operations with.
+
+Must contain an ``@`` (usually ``@local``)
+
+**Default:** ``admin@internal``
+
+**Optional:** Yes
+
+**Type:** String
+
+**Created In:** ``roles/common/``
+
+
+
+
+kubernetes_control_plane_node_modify_count
+------------------------------------------
+
+The username to perform all oVirt operations with.
+
+Must contain an ``@`` (usually ``@local``)
+
+**Type:** String
+
+**Role:** :ref:`roles:grab_ssh_key`
+
+**Source:** :role:`common/grab_ssh_key/tasks/main.yaml`
+
+
+
+
+
+
+Worker nodes
+============
+
+
+
+
+kubernetes_worker_nodes_list
+----------------------------
+
+The username to perform all oVirt operations with.
+
+Must contain an ``@`` (usually ``@local``)
+
+**Default:** ``admin@internal``
+
+**Optional:** Yes
+
+**Type:** String
+
+**Created In:** ``roles/common/``
+
+
+
+
+kubernetes_worker_node_count_difference
+---------------------------------------
+
+The username to perform all oVirt operations with.
+
+Must contain an ``@`` (usually ``@local``)
+
+**Default:** ``admin@internal``
+
+**Optional:** Yes
+
+**Type:** String
+
+**Created In:** ``roles/common/``
+
+
+
+
+kubernetes_worker_node_modify_count
+-----------------------------------
+
+The username to perform all oVirt operations with.
+
+Must contain an ``@`` (usually ``@local``)
+
+**Default:** ``admin@internal``
+
+**Optional:** Yes
+
+**Type:** String
+
+**Created In:** ``roles/common/``
+
+
+
+
+increase_worker_nodes
 ---------------------
 
 The username to perform all oVirt operations with.
@@ -18,507 +486,40 @@ Must contain an ``@`` (usually ``@local``)
 
 **Type:** String
 
+**Created In:** ``roles/common/``
 
 
-ovirt_engine_password
+
+
+decrease_worker_nodes
 ---------------------
 
-The password to connect to oVirt with.
+The username to perform all oVirt operations with.
 
-**Default:** ``NONE``
+Must contain an ``@`` (usually ``@local``)
 
-**Optional:** No
+**Default:** ``admin@internal``
+
+**Optional:** Yes
 
 **Type:** String
 
-.. caution:: This is a required variable
+**Created In:** ``roles/common/``
 
-ovirt_engine_endpoint
+
+
+
+maintain_worker_nodes
 ---------------------
 
-The endpoint of your oVirt engine.
+The username to perform all oVirt operations with.
 
-**Default:** ``NONE``
+Must contain an ``@`` (usually ``@local``)
 
-**Optional:** No
-
-**Type:** String
-
-.. caution:: The endpoint must be defined.
-
-    If the endpoint does not end with ``/ovirt-engine`` the playbook will fail.
-
-ovirt_engine_datacenter_name
-----------------------------
-
-The datacenter name you want to deploy Haikoo into.
-
-**Default:** ``Default``
+**Default:** ``admin@internal``
 
 **Optional:** Yes
 
 **Type:** String
 
-ovirt_engine_cluster_name
--------------------------
-
-The Cluster name you want to deploy Haikoo into.
-
-**Default:** ``Default``
-
-**Optional:** Yes
-
-**Type:** String
-
---------------
-
-Template
-========
-
-template_name
--------------
-
-The name of the template to be created.
-
-Defaults to the cluster name.
-
-**Default:** ``{{ kubernetes_cluster_name }}``
-
-**Optional:** Yes
-
-**Type:** String
-
-template_imported_image_name
-----------------------------
-
-The name of the image to import from the ovirt-image-repository storage
-domain.
-
-Currently Haikoo supports Fedora based systems only.
-
-**Default:** ``Fedora 33 Cloud Base Image v1.2 for x86_64``
-
-**Optional:** Yes
-
-**Type:** String
-
-template_storage_location
--------------------------
-
-The Storage domain to import and save the Template(s) to.
-
-**Default:** ``data``
-
-**Optional:** Yes
-
-**Type:** String
-
-template_import_timeout
------------------------
-
-The time, in seconds to wait for the import to run.
-
-Increase this if your import fails.
-
-**Default:** ``600``
-
-**Optional:** Yes
-
-**Type:** Integer
-
-template_description
---------------------
-
-The description to give to the imported template.
-
-**Default:** ``Created by haikoo``
-
-**Optional:** *Yes*
-
-**Type:** String
-
-template_extra_repos
---------------------
-
-A list of extra repos to package into the template.
-
-**Default:** ``Created by haikoo``
-
-**Optional:** *Yes*
-
-**Type:** List
-
-template_upgrade_packages
--------------------------
-
-A boolean to determine whether to upgrade all the packages on the
-template before packaging into the base image. Disable if template takes
-too long.
-
-**Default:** ``True``
-
-**Optional:** *Yes*
-
-**Type:** Boolean
-
-template_timezone
------------------
-
-The timezone of the template.
-
-**Default:** ``Etc/GMT``
-
-**Optional:** *Yes*
-
-**Type:** String
-
-template_extra_packages
------------------------
-
-A list of extra packages to install into the base image.
-
-**Default:** ``NONE``
-
-**Optional:** *Yes*
-
-**Type:** List
-
-template_extra_services
------------------------
-
-A list of extra services to enable on boot.
-
-**Default:** ``NONE``
-
-**Optional:** *Yes*
-
-**Type:** List
-
-template_selinux_enabled
-------------------------
-
-Boolean to determine whether to enable SELinux.
-
-
-**Default:** ``False``
-
-**Optional:** *Yes*
-
-**Type:** Boolean
-
-.. warning:: Enabling SELinux at this stage will only cause pain.
-
-template_subversion_name
-------------------------
-
-The subversion name to give to the template after modifications have
-been made.
-
-**Default:** ``post-modification``
-
-**Optional:** *Yes*
-
-**Type:** String
-
---------------
-
-Temporary virtual machine
-=========================
-
-temp_vm_name
-------------
-
-The name of the temporary virtual machine to create.
-
-**Default:** ``haikoo-temp-vm``
-
-**Optional:** *Yes*
-
-**Type:** String
-
-temp_vm_network
----------------
-
-The network to assign the temporary virtual machine to
-
-**Default:** ``ovirtmgmt``
-
-**Optional:** *Yes*
-
-**Type:** String
-
-temp_vm_cores
--------------
-
-The number of cores to give the temporary virtual machine.
-
-Change this value if you do not have enough cores on a single
-hypervisor.
-
-**Default:** ``6``
-
-**Optional:** *Yes*
-
-**Type:** Integer
-
-temp_vm_memory
---------------
-
-The amount (in MB) to give the temporary virtual machine.
-
-**Default:** ``3072``
-
-**Optional:** *Yes*
-
-**Type:** Integer
-
---------------
-
-Kubernetes
-==========
-
-kubernetes_login_username
--------------------------
-
-The username to provision as the administrator within the template, and
-the cluster.
-
-**Default:** ``kubeadmin``
-
-**Optional:** *Yes*
-
-**Type:** String
-
-crio_version
-------------
-
-The version of cri-o to enable within the cluster.
-
-**Default:** ``1.18``
-
-**Optional:** *Yes*
-
-**Type:** String
-
-kubernetes_cluster_name
------------------------
-
-The name of the cluster to deploy.
-
-**Default:** ``haikoo``
-
-**Optional:** *Yes*
-
-**Type:** String
-
-domain
-------
-
-The domain to append onto the end of all node names.
-
-**Default:** ``NONE``
-
-**Optional:** *Yes*
-
-**Type:** String
-
-kubernetes_control_plane_endpoint_ip
-------------------------------------
-
-The endpoint IP that the control plane nodes will share over VRRP.
-
-**Default:** ``NONE``
-
-**Optional:** *No*
-
-**Type:** String
-
-kubernetes_control_plane_endpoint_dns
--------------------------------------
-
-A DNS endpoint that the cluster will be available at.
-
-**Default:** ``NONE``
-
-**Optional:** *Yes*
-
-**Type:** String
-
-kubernetes_cluster_network
---------------------------
-
-The network to deploy the kubernetes cluster into.
-
-**Default:** ``ovirtmgmt``
-
-**Optional:** *Yes*
-
-**Type:** String
-
-startup_timeout
----------------
-
-The timeout, in minutes to wait for all the virtual machines to power
-on.
-
-**Default:** ``60``
-
-**Optional:** *Yes*
-
-**Type:** Integer
-
---------------
-
-Control Plane Nodes
-===================
-
-kubernetes_control_plane_node_name
-----------------------------------
-
-The naming sheme for control plane nodes.
-
-Done in case you want your nodes to be named something other than
-``control-plane``
-
-**Default:** ``control-plane``
-
-**Optional:** *Yes*
-
-**Type:** String
-
-kubernetes_control_plane_node_count
------------------------------------
-
-The number of control plane nodes to *result* in.
-
-If the number deployed is different, the playbooks will ensure the end
-result is equal to this amount.
-
-**Default:** ``3``
-
-**Optional:** *Yes*
-
-**Type:** Integer
-
-kubernetes_control_plane_node_cores
------------------------------------
-
-The number of cores to give to each control plane node.
-
-**Default:** ``4``
-
-**Optional:** *Yes*
-
-**Type:** Integer
-
-kubernetes_control_plane_node_memory
-------------------------------------
-
-The amount (in MB) to give each control plane node
-
-**Default:** ``4096``
-
-**Optional:** *Yes*
-
-**Type:** Integer
-
-kubernetes_control_plane_node_disk_size
----------------------------------------
-
-The size (in GB) to give to each control plane node.
-
-**Default:** ``30``
-
-**Optional:** *Yes*
-
-**Type:** Integer
-
-kubernetes_control_plane_node_roles
------------------------------------
-
-A list of roles to assign to each new control plane node.
-
-**Default:** ``NONE``
-
-**Optional:** *Yes*
-
-**Type:** List
-
---------------
-
-Worker nodes
-============
-
-kubernetes_worker_node_name
----------------------------
-
-The naming sheme for worker nodes.
-
-Done in case you want your nodes to be named something other than
-``worker``.
-
-Please don’t name it the same as your control plane nodes.
-
-**Default:** ``worker``
-
-**Optional:** *Yes*
-
-**Type:** String
-
-kubernetes_worker_node_count
-----------------------------
-
-The number of worker nodes to *result* in.
-
-If the number deployed is different, the playbooks will ensure the end
-result is equal to this amount.
-
-**Default:** ``3``
-
-**Optional:** *Yes*
-
-**Type:** Integer
-
-kubernetes_worker_node_cpu_cores
---------------------------------
-
-The number of cores to give to each worker node.
-
-**Default:** ``4``
-
-**Optional:** *Yes*
-
-**Type:** Integer
-
-kubernetes_worker_node_memory
------------------------------
-
-The amount (in MB) to give each worker node
-
-**Default:** ``4096``
-
-**Optional:** *Yes*
-
-**Type:** Integer
-
-kubernetes_worker_node_disk_size
---------------------------------
-
-The size (in GB) to give to each worker node.
-
-**Default:** ``30``
-
-**Optional:** *Yes*
-
-**Type:** Integer
-
-kubernetes_worker_node_roles
-----------------------------
-
-A list of roles to assign to each new worker node.
-
-**Default:** ``NONE``
-
-**Optional:** *Yes*
-
-**Type:** List
+**Created In:** ``roles/common/``
