@@ -16,7 +16,7 @@ jobs:
         uses: ammaraskar/sphinx-action@master
         with:
           pre-build-command: "pip install sphinxawesome-theme"
-          build-command: "make html"
+          build-command: "make clean html"
           docs-folder: "docs/"
 
       - name: Deploy

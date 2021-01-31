@@ -45,7 +45,7 @@
   ansible.builtin.set_fact:
     endpoint: "{{ kubernetes_control_plane_endpoint_dns }}"
   when:
-    - kubernetes_control_plane_endpoint_dns is defined and ( skip_dns_check or dns_check_passed )
+    - kubernetes_control_plane_endpoint_dns is defined and ( skip_dns_check or (dns_check_passed | default(False)) )
 
 
 # Set a fact to determine what the endpoint will be
@@ -187,13 +187,13 @@
   changed_when: kubeadm_init.rc != 0
 
 
-# Add the node to a group
-- name: "Now that the cluster is initalized, add {{ inventory_hostname_short }} to the 'kube_main_existing' group"
-  ansible.builtin.add_host:
-    name: "{{ inventory_hostname }}"
-    groups:
-      - kube_main_existing
-      - kube_main_init_host
+# # Add the node to a group
+# - name: "Now that the cluster is initalized, add {{ inventory_hostname_short }} to the 'kube_main_existing' group"
+#   ansible.builtin.add_host:
+#     name: "{{ inventory_hostname }}"
+#     groups:
+#       - kube_main_existing
+#       - kube_main_init_host
 
 
 - name: "Set a fact to declare that the node is not yet ready"

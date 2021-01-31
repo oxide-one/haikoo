@@ -1,3 +1,16 @@
+.. toctree::
+   :maxdepth: 1
+   :hidden:
+   :glob:
+   :caption: Contents
+
+   quickstart
+   workflow
+   defaults
+   variables
+   roles
+
+
 Haikoo
 ******
 Because High availability kubernetes on oVirt should be easy, right?
@@ -6,16 +19,7 @@ Because High availability kubernetes on oVirt should be easy, right?
    :alt: Ansible Lint
    :align: left
 
-.. toctree::
-   :maxdepth: 2
-   :hidden:
-   :glob:
-   :caption: Contents
 
-   quickstart
-   variables
-   roles/*
-   workflow
 
 
 
