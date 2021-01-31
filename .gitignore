@@ -2,3 +2,4 @@ config.yaml
 .gitignore
 virtualenv
 venv
+docs/_build

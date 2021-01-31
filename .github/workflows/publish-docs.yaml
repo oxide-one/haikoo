@@ -1,0 +1,24 @@
+name: github pages
+
+on: [pull_request]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # Clone the Repo
+      - uses: actions/checkout@v2
+      # Build the documents
+      - name: "Build the Documentation"
+        uses: ammaraskar/sphinx-action@master
+        with:
+          pre-build-command: "pip install sphinxawesome-theme"
+          build-command: "make html"
+          docs-folder: "docs/"
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs/_build/html/
+          cname: haikoo.oxide.one
