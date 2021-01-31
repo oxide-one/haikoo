@@ -1,0 +1,224 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta content="ie=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta charset="utf-8"/>
+<title>
+      Haikoo | haikoo 0.1 documentation
+    </title>
+<link href="_static/pygments.css" rel="stylesheet"/>
+<link href="_static/theme.css" rel="stylesheet"/>
+<link href="search.html" rel="search" title="Search"/>
+<link href="genindex.html" rel="index" title="Index"/>
+<link href="quickstart.html" rel="next" title="Quick Start"/>
+</head><body class="text-gray-900 antialiased min-h-screen md:h-screen flex flex-col">
+<a class="block text-xl bg-white px-8 py-4 z-20 absolute top-0 inset-x-0 text-center transform -translate-y-full focus:translate-y-0 focus:outline-none transition-transform duration-75" href="#haikoo" title="Skip navigation links">Skip to content</a>
+<header class="md:sticky top-0 bg-gray-900 shadow-md flex md:flex-row justify-between items-center z-10"><a class="py-4">
+<img alt="Logo" class="h-8 mx-5" src="_static/logo-bright.png"/>
+</a><h2 class="text-xl text-gray-100 mx-5 py-4">haikoo 0.1 documentation</h2><form action="search.html" class="hidden md:flex my-auto mx-5 justify-between items-center print:hidden" id="searchbox" method="get">
+<input aria-label="Search the docs" class="p-2 flex-1 focus:bg-yellow-100" id="search-input" name="q" placeholder="Search the docs" style="width: 300px;" type="search"/>
+<button aria-label="Get search results" class="p-2 text-white bg-gray-700 hover:bg-gray-200 hover:text-pink-500 focus:bg-gray-200 focus:text-pink-500 tooltipped tooltipped-sw">
+<svg aria-hidden="true" class="fill-current stroke-current h-6 w-6" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path></svg>
+</button>
+</form>
+</header>
+<div class="md:overflow-hidden flex flex-col md:flex-row flex-1"><nav class="h-full fixed md:relative inset-y-0 left-0 z-20 md:z-0 bg-white text-gray-700 border-r overflow-x-hidden pt-16 print:hidden flex flex-col" data-menu="closed" role="navigation" style="width: 270px;">
+<div class="nav-toc"><p class="caption">Contents</p>
+<ul>
+<li class="toctree-l1"><div class="nav-link"><a class="reference internal" href="quickstart.html">Quick Start</a></div></li>
+<li class="toctree-l1"><div class="nav-link"><svg aria-hidden="true" class="expand" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg><a class="reference internal" href="variables.html">Default Variables</a></div><ul>
+<li class="toctree-l2"><div class="nav-link"><svg aria-hidden="true" class="expand" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg><a class="reference internal" href="variables.html#ovirt">oVirt</a></div><ul>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="variables.html#ovirt-engine-username">ovirt_engine_username</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="variables.html#ovirt-engine-password">ovirt_engine_password</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="variables.html#ovirt-engine-endpoint">ovirt_engine_endpoint</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="variables.html#ovirt-engine-datacenter-name">ovirt_engine_datacenter_name</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="variables.html#ovirt-engine-cluster-name">ovirt_engine_cluster_name</a></div></li>
+</ul>
+</li>
+<li class="toctree-l2"><div class="nav-link"><svg aria-hidden="true" class="expand" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg><a class="reference internal" href="variables.html#template">Template</a></div><ul>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="variables.html#template-name">template_name</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="variables.html#template-imported-image-name">template_imported_image_name</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="variables.html#template-storage-location">template_storage_location</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="variables.html#template-import-timeout">template_import_timeout</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="variables.html#template-description">template_description</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="variables.html#template-extra-repos">template_extra_repos</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="variables.html#template-upgrade-packages">template_upgrade_packages</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="variables.html#template-timezone">template_timezone</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="variables.html#template-extra-packages">template_extra_packages</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="variables.html#template-extra-services">template_extra_services</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="variables.html#template-selinux-enabled">template_selinux_enabled</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="variables.html#template-subversion-name">template_subversion_name</a></div></li>
+</ul>
+</li>
+<li class="toctree-l2"><div class="nav-link"><svg aria-hidden="true" class="expand" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg><a class="reference internal" href="variables.html#temporary-virtual-machine">Temporary virtual machine</a></div><ul>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="variables.html#temp-vm-name">temp_vm_name</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="variables.html#temp-vm-network">temp_vm_network</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="variables.html#temp-vm-cores">temp_vm_cores</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="variables.html#temp-vm-memory">temp_vm_memory</a></div></li>
+</ul>
+</li>
+<li class="toctree-l2"><div class="nav-link"><svg aria-hidden="true" class="expand" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg><a class="reference internal" href="variables.html#kubernetes">Kubernetes</a></div><ul>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="variables.html#kubernetes-login-username">kubernetes_login_username</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="variables.html#crio-version">crio_version</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="variables.html#kubernetes-cluster-name">kubernetes_cluster_name</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="variables.html#domain">domain</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="variables.html#kubernetes-control-plane-endpoint-ip">kubernetes_control_plane_endpoint_ip</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="variables.html#kubernetes-control-plane-endpoint-dns">kubernetes_control_plane_endpoint_dns</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="variables.html#kubernetes-cluster-network">kubernetes_cluster_network</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="variables.html#startup-timeout">startup_timeout</a></div></li>
+</ul>
+</li>
+<li class="toctree-l2"><div class="nav-link"><svg aria-hidden="true" class="expand" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg><a class="reference internal" href="variables.html#control-plane-nodes">Control Plane Nodes</a></div><ul>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="variables.html#kubernetes-control-plane-node-name">kubernetes_control_plane_node_name</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="variables.html#kubernetes-control-plane-node-count">kubernetes_control_plane_node_count</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="variables.html#kubernetes-control-plane-node-cores">kubernetes_control_plane_node_cores</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="variables.html#kubernetes-control-plane-node-memory">kubernetes_control_plane_node_memory</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="variables.html#kubernetes-control-plane-node-disk-size">kubernetes_control_plane_node_disk_size</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="variables.html#kubernetes-control-plane-node-roles">kubernetes_control_plane_node_roles</a></div></li>
+</ul>
+</li>
+<li class="toctree-l2"><div class="nav-link"><svg aria-hidden="true" class="expand" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg><a class="reference internal" href="variables.html#worker-nodes">Worker nodes</a></div><ul>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="variables.html#kubernetes-worker-node-name">kubernetes_worker_node_name</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="variables.html#kubernetes-worker-node-count">kubernetes_worker_node_count</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="variables.html#kubernetes-worker-node-cpu-cores">kubernetes_worker_node_cpu_cores</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="variables.html#kubernetes-worker-node-memory">kubernetes_worker_node_memory</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="variables.html#kubernetes-worker-node-disk-size">kubernetes_worker_node_disk_size</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="variables.html#kubernetes-worker-node-roles">kubernetes_worker_node_roles</a></div></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><div class="nav-link"><svg aria-hidden="true" class="expand" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg><a class="reference internal" href="roles/common.html">Common Role Documentation</a></div><ul>
+<li class="toctree-l2"><div class="nav-link"><svg aria-hidden="true" class="expand" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg><a class="reference internal" href="roles/common.html#config-checks">Config Checks</a></div><ul>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="roles/common.html#kubernetes">Kubernetes</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="roles/common.html#ovirt">oVirt</a></div></li>
+</ul>
+</li>
+<li class="toctree-l2"><div class="nav-link"><svg aria-hidden="true" class="expand" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg><a class="reference internal" href="roles/common.html#gather-environment-info">Gather Environment Info</a></div><ul>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="roles/common.html#datacentre-cluster">Datacentre/Cluster</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="roles/common.html#networks">Networks</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="roles/common.html#storage">Storage</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="roles/common.html#templates">Templates</a></div></li>
+<li class="toctree-l3"><div class="nav-link"><a class="reference internal" href="roles/common.html#virtual-machines">Virtual Machines</a></div></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><div class="nav-link"><a class="reference internal" href="workflow.html">Playbook Workflow</a></div></li>
+</ul>
+</div>
+<button aria-label="Close menu" class="text-4xl text-gray-800 p-4 bottom-0 hover:text-pink-500 md:hidden focus:text-pink-500 self-center" id="closeNavBtn" title="Close menu">
+<svg aria-hidden="true" class="fill-current stroke-current h-6 w-6" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+</button>
+</nav>
+<div class="overflow-y-auto md:w-full flex flex-col flex-1" id="main-wrapper">
+<main class="px-5 md:ml-fluid flex-1" role="main">
+<section id="haikoo">
+<h1>Haikoo<a aria-label="Copy link to section: Haikoo." class="headerlink tooltipped tooltipped-ne" href="#haikoo" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h1>
+<p>Because High availability kubernetes on oVirt should be easy, right?</p>
+<figure class="align-left">
+<img alt="Ansible Lint" src="https://github.com/oxide-one/haikoo/workflows/Ansible%20Lint/badge.svg"/></figure>
+<div class="toctree-wrapper compound">
+</div>
+<section id="about">
+<h2>About<a aria-label="Copy link to section: About." class="headerlink tooltipped tooltipped-ne" href="#about" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>Haikoo, short for <em>High Availability Kubernetes On Ovirt</em>, is a project
+to enable the creation and management of production-ready kubernetes
+clusters on <a class="reference external" href="https://www.ovirt.org/">oVirt<svg aria-hidden="true" class="external-link-icon" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 19H5V5h7V3H5a2 2 0 00-2 2v14a2 2 0 002 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"></path></svg></a>. This is enabled through
+primarily through the use of <a class="reference external" href="https://www.ansible.com/">Ansible<svg aria-hidden="true" class="external-link-icon" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 19H5V5h7V3H5a2 2 0 00-2 2v14a2 2 0 002 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"></path></svg></a>.</p>
+</section>
+<section id="why">
+<h2>Why<a aria-label="Copy link to section: Why." class="headerlink tooltipped tooltipped-ne" href="#why" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>In short, because I can.</p>
+<p>I built this because I tried out
+<a class="reference external" href="https://www.openshift.com/">Openshift<svg aria-hidden="true" class="external-link-icon" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 19H5V5h7V3H5a2 2 0 00-2 2v14a2 2 0 002 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"></path></svg></a> on oVirt and wasn’t happy
+with it for a number of reasons.</p>
+<p><strong>Limitations of Openshift</strong></p>
+<ul class="simple">
+<li><p>Openshift is incredibly complex</p></li>
+<li><p>Openshift uses a lot of power (200w on my cluster)</p></li>
+<li><p>It’s slow to deploy</p></li>
+</ul>
+<p>With this in mind, I wanted to build my own clusters that were much
+simpler to understand and work with. I also wanted ones that were easier
+to maintain without having an entire team behind it. Openshift isn’t the
+answer in this case.</p>
+</section>
+<section id="project-aims">
+<h2>Project aims<a aria-label="Copy link to section: Project aims." class="headerlink tooltipped tooltipped-ne" href="#project-aims" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>This project does not aim to make kubernetes <em>easy</em>. You should know
+what kubernetes is, and have some basic experience with it. That being
+said, you could probably go into it without knowing anything about
+kubernetes and go pretty far.</p>
+<p>This project <strong>will</strong> do the following for you:</p>
+<ul class="simple">
+<li><p>Deploy a Kubernetes cluster</p></li>
+<li><p>Maintain the number of worker nodes, which involves:</p>
+<ul>
+<li><p>Joining nodes to the cluster</p></li>
+<li><p>Removing nodes from the cluster</p></li>
+</ul>
+</li>
+<li><p>Maintain the number of control plane nodes, which involves:</p>
+<ul>
+<li><p>Joining control plane nodes to the cluster</p></li>
+<li><p>Removing control plane nodes from the cluster</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="features">
+<h2>Features<a aria-label="Copy link to section: Features." class="headerlink tooltipped tooltipped-ne" href="#features" role="button"><svg pointer-events="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>The most important feature in this, is the use of
+<a class="reference external" href="https://www.haproxy.org/">HAProxy<svg aria-hidden="true" class="external-link-icon" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 19H5V5h7V3H5a2 2 0 00-2 2v14a2 2 0 002 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"></path></svg></a> and
+<a class="reference external" href="https://github.com/acassen/keepalived">Keepalived<svg aria-hidden="true" class="external-link-icon" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 19H5V5h7V3H5a2 2 0 00-2 2v14a2 2 0 002 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"></path></svg></a> to deploy load
+balanced, fault tolerant control plane nodes.</p>
+<p>Each control plane node has an IP address, and shares a Virtual IP
+address which serves as the control plane endpoint (aka, the kubernetes
+API). Each node (and you) will connect to this endpoint. This endpoint
+is served by HAProxy, which distributes load to the rest of the control
+plane nodes.</p>
+<p>In the event that a control plane node goes down, the next control plane
+node will assume the Virtual IP, and continue operation. Magic stuff
+really :p</p>
+</section>
+</section>
+</main>
+<footer class="mt-20 px-5 md:ml-fluid mb-4 flex-shrink-0 text-sm text-gray-700" role="contentinfo">© Copyright 2021, okamidash Made with <a href="https://www.sphinx-doc.org">Sphinx 3.4.3</a></footer>
+</div>
+<div class="sticky bottom-0 md:hidden print:hidden bg-white">
+<div class="flex justify-center items-center">
+<button aria-labelledby="menuLabel" class="text-3xl p-4 flex items-center focus:bg-gray-200" id="openNavBtn">
+<svg aria-hidden="true" class="fill-current h-8 w-8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path></svg>
+<span class="pl-2 text-sm font-medium uppercase tracking-wide text-gray-700" id="menuLabel">Menu</span>
+</button><button aria-labelledby="searchLabel" class="text-3xl p-4 flex items-center focus:bg-gray-200" id="openSearchBtn">
+<svg aria-hidden="true" class="fill-current h-8 w-8" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path></svg>
+<span class="pl-2 text-sm font-medium uppercase tracking-wide text-gray-700" id="searchLabel">Search</span>
+</button>
+</div>
+</div>
+<div class="w-full fixed bottom-0 left-0 z-10 bg-gray-900 overflow-x-hidden pt-10 flex flex-col items-center md:hidden" data-menu="closed" id="search-pane">
+<h4 class="text-xl text-white mb-4" id="search-label">Enter search term</h4><form action="search.html" class="flex w-full justify-between items-center max-w-sm px-12" id="searchbox" method="get">
+<input aria-labelledby="search-label" class="p-2 flex-1" name="q" placeholder="Search the docs" type="search"/>
+<button aria-label="Get search results" class="p-2 text-white bg-gray-700 hover:bg-gray-200 hover:text-pink-500 focus:bg-gray-200 focus:text-pink-500 tooltipped tooltipped-sw">
+<svg aria-hidden="true" class="fill-current stroke-current h-6 w-6" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path></svg>
+</button>
+</form>
+<button aria-label="Close menu" class="text-4xl text-gray-200 p-4 bottom-0 hover:text-pink-500 md:hidden focus:text-pink-500 self-center" id="closeSearchBtn" title="Close menu">
+<svg aria-hidden="true" class="fill-current stroke-current h-6 w-6" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+</button>
+</div>
+<div class="fixed bottom-0 right-0 opacity-0 p-4 m-4 bg-gray-900 text-gray-100 transition transform duration-500 translate-y-full" id="snackbar"></div>
+<div class="fixed inset-0 bg-black bg-opacity-50" id="screen" style="display: none;"></div>
+</div>
+<script data-url_root="./" id="documentation_options" src="_static/documentation_options.js">
+</script>
+<script src="_static/jquery.js"></script>
+<script src="_static/underscore.js"></script>
+<script src="_static/doctools.js"></script>
+<script defer="" src="_static/theme.js"></script>
+</body>
+</html>
