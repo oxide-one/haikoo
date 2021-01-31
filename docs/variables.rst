@@ -1,7 +1,6 @@
-Variable Reference
-******************
+Default Variables
+*****************
 
-.. contents::
 
 oVirt
 =====
@@ -19,6 +18,8 @@ Must contain an ``@`` (usually ``@local``)
 
 **Type:** String
 
+
+
 ovirt_engine_password
 ---------------------
 
@@ -30,16 +31,22 @@ The password to connect to oVirt with.
 
 **Type:** String
 
+.. caution:: This is a required variable
+
 ovirt_engine_endpoint
 ---------------------
 
-The endpoint of your oVirt engine. Must end with ``/ovirt-engine``.
+The endpoint of your oVirt engine.
 
 **Default:** ``NONE``
 
 **Optional:** No
 
 **Type:** String
+
+.. caution:: The endpoint must be defined.
+
+    If the endpoint does not end with ``/ovirt-engine`` the playbook will fail.
 
 ovirt_engine_datacenter_name
 ----------------------------
@@ -64,7 +71,6 @@ The Cluster name you want to deploy Haikoo into.
 **Type:** String
 
 --------------
-
 
 Template
 ========
@@ -193,13 +199,14 @@ template_selinux_enabled
 
 Boolean to determine whether to enable SELinux.
 
-Please do not enable this until further testing is done :)
 
 **Default:** ``False``
 
 **Optional:** *Yes*
 
 **Type:** Boolean
+
+.. warning:: Enabling SELinux at this stage will only cause pain.
 
 template_subversion_name
 ------------------------

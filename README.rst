@@ -1,16 +1,22 @@
-******
 Haikoo
 ******
-
 Because High availability kubernetes on oVirt should be easy, right?
-
 
 .. figure:: https://github.com/oxide-one/haikoo/workflows/Ansible%20Lint/badge.svg
    :alt: Ansible Lint
+   :align: left
 
-   Ansible Lint
+.. toctree::
+   :maxdepth: 2
+   :hidden:
+   :glob:
+   :caption: Contents
 
-.. contents::
+   quickstart
+   variables
+   roles/*
+   workflow
+
 
 
 About
