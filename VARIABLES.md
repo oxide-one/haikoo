@@ -12,8 +12,6 @@ Must contain an `@` (usually `@local`)
 
 **Type:** String
 
-
-
 ## ovirt_engine_password
 
 The password to connect to oVirt with.
@@ -23,8 +21,6 @@ The password to connect to oVirt with.
 **Optional:** No
 
 **Type:** String
-
-
 
 ## ovirt_engine_endpoint
 
@@ -36,8 +32,6 @@ The endpoint of your oVirt engine. Must end with `/ovirt-engine`.
 
 **Type:** String
 
-
-
 ## ovirt_engine_datacenter_name
 
 The datacenter name you want to deploy Haikoo into.
@@ -48,8 +42,6 @@ The datacenter name you want to deploy Haikoo into.
 
 **Type:** String
 
-
-
 ## ovirt_engine_cluster_name
 
 The Cluster name you want to deploy Haikoo into.
@@ -59,10 +51,6 @@ The Cluster name you want to deploy Haikoo into.
 **Optional:** Yes
 
 **Type:** String
-
-
-
-
 
 ---
 
@@ -80,8 +68,6 @@ Defaults to the cluster name.
 
 **Type:** String
 
-
-
 ## template_imported_image_name
 
 The name of the image to import from the ovirt-image-repository storage domain.
@@ -94,8 +80,6 @@ Currently Haikoo supports Fedora based systems only.
 
 **Type:** String
 
-
-
 ## template_storage_location
 
 The Storage domain to import and save the Template(s) to.
@@ -105,8 +89,6 @@ The Storage domain to import and save the Template(s) to.
 **Optional:** Yes
 
 **Type:** String
-
-
 
 ## template_import_timeout
 
@@ -120,8 +102,6 @@ Increase this if your import fails.
 
 **Type:** Integer
 
-
-
 ## template_description
 
 The description to give to the imported template.
@@ -131,8 +111,6 @@ The description to give to the imported template.
 **Optional:** *Yes*
 
 **Type:** String
-
-
 
 ## template_extra_repos
 
@@ -144,8 +122,6 @@ A list of extra repos to package into the template.
 
 **Type:** List
 
-
-
 ## template_upgrade_packages
 
 A boolean to determine whether to upgrade all the packages on the template before packaging into the base image. Disable if template takes too long.
@@ -155,8 +131,6 @@ A boolean to determine whether to upgrade all the packages on the template befor
 **Optional:** *Yes*
 
 **Type:** Boolean
-
-
 
 ## template_timezone
 
@@ -168,8 +142,6 @@ The timezone of the template.
 
 **Type:** String
 
-
-
 ## template_extra_packages
 
 A list of extra packages to install into the base image.
@@ -180,8 +152,6 @@ A list of extra packages to install into the base image.
 
 **Type:** List
 
-
-
 ## template_extra_services
 
 A list of extra services to enable on boot.
@@ -191,8 +161,6 @@ A list of extra services to enable on boot.
 **Optional:** *Yes*
 
 **Type:** List
-
-
 
 ## template_selinux_enabled
 
@@ -206,8 +174,6 @@ Please do not enable this until further testing is done :)
 
 **Type:** Boolean
 
-
-
 ## template_subversion_name
 
 The subversion name to give to the template after modifications have been made.
@@ -217,10 +183,6 @@ The subversion name to give to the template after modifications have been made.
 **Optional:** *Yes*
 
 **Type:** String
-
-
-
-
 
 ---
 
@@ -236,8 +198,6 @@ The name of the temporary virtual machine to create.
 
 **Type:** String
 
-
-
 ## temp_vm_network
 
 The network to assign the temporary virtual machine to
@@ -247,8 +207,6 @@ The network to assign the temporary virtual machine to
 **Optional:** *Yes*
 
 **Type:** String
-
-
 
 ## temp_vm_cores
 
@@ -262,8 +220,6 @@ Change this value if you do not have enough cores on a single hypervisor.
 
 **Type:** Integer
 
-
-
 ## temp_vm_memory
 
 The amount (in MB) to give the temporary virtual machine.
@@ -273,10 +229,6 @@ The amount (in MB) to give the temporary virtual machine.
 **Optional:** *Yes*
 
 **Type:** Integer
-
-
-
-
 
 ---
 
@@ -292,8 +244,6 @@ The username to provision as the administrator within the template, and the clus
 
 **Type:** String
 
-
-
 ## crio_version
 
 The version of cri-o to enable within the cluster.
@@ -303,8 +253,6 @@ The version of cri-o to enable within the cluster.
 **Optional:** *Yes*
 
 **Type:** String
-
-
 
 ## kubernetes_cluster_name
 
@@ -316,8 +264,6 @@ The name of the cluster to deploy.
 
 **Type:** String
 
-
-
 ## domain
 
 The domain to append onto the end of all node names.
@@ -327,8 +273,6 @@ The domain to append onto the end of all node names.
 **Optional:** *Yes*
 
 **Type:** String
-
-
 
 ## kubernetes_control_plane_endpoint_ip
 
@@ -340,8 +284,6 @@ The endpoint IP that the control plane nodes will share over VRRP.
 
 **Type:** String
 
-
-
 ## kubernetes_control_plane_endpoint_dns
 
 A DNS endpoint that the cluster will be available at.
@@ -351,8 +293,6 @@ A DNS endpoint that the cluster will be available at.
 **Optional:** *Yes*
 
 **Type:** String
-
-
 
 ## kubernetes_cluster_network
 
@@ -364,8 +304,6 @@ The network to deploy the kubernetes cluster into.
 
 **Type:** String
 
-
-
 ## startup_timeout
 
 The timeout, in minutes to wait for all the virtual machines to power on.
@@ -375,10 +313,6 @@ The timeout, in minutes to wait for all the virtual machines to power on.
 **Optional:** *Yes*
 
 **Type:** Integer
-
-
-
-
 
 ---
 
@@ -396,8 +330,6 @@ Done in case you want your nodes to be named something other than `control-plane
 
 **Type:** String
 
-
-
 ## kubernetes_control_plane_node_count
 
 The number of control plane nodes to _result_ in.
@@ -410,8 +342,6 @@ If the number deployed is different, the playbooks will ensure the end result is
 
 **Type:** Integer
 
-
-
 ## kubernetes_control_plane_node_cores
 
 The number of cores to give to each control plane node.
@@ -421,8 +351,6 @@ The number of cores to give to each control plane node.
 **Optional:** *Yes*
 
 **Type:** Integer
-
-
 
 ## kubernetes_control_plane_node_memory
 
@@ -434,8 +362,6 @@ The amount (in MB) to give each control plane node
 
 **Type:** Integer
 
-
-
 ## kubernetes_control_plane_node_disk_size
 
 The size (in GB) to give to each control plane node.
@@ -446,8 +372,6 @@ The size (in GB) to give to each control plane node.
 
 **Type:** Integer
 
-
-
 ## kubernetes_control_plane_node_roles
 
 A list of roles to assign to each new control plane node.
@@ -457,10 +381,6 @@ A list of roles to assign to each new control plane node.
 **Optional:** *Yes*
 
 **Type:** List
-
-
-
-
 
 ---
 
@@ -480,8 +400,6 @@ Please don't name it the same as your control plane nodes.
 
 **Type:** String
 
-
-
 ## kubernetes_worker_node_count
 
 The number of worker nodes to *result* in.
@@ -494,8 +412,6 @@ If the number deployed is different, the playbooks will ensure the end result is
 
 **Type:** Integer
 
-
-
 ## kubernetes_worker_node_cpu_cores
 
 The number of cores to give to each worker node.
@@ -505,8 +421,6 @@ The number of cores to give to each worker node.
 **Optional:** *Yes*
 
 **Type:** Integer
-
-
 
 ## kubernetes_worker_node_memory
 
@@ -518,8 +432,6 @@ The amount (in MB) to give each worker node
 
 **Type:** Integer
 
-
-
 ## kubernetes_worker_node_disk_size
 
 The size (in GB) to give to each worker node.
@@ -529,8 +441,6 @@ The size (in GB) to give to each worker node.
 **Optional:** *Yes*
 
 **Type:** Integer
-
-
 
 ## kubernetes_worker_node_roles
 
