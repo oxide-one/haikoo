@@ -1,0 +1,18 @@
+---
+# Change the default runtime to crun
+- name: Change the default Runtime to crun
+  become: yes
+  ansible.builtin.lineinfile:
+    path: "/etc/crio/crio.conf"
+    regexp: '^default_runtime = "runc"$'
+    line: 'default_runtime = "crun"'
+    mode: u=rw,g=r,o=r
+
+# Add crun to the runtimes
+- name: "Add a runtime argument so that crun can be used"
+  become: yes
+  ansible.builtin.lineinfile:
+    path: "/etc/crio/crio.conf"
+    insertbefore: '\[crio\.runtime\.runtimes\.runc\]'
+    line: "[crio.runtime.runtimes.crun]"
+    mode: u=rw,g=r,o=r

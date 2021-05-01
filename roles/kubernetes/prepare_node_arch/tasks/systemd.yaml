@@ -1,0 +1,22 @@
+---
+# Systemd stuff
+- name: "Enable systemd services on boot"
+  become: yes
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    enabled: yes
+    state: started
+  with_list:
+    - kubelet
+    - crio
+
+
+# Enable extra services if they're defined
+- name: "Enable extra systemd services on boot"
+  become: yes
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    enabled: yes
+    state: started
+  with_list: "{{ template_extra_services }}"
+  when: template_extra_services is defined

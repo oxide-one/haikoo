@@ -1,0 +1,26 @@
+---
+# Update all the packages
+# Ansible lint complains about this but whatever.
+- name: "Update all packages"
+  become: yes
+  community.general.pacman:
+    update_cache: yes
+    upgrade: yes
+  when: template_upgrade_packages
+
+
+# Get kubernetes
+- name: "Download kubernetes packages"
+  become: yes
+  community.general.pacman:
+    name:
+      - cri-o
+      - kubelet
+      - kubeadm
+      - kubectl
+      - nfs-utils
+      - ceph
+      - cni-plugins
+      - logrotate
+      - crun
+    state: present

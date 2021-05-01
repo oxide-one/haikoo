@@ -1,0 +1,7 @@
+---
+# Shutdown the system. There is no 'comparative' model
+- name: "Poweroff the system"
+  become: yes
+  ansible.builtin.command: /sbin/shutdown -h 1
+  register: shutdown_cmd
+  changed_when: shutdown_cmd.rc != 0

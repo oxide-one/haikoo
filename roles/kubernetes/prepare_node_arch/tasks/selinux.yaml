@@ -1,0 +1,19 @@
+---
+# Disable selinux
+- name: "Disable SELinux"
+  become: yes
+  ansible.builtin.selinux:
+    state: disabled
+  when: not template_selinux_enabled
+
+
+# Ensure Selinux is disabled
+- name: "Ensure SELinux is set to disabled in the file"
+  become: yes
+  ansible.builtin.lineinfile:
+    path: /etc/selinux/config
+    regexp: '^SELINUX='
+    line: SELINUX=disabled
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r

@@ -1,0 +1,9 @@
+---
+
+# Remove the password for the specified user (kubeadmin)
+- name: "Remove the password from the user {{ kubernetes_login_username }}"
+  become: yes
+  ansible.builtin.user:
+    name: "{{ kubernetes_login_username }}"
+    password: "!"
+    state: present
